@@ -1,5 +1,5 @@
 run:
-	go run cmd/main.go
+	docker compose up --build
 	
 # Команда для генерации дерева зависимостей
 deep:
