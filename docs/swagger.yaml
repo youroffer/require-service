@@ -1,0 +1,631 @@
+basePath: /api/v1
+definitions:
+  http.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  models.Analytic:
+    properties:
+      id:
+        type: integer
+      last_updated:
+        type: string
+      posts_id:
+        minimum: 1
+        type: integer
+      search_query:
+        type: string
+      vacancies_num:
+        type: integer
+    required:
+    - posts_id
+    - search_query
+    type: object
+  models.AnalyticResp:
+    properties:
+      id:
+        type: integer
+      last_updated:
+        type: string
+      search_query:
+        type: string
+      vacancies_num:
+        type: integer
+    type: object
+  models.AnalyticUpdate:
+    properties:
+      posts_id:
+        minimum: 1
+        type: integer
+      search_query:
+        type: string
+    type: object
+  models.AnalyticWithWords:
+    properties:
+      analytic:
+        $ref: '#/definitions/models.AnalyticResp'
+      keywords:
+        items:
+          $ref: '#/definitions/models.TopWords'
+        type: array
+      skills:
+        items:
+          $ref: '#/definitions/models.TopWords'
+        type: array
+    type: object
+  models.Category:
+    properties:
+      id:
+        type: integer
+      title:
+        maxLength: 50
+        minLength: 3
+        type: string
+    required:
+    - title
+    type: object
+  models.Filter:
+    properties:
+      id:
+        type: integer
+      word:
+        minLength: 1
+        type: string
+    required:
+    - word
+    type: object
+  models.FilterResp:
+    properties:
+      filters:
+        items:
+          $ref: '#/definitions/models.Filter'
+        type: array
+      total:
+        type: integer
+    type: object
+  models.Logo:
+    properties:
+      title:
+        type: string
+      url:
+        type: string
+    type: object
+  models.Post:
+    properties:
+      categories_id:
+        minimum: 1
+        type: integer
+      id:
+        type: integer
+      logos_id:
+        minimum: 1
+        type: integer
+      public:
+        type: boolean
+      title:
+        maxLength: 100
+        minLength: 3
+        type: string
+    required:
+    - categories_id
+    - logos_id
+    - public
+    - title
+    type: object
+  models.PostResponse:
+    properties:
+      id:
+        type: integer
+      logo:
+        $ref: '#/definitions/models.Logo'
+      public:
+        type: boolean
+      title:
+        type: string
+    type: object
+  models.PostUpdate:
+    properties:
+      categories_id:
+        minimum: 1
+        type: integer
+      logos_id:
+        minimum: 1
+        type: integer
+      public:
+        type: boolean
+      title:
+        maxLength: 100
+        minLength: 3
+        type: string
+    type: object
+  models.TopWords:
+    properties:
+      reference:
+        type: integer
+      word:
+        type: string
+    type: object
+host: localhost:8081
+info:
+  contact: {}
+  description: API для сервиса требований
+  title: API Documentation
+  version: "1.0"
+paths:
+  /admin/analytic:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую аналитику
+      parameters:
+      - description: Данные аналитики
+        in: body
+        name: analytic
+        required: true
+        schema:
+          $ref: '#/definitions/models.Analytic'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Analytic'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Добавить аналитику
+      tags:
+      - analytic
+  /admin/analytic/{id}:
+    delete:
+      description: Удаляет аналитику по ID
+      parameters:
+      - description: ID аналитики
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Удалить аналитику
+      tags:
+      - analytic
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные аналитики по ID
+      parameters:
+      - description: ID аналитики
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновленные данные аналитики
+        in: body
+        name: analytic
+        required: true
+        schema:
+          $ref: '#/definitions/models.AnalyticUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Analytic'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Обновить аналитику
+      tags:
+      - analytic
+  /admin/categories:
+    get:
+      description: Возвращает список всех категорий
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "404":
+          description: Category Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Получить все категории
+      tags:
+      - Categories
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую категорию
+      parameters:
+      - description: Данные новой категории
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Category Already Exists
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Добавить новую категорию
+      tags:
+      - Categories
+  /admin/categories/{category}:
+    delete:
+      description: Удаляет категорию
+      parameters:
+      - description: Категория
+        in: path
+        name: category
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Category Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Удалить категорию
+      tags:
+      - Categories
+    put:
+      consumes:
+      - application/json
+      description: Обновляет название категории
+      parameters:
+      - description: Категория
+        in: path
+        name: category
+        required: true
+        type: string
+      - description: Новое название категории
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Category Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Обновить категорию
+      tags:
+      - Categories
+  /admin/categories/posts:
+    get:
+      description: Возвращает список категорий с постами
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.PostResponse'
+              type: array
+            type: object
+        "404":
+          description: Post Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Получить категории с постами
+      tags:
+      - Categories
+  /admin/filters:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новый фильтр
+      parameters:
+      - description: Название фильтра
+        in: query
+        name: filter
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Filter'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Добавить фильтр
+      tags:
+      - Filters
+  /admin/positions:
+    post:
+      consumes:
+      - application/json
+      description: Добавляет новую должность в систему
+      parameters:
+      - description: Данные новой должности
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.Post'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PostResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Conflict - Должность уже существует или зависимость не найдена
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Добавить должность
+      tags:
+      - Positions
+  /admin/positions/{id}:
+    delete:
+      description: Удаляет должность по её ID
+      parameters:
+      - description: ID должности
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Должность не найдена
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Удалить должность
+      tags:
+      - Positions
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные существующей должности по её ID
+      parameters:
+      - description: ID должности
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Данные для обновления должности
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/models.PostUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.PostResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Должность не найдена
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "409":
+          description: Conflict - Должность уже существует или зависимость не найдена
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Обновить должность
+      tags:
+      - Positions
+  /analytic/post/{id}:
+    get:
+      description: Возвращает аналитику с словами по ID поста
+      parameters:
+      - description: ID поста
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AnalyticWithWords'
+            type: array
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Получить аналитику с словами по ID поста
+      tags:
+      - Analytic
+  /categories/public-posts:
+    get:
+      description: Возвращает список категорий с публичными постами
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              items:
+                $ref: '#/definitions/models.PostResponse'
+              type: array
+            type: object
+        "404":
+          description: Post Not Found
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Получить категории с публичными постами
+      tags:
+      - Categories
+  /filters:
+    get:
+      description: Возвращает список фильтров с поддержкой пагинации
+      parameters:
+      - description: Количество фильтров
+        in: query
+        name: limit
+        type: integer
+      - description: Смещение для фильтров
+        in: query
+        name: offset
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.FilterResp'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Получить список фильтров
+      tags:
+      - Filters
+  /filters/{filter}:
+    delete:
+      description: Удаляет фильтр по его названию
+      parameters:
+      - description: Название фильтра
+        in: path
+        name: filter
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.errorResponse'
+      summary: Удалить фильтр
+      tags:
+      - Filters
+swagger: "2.0"

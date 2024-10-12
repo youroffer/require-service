@@ -1,0 +1,46 @@
+services:
+  pg_require:
+    restart: always
+    container_name: pg_require
+    image: postgres:alpine
+    environment:
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=uo_require
+    volumes:
+    - ./pg_require_data:/var/lib/postgresql/data
+    - ./migrations/20241002194151_require.up.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+    - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d uo_require"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rdb_require:
+    restart: always
+    image: redis:latest
+    container_name: redis
+    environment:
+      REDIS_PASSWORD: redis  
+    ports:
+      - "6380:6379"
+
+  require:
+    restart: always
+    container_name: require
+    build:
+      context: ./require
+      dockerfile: Dockerfile
+    command: ["/app", "--loglevel=debug"]
+    ports:
+      - "8081:8081"
+    env_file:
+      - ./.env
+      
+    depends_on:
+      pg_require:
+        condition: service_healthy
+      rdb_require:
+        condition: service_started
