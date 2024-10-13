@@ -1,5 +1,6 @@
 package parser
 
+// вакансия в ответе не связана со своим id странно
 type VacancyID struct {
 	ID string `json:"id"`
 }

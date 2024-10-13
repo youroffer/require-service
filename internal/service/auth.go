@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/himmel520/uoffer/require/models"
+	"github.com/himmel520/uoffer/require/roles"
 )
 
 func (s *Service) GetUserRoleFromToken(jwtToken string, publicKey *rsa.PublicKey) (string, error) {
@@ -35,9 +35,9 @@ func (s *Service) GetUserRoleFromToken(jwtToken string, publicKey *rsa.PublicKey
 
 func (s *Service) IsUserAuthorized(requiredRole, userRole string) bool {
 	rolesHierarchy := map[string]int{
-		models.RoleAnonym: 0,
-		models.RoleUser:   1,
-		models.RoleAdmin:  2,
+		roles.Anonym: 0,
+		roles.Admin:  1,
+		roles.User:   2,
 	}
 
 	return rolesHierarchy[userRole] >= rolesHierarchy[requiredRole]

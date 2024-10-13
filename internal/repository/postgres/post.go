@@ -16,10 +16,10 @@ func (r *Repository) AddPost(ctx context.Context, post *models.Post) (*models.Po
 	postResp := &models.PostResponse{}
 
 	err := r.DB.QueryRow(ctx, `
-	insert into posts 
-		(categories_id, logo_id, title, public) 
-	values 
-		($1, $2, $3, $4) 
+	insert into posts
+		(categories_id, logo_id, title, public)
+	values
+		($1, $2, $3, $4)
 	returning id, logo_id, title, public;`, post.CategoriesID, post.LogosID, post.Title, post.Public).Scan(
 		&postResp.ID, &postResp.LogoID, &postResp.Title, &postResp.Public)
 
@@ -62,7 +62,7 @@ func (r *Repository) UpdatePost(ctx context.Context, id int, post *models.PostUp
 
 	values = append(values, id)
 	query := fmt.Sprintf(`
-	update posts set %s 
+	update posts set %s
 		where id = $%d
 	returning id, logo_id, title, public`, strings.Join(keys, ", "), len(values))
 
@@ -74,6 +74,7 @@ func (r *Repository) UpdatePost(ctx context.Context, id int, post *models.PostUp
 		return nil, repository.ErrPostNotFound
 	}
 
+	// часто повторяется эта конструкция
 	var pgErr *pgconn.PgError
 	if errors.As(err, &pgErr) {
 		switch pgErr.Code {

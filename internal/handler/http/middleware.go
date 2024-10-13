@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/himmel520/uoffer/require/models"
+	"github.com/himmel520/uoffer/require/roles"
 )
 
 func (h *Handler) validateID() gin.HandlerFunc {
@@ -30,7 +30,7 @@ func (h *Handler) jwtAuthAccess(requiredRole string) gin.HandlerFunc {
 				c.AbortWithStatusJSON(http.StatusUnauthorized, errorResponse{"Authorization header is missing"})
 				return
 			}
-			c.Set("role", models.RoleAnonym)
+			c.Set("role", roles.Anonym)
 			return
 		}
 

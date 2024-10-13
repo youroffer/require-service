@@ -23,19 +23,23 @@ import (
 // @Router /admin/analytic [post]
 func (h *Handler) addAnalytic(c *gin.Context) {
 	var analytic *models.Analytic
+
 	if err := c.BindJSON(&analytic); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorResponse{err.Error()})
 		return
 	}
 
 	newAnalytic, err := h.srv.AddAnalytic(c.Request.Context(), analytic)
+
 	switch {
 	case errors.Is(err, repository.ErrPostIDExist):
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorResponse{err.Error()})
 		return
+
 	case errors.Is(err, repository.ErrAnalyticDependencyNotFound):
 		c.AbortWithStatusJSON(http.StatusConflict, errorResponse{err.Error()})
 		return
+
 	case err != nil:
 		h.log.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, errorResponse{err.Error()})
@@ -73,16 +77,20 @@ func (h *Handler) updateAnalytic(c *gin.Context) {
 	}
 
 	newAnalytic, err := h.srv.UpdateAnalytic(c.Request.Context(), id, analytic)
+
 	switch {
 	case errors.Is(err, repository.ErrPostIDExist):
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorResponse{err.Error()})
 		return
+
 	case errors.Is(err, repository.ErrAnalyticNotFound):
 		c.AbortWithStatusJSON(http.StatusNotFound, errorResponse{err.Error()})
 		return
+
 	case errors.Is(err, repository.ErrAnalyticDependencyNotFound):
 		c.AbortWithStatusJSON(http.StatusConflict, errorResponse{err.Error()})
 		return
+
 	case err != nil:
 		h.log.Error(err.Error())
 		c.AbortWithStatusJSON(http.StatusInternalServerError, errorResponse{err.Error()})

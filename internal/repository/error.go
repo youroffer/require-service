@@ -3,7 +3,7 @@ package repository
 import "errors"
 
 // DB
-var (
+const (
 	// foreign key violation: 23503
 	FKViolation = "23503"
 	// unique violation: 23505
@@ -11,32 +11,32 @@ var (
 )
 
 // Category
-var (
+const (
 	ErrCategoryNotFound = errors.New("category not found")
 	ErrCategoryExists   = errors.New("category exists")
 )
 
 // Post
-var (
+const (
 	ErrPostExists             = errors.New("post exists")
 	ErrPostNotFound           = errors.New("post not found")
 	ErrPostDependencyNotFound = errors.New("cannot add post because there are no record references to category")
 )
 
 // Analytic
-var (
+const (
 	ErrPostIDExist                = errors.New("post_id must be unique")
 	ErrAnalyticDependencyNotFound = errors.New("cannot add or update analytic because there is no record reference to post")
 	ErrAnalyticNotFound           = errors.New("analytic not found")
 )
 
 // Filter
-var (
+const (
 	ErrFilterExist    = errors.New("filter already exist")
 	ErrFilterNotFound = errors.New("filter not found")
 )
 
 // CACHE
-var (
+const (
 	ErrKeyNotFound = errors.New("there is no current data")
 )

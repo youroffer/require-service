@@ -10,6 +10,9 @@ import (
 	"github.com/himmel520/uoffer/require/models"
 )
 
+// Вместо двух операций не идемпотентных ( create upadate ) - лучше использовать одну индепотентную - set
+// ( источник - облачный Го, раздел о гексогональной архитекруте)
+
 // @Summary Добавить должность
 // @Description Добавляет новую должность в систему
 // @Tags Positions
@@ -23,6 +26,7 @@ import (
 // @Router /admin/positions [post]
 func (h *Handler) addPost(c *gin.Context) {
 	var post *models.Post
+
 	if err := c.BindJSON(&post); err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest, errorResponse{err.Error()})
 		return

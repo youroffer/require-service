@@ -6,6 +6,7 @@ import (
 
 	"github.com/himmel520/uoffer/require/internal/repository"
 	"github.com/himmel520/uoffer/require/models"
+	"github.com/himmel520/uoffer/require/roles"
 )
 
 func (s *Service) clearAnalyticCache(ctx context.Context, postID int) {
@@ -54,7 +55,7 @@ func (s *Service) DeleteAnalytic(ctx context.Context, id int) error {
 
 func (s *Service) GetAnalyticWithWords(ctx context.Context, postID int, role string) (*models.AnalyticWithWords, error) {
 	var limit bool
-	if role == models.RoleAnonym {
+	if role == roles.Anonym {
 		limit = true
 	}
 
@@ -71,7 +72,7 @@ func (s *Service) GetAnalyticWithWords(ctx context.Context, postID int, role str
 
 		analyticWords := &models.AnalyticWithWords{
 			Analytic: analytic,
-			Skills: []*models.TopWords{},
+			Skills:   []*models.TopWords{},
 			Keywords: []*models.TopWords{},
 		}
 

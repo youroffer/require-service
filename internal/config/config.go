@@ -11,6 +11,13 @@ import (
 )
 
 type (
+	Config struct {
+		Srv    Server
+		API_HH API_HH
+		DB     Database
+		Cache  Cache
+	}
+
 	Server struct {
 		Addr            string
 		JWT             JWT
@@ -38,13 +45,6 @@ type (
 		Exp  time.Duration
 	}
 )
-
-type Config struct {
-	Srv    Server
-	API_HH API_HH
-	DB     Database
-	Cache  Cache
-}
 
 func New() (*Config, error) {
 	viper.AutomaticEnv()

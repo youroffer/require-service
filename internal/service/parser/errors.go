@@ -5,7 +5,7 @@ type pageFetchError struct {
 	Err  error
 }
 
-func(e *pageFetchError) Error() string {
+func (e *pageFetchError) Error() string {
 	return e.Err.Error()
 }
 

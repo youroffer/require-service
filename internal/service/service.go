@@ -47,30 +47,30 @@ type (
 		GetFiltersWithPagination(ctx context.Context, limit, offset int) ([]*models.Filter, error)
 		GetFiltersCount(ctx context.Context) (int, error)
 	}
+
+	Cache interface {
+		DeleteCategoriesWithPublicPosts(ctx context.Context) error
+		GetCategoriesWithPublicPosts(ctx context.Context) (map[string][]*models.PostResponse, error)
+		SetCategoriesWithPublicPosts(ctx context.Context, categories map[string][]*models.PostResponse) error
+
+		DeleteAnalyticWithWords(ctx context.Context, postID int) error
+		SetAnalyticWithWords(ctx context.Context, data *models.AnalyticWithWords, postID int) error
+		GetAnalyticWithWords(ctx context.Context, postID int) (*models.AnalyticWithWords, error)
+	}
+
+	Service struct {
+		mediaUrl string
+		repo     Repository
+		cache    Cache
+		log      *logrus.Logger
+	}
 )
-
-type Cache interface {
-	DeleteCategoriesWithPublicPosts(ctx context.Context) error
-	GetCategoriesWithPublicPosts(ctx context.Context) (map[string][]*models.PostResponse, error)
-	SetCategoriesWithPublicPosts(ctx context.Context, categories map[string][]*models.PostResponse) error
-
-	DeleteAnalyticWithWords(ctx context.Context, postID int) error
-	SetAnalyticWithWords(ctx context.Context, data *models.AnalyticWithWords, postID int) error
-	GetAnalyticWithWords(ctx context.Context, postID int) (*models.AnalyticWithWords, error)
-}
-
-type Service struct {
-	mediaUrl string
-	repo  Repository
-	cache Cache
-	log   *logrus.Logger
-}
 
 func New(repo Repository, cache Cache, mediaUrl string, log *logrus.Logger) *Service {
 	return &Service{
 		mediaUrl: mediaUrl,
-		repo:  repo,
-		cache: cache,
-		log:   log,
+		repo:     repo,
+		cache:    cache,
+		log:      log,
 	}
 }

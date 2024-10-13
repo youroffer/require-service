@@ -15,9 +15,9 @@ import (
 func (r *Repository) AddAnalytic(ctx context.Context, analytic *models.Analytic) (*models.Analytic, error) {
 	newAnalytic := &models.Analytic{}
 	err := r.DB.QueryRow(ctx, `
-	insert into analytics 
-		(posts_id, search_query) 
-	values ($1, $2) 
+	insert into analytics
+		(posts_id, search_query)
+	values ($1, $2)
 	returning *;`, analytic.PostID, analytic.SearchQuery).Scan(
 		&newAnalytic.ID, &newAnalytic.PostID, &newAnalytic.SearchQuery)
 
@@ -50,8 +50,8 @@ func (r *Repository) UpdateAnalytic(ctx context.Context, id int, analytics *mode
 
 	values = append(values, id)
 	query := fmt.Sprintf(`
-	update analytics 
-	set %v 
+	update analytics
+	set %v
 	where id=$%d
 	returning *;`, strings.Join(keys, ", "), len(values))
 

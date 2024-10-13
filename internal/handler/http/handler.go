@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/himmel520/uoffer/require/internal/config"
 	"github.com/himmel520/uoffer/require/models"
+	"github.com/himmel520/uoffer/require/roles"
 	"github.com/sirupsen/logrus"
 
 	_ "github.com/himmel520/uoffer/require/docs"
@@ -20,7 +21,7 @@ type (
 	Service interface {
 		Auth
 		Cache
-		
+
 		Category
 		Post
 		Analytic
@@ -59,17 +60,17 @@ type (
 		DeleteFilter(ctx context.Context, word string) error
 		GetFilters(ctx context.Context, limit, offset int) (*models.FilterResp, error)
 	}
+
+	Cache interface {
+		DeleteCacheCategoriesAndPosts(ctx context.Context) error
+	}
+
+	Handler struct {
+		srv Service
+		log *logrus.Logger
+		cfg *config.JWT
+	}
 )
-
-type Cache interface {
-	DeleteCacheCategoriesAndPosts(ctx context.Context) error
-}
-
-type Handler struct {
-	srv Service
-	log *logrus.Logger
-	cfg *config.JWT
-}
 
 func New(srv Service, cfg *config.JWT, log *logrus.Logger) *Handler {
 	return &Handler{srv: srv, log: log, cfg: cfg}
@@ -84,18 +85,18 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		api.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 		// user
-		analytic := api.Group("/analytics").Use(h.jwtAuthAccess(models.RoleUser))
+		analytic := api.Group("/analytics").Use(h.jwtAuthAccess(roles.User))
 		{
 			analytic.GET("/post/:id", h.getAnalyticWithWordsByPostID) // Get analytics for a post
 		}
 
-		category := api.Group("/categories").Use(h.jwtAuthAccess(models.RoleUser))
+		category := api.Group("/categories").Use(h.jwtAuthAccess(roles.User))
 		{
 			category.GET("/posts", h.getCategoriesWithPublicPosts) // Get all public posts with categories
 		}
 
 		// admin
-		admin := api.Group("/admin", h.jwtAuthAccess(models.RoleAdmin))
+		admin := api.Group("/admin", h.jwtAuthAccess(roles.Admin))
 		{
 			category := admin.Group("/categories", h.deleteCategoriesCache())
 			{
