@@ -8,7 +8,7 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_DB=uo_require
     volumes:
-    - ./pg_require_data:/var/lib/postgresql/data
+    - pgdata:/var/lib/postgresql/data
     - ./migrations/20241002194151_require.up.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
     - "5433:5432"
@@ -31,16 +31,19 @@ services:
     restart: always
     container_name: require
     build:
-      context: ./require
+      context: .
       dockerfile: Dockerfile
     command: ["/app", "--loglevel=debug"]
     ports:
       - "8081:8081"
     env_file:
       - ./.env
-      
     depends_on:
       pg_require:
         condition: service_healthy
       rdb_require:
         condition: service_started
+
+volumes:
+  pgdata:
+    driver: local

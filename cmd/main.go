@@ -9,15 +9,16 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/himmel520/uoffer/require/internal/config"
-	httphandler "github.com/himmel520/uoffer/require/internal/handler/http"
-	"github.com/himmel520/uoffer/require/internal/server/cron"
-
-	"github.com/himmel520/uoffer/require/internal/repository/postgres"
-	"github.com/himmel520/uoffer/require/internal/repository/redis"
+	"github.com/himmel520/uoffer/require/config"
+	httpctrl "github.com/himmel520/uoffer/require/internal/controller/http"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/cache"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/cache/redis"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/parser"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/parser/cron"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
 	"github.com/himmel520/uoffer/require/internal/server"
-	"github.com/himmel520/uoffer/require/internal/service"
-	"github.com/himmel520/uoffer/require/internal/service/parser"
+	"github.com/himmel520/uoffer/require/internal/usecase"
 )
 
 // @title API Documentation
@@ -37,21 +38,22 @@ func main() {
 		log.Fatal(err)
 	}
 
-	db, err := postgres.NewPG(cfg.DB.DBConn)
+	pool, err := postgres.NewPG(cfg.DB.DBConn)
 	if err != nil {
 		log.Fatalf("unable to connect to pool: %v", err)
 	}
-	defer db.Close()
+	defer pool.Close()
 
-	// Слои
-	cache, err := redis.New(cfg.Cache)
+	rdb, err := redis.New(cfg.Cache.Conn)
 	if err != nil {
-		log.Fatalf("unable to connect to redis: %v", err)
+		log.Fatalf("unable to connect to cache: %v", err)
 	}
+	defer rdb.Close()
 
-	repo := postgres.NewRepo(db)
-	srv := service.New(repo, cache, cfg.Srv.MediaServiceURL, log)
-	handler := httphandler.New(srv, &cfg.Srv.JWT, log)
+	cache := cache.New(rdb, cfg.Cache.Exp)
+	repo := repository.New(pool)
+	uc := usecase.New(repo, cache, cfg.Srv.JWT.PublicKey, log)
+	handler := httpctrl.New(uc, log)
 
 	// сервер
 	parser := parser.NewParser(cfg.API_HH, repo, cache, log)
