@@ -6,9 +6,17 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/himmel520/uoffer/require/internal/entity"
 )
+
+func (h *Handler) newCors() gin.HandlerFunc {
+	cfg := cors.DefaultConfig()
+	cfg.AllowOrigins = []string{"http://localhost:5173"}
+	cfg.AllowCredentials = true
+	return cors.New(cfg)
+}
 
 func (h *Handler) validateID() gin.HandlerFunc {
 	return func(c *gin.Context) {
