@@ -12,8 +12,8 @@ import (
 
 type (
 	Server struct {
-		Addr            string
-		JWT             JWT
+		Addr string
+		JWT  JWT
 	}
 
 	JWT struct {
@@ -50,7 +50,7 @@ func New() (*Config, error) {
 
 	cfg := &Config{
 		Srv: Server{
-			Addr:            viper.GetString("SERVER_ADDRESS"),
+			Addr: viper.GetString("SERVER_ADDRESS"),
 			JWT: JWT{
 				KeyPath: viper.GetString("JWT_KEY_PATH"),
 			},

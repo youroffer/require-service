@@ -31,7 +31,6 @@ type (
 
 	AuthUC interface {
 		GetUserRoleFromToken(jwtToken string,) (string, error)
-		IsUserAuthorized(requiredRole, userRole string) bool
 	}
 
 	CategoryUC interface {

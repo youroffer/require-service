@@ -67,9 +67,9 @@ func (uc *AnalyticUsecase) Delete(ctx context.Context, id int) error {
 
 func (uc *AnalyticUsecase) GetWithWords(ctx context.Context, postID int, role string) (*entity.AnalyticWithWords, error) {
 	var limit bool
-	if role == entity.RoleAnonym {
-		limit = true
-	}
+	// if role == entity.RoleAnonym {
+	// 	limit = true
+	// }
 
 	analytic, err := uc.cache.GetWithWords(ctx, postID)
 	if err != nil {

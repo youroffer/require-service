@@ -6,7 +6,6 @@ import (
 	"fmt"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/himmel520/uoffer/require/internal/entity"
 )
 
 type AuthUsecase struct {
@@ -39,14 +38,4 @@ func (uc *AuthUsecase) GetUserRoleFromToken(jwtToken string) (string, error) {
 	}
 
 	return role, err
-}
-
-func (uc *AuthUsecase) IsUserAuthorized(requiredRole, userRole string) bool {
-	rolesHierarchy := map[string]int{
-		entity.RoleAnonym: 0,
-		entity.RoleUser:   1,
-		entity.RoleAdmin:  2,
-	}
-
-	return rolesHierarchy[userRole] >= rolesHierarchy[requiredRole]
 }
