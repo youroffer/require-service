@@ -50,6 +50,34 @@ func (UnimplementedHandler) V1AdminCategoriesPost(ctx context.Context, req *Cate
 	return r, ht.ErrNotImplemented
 }
 
+// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters{filterID} operation.
+//
+// Удаляет фильтр по его уникальному идентификатору.
+//
+// DELETE /v1/admin/filters{filterID}
+func (UnimplementedHandler) V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (r V1AdminFiltersFilterIDDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminFiltersGet implements GET /v1/admin/filters operation.
+//
+// Возвращает список всех фильтров с возможностью
+// пагинации.
+//
+// GET /v1/admin/filters
+func (UnimplementedHandler) V1AdminFiltersGet(ctx context.Context, params V1AdminFiltersGetParams) (r V1AdminFiltersGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminFiltersPost implements POST /v1/admin/filters operation.
+//
+// Создает новый фильтр с уникальным словом.
+//
+// POST /v1/admin/filters
+func (UnimplementedHandler) V1AdminFiltersPost(ctx context.Context, req *V1AdminFiltersPostReq) (r V1AdminFiltersPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1CategoriesGet implements GET /v1/categories operation.
 //
 // Возвращает все категории с публичными должностями.

@@ -33,6 +33,25 @@ type Handler interface {
 	//
 	// POST /v1/admin/categories
 	V1AdminCategoriesPost(ctx context.Context, req *CategoryPost) (V1AdminCategoriesPostRes, error)
+	// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters{filterID} operation.
+	//
+	// Удаляет фильтр по его уникальному идентификатору.
+	//
+	// DELETE /v1/admin/filters{filterID}
+	V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (V1AdminFiltersFilterIDDeleteRes, error)
+	// V1AdminFiltersGet implements GET /v1/admin/filters operation.
+	//
+	// Возвращает список всех фильтров с возможностью
+	// пагинации.
+	//
+	// GET /v1/admin/filters
+	V1AdminFiltersGet(ctx context.Context, params V1AdminFiltersGetParams) (V1AdminFiltersGetRes, error)
+	// V1AdminFiltersPost implements POST /v1/admin/filters operation.
+	//
+	// Создает новый фильтр с уникальным словом.
+	//
+	// POST /v1/admin/filters
+	V1AdminFiltersPost(ctx context.Context, req *V1AdminFiltersPostReq) (V1AdminFiltersPostRes, error)
 	// V1CategoriesGet implements GET /v1/categories operation.
 	//
 	// Возвращает все категории с публичными должностями.

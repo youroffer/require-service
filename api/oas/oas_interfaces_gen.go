@@ -17,6 +17,18 @@ type V1AdminCategoriesPostRes interface {
 	v1AdminCategoriesPostRes()
 }
 
+type V1AdminFiltersFilterIDDeleteRes interface {
+	v1AdminFiltersFilterIDDeleteRes()
+}
+
+type V1AdminFiltersGetRes interface {
+	v1AdminFiltersGetRes()
+}
+
+type V1AdminFiltersPostRes interface {
+	v1AdminFiltersPostRes()
+}
+
 type V1CategoriesGetRes interface {
 	v1CategoriesGetRes()
 }

@@ -234,6 +234,86 @@ func (s *ErrorStatusCode) SetResponse(val Error) {
 	s.Response = val
 }
 
+// Ref: #
+type Filter struct {
+	// Уникальный идентификатор фильтра.
+	ID int `json:"id"`
+	// Уникальный фильтр.
+	Word string `json:"word"`
+}
+
+// GetID returns the value of ID.
+func (s *Filter) GetID() int {
+	return s.ID
+}
+
+// GetWord returns the value of Word.
+func (s *Filter) GetWord() string {
+	return s.Word
+}
+
+// SetID sets the value of ID.
+func (s *Filter) SetID(val int) {
+	s.ID = val
+}
+
+// SetWord sets the value of Word.
+func (s *Filter) SetWord(val string) {
+	s.Word = val
+}
+
+func (*Filter) v1AdminFiltersPostRes() {}
+
+// Ref: #
+type FiltersResp struct {
+	Data    []Filter `json:"data"`
+	Page    int      `json:"page"`
+	Pages   int      `json:"pages"`
+	PerPage int      `json:"per_page"`
+}
+
+// GetData returns the value of Data.
+func (s *FiltersResp) GetData() []Filter {
+	return s.Data
+}
+
+// GetPage returns the value of Page.
+func (s *FiltersResp) GetPage() int {
+	return s.Page
+}
+
+// GetPages returns the value of Pages.
+func (s *FiltersResp) GetPages() int {
+	return s.Pages
+}
+
+// GetPerPage returns the value of PerPage.
+func (s *FiltersResp) GetPerPage() int {
+	return s.PerPage
+}
+
+// SetData sets the value of Data.
+func (s *FiltersResp) SetData(val []Filter) {
+	s.Data = val
+}
+
+// SetPage sets the value of Page.
+func (s *FiltersResp) SetPage(val int) {
+	s.Page = val
+}
+
+// SetPages sets the value of Pages.
+func (s *FiltersResp) SetPages(val int) {
+	s.Pages = val
+}
+
+// SetPerPage sets the value of PerPage.
+func (s *FiltersResp) SetPerPage(val int) {
+	s.PerPage = val
+}
+
+func (*FiltersResp) v1AdminFiltersGetRes() {}
+
 // NewOptBool returns new OptBool with value set to v.
 func NewOptBool(v bool) OptBool {
 	return OptBool{
@@ -492,6 +572,58 @@ func (*V1AdminCategoriesPostConflict) v1AdminCategoriesPostRes() {}
 type V1AdminCategoriesPostUnauthorized Error
 
 func (*V1AdminCategoriesPostUnauthorized) v1AdminCategoriesPostRes() {}
+
+type V1AdminFiltersFilterIDDeleteNotFound Error
+
+func (*V1AdminFiltersFilterIDDeleteNotFound) v1AdminFiltersFilterIDDeleteRes() {}
+
+// V1AdminFiltersFilterIDDeleteOK is response for V1AdminFiltersFilterIDDelete operation.
+type V1AdminFiltersFilterIDDeleteOK struct{}
+
+func (*V1AdminFiltersFilterIDDeleteOK) v1AdminFiltersFilterIDDeleteRes() {}
+
+type V1AdminFiltersFilterIDDeleteUnauthorized Error
+
+func (*V1AdminFiltersFilterIDDeleteUnauthorized) v1AdminFiltersFilterIDDeleteRes() {}
+
+type V1AdminFiltersGetBadRequest Error
+
+func (*V1AdminFiltersGetBadRequest) v1AdminFiltersGetRes() {}
+
+type V1AdminFiltersGetNotFound Error
+
+func (*V1AdminFiltersGetNotFound) v1AdminFiltersGetRes() {}
+
+type V1AdminFiltersGetUnauthorized Error
+
+func (*V1AdminFiltersGetUnauthorized) v1AdminFiltersGetRes() {}
+
+type V1AdminFiltersPostBadRequest Error
+
+func (*V1AdminFiltersPostBadRequest) v1AdminFiltersPostRes() {}
+
+type V1AdminFiltersPostConflict Error
+
+func (*V1AdminFiltersPostConflict) v1AdminFiltersPostRes() {}
+
+type V1AdminFiltersPostReq struct {
+	// Уникальный фильтр.
+	Word string `json:"word"`
+}
+
+// GetWord returns the value of Word.
+func (s *V1AdminFiltersPostReq) GetWord() string {
+	return s.Word
+}
+
+// SetWord sets the value of Word.
+func (s *V1AdminFiltersPostReq) SetWord(val string) {
+	s.Word = val
+}
+
+type V1AdminFiltersPostUnauthorized Error
+
+func (*V1AdminFiltersPostUnauthorized) v1AdminFiltersPostRes() {}
 
 type V1CategoriesGetOK map[string][]Position
 

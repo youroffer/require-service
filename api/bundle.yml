@@ -17,7 +17,7 @@ paths:
       description: Возвращает все категории с публичными должностями
       responses:
         '200':
-          description: Все категории с должностями успешно получен
+          description: Все категории с должностями успешно получены
           content:
             application/json:
               schema:
@@ -239,6 +239,151 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+  /v1/admin/filters:
+    post:
+      tags:
+        - filters
+      summary: Создать новый фильтр
+      description: Создает новый фильтр с уникальным словом.
+      security:
+        - adminBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - word
+              properties:
+                word:
+                  type: string
+                  description: Уникальный фильтр.
+                  maxLength: 100
+                  example: example
+      responses:
+        '201':
+          description: Фильтр успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Filter'
+        '400':
+          description: Некорректные данные.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Фильтр уже существует.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    get:
+      tags:
+        - filters
+      summary: Получить все фильтры
+      description: Возвращает список всех фильтров с возможностью пагинации
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы для пагинации
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество фильтров на странице
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+      responses:
+        '200':
+          description: Список фильтров успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FiltersResp'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Фильтры не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/admin/filters{filterID}:
+    delete:
+      tags:
+        - filters
+      summary: Удалить фильтр по ID
+      description: Удаляет фильтр по его уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: filterID
+          in: path
+          required: true
+          description: Уникальный идентификатор фильтра.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Фильтр успешно удален
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Фильтр не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
 components:
   securitySchemes:
     bearerAuth:
@@ -278,11 +423,11 @@ components:
         categories_id:
           type: integer
           description: Идентификатор категории.
-          example: 2
+          example: 1
         logo_id:
           type: integer
           description: Идентификатор логотипа.
-          example: 3
+          example: 1
         title:
           type: string
           description: Заголовок поста.
@@ -354,3 +499,39 @@ components:
         public:
           type: boolean
           example: true
+    Filter:
+      type: object
+      required:
+        - id
+        - word
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор фильтра.
+          example: 1
+        word:
+          type: string
+          description: Уникальный фильтр.
+          maxLength: 100
+          example: example
+    FiltersResp:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Filter'
+        page:
+          type: integer
+          example: 0
+        pages:
+          type: integer
+          example: 13
+        per_page:
+          type: integer
+          example: 1
+      required:
+        - data
+        - page
+        - pages
+        - per_page
