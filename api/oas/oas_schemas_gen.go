@@ -177,7 +177,8 @@ func (s *AnalyticWords) SetKeywords(val []Word) {
 	s.Keywords = val
 }
 
-func (*AnalyticWords) v1AnalyticsAnalyticIDGetRes() {}
+func (*AnalyticWords) v1AnalyticsAnalyticIDGetRes()      {}
+func (*AnalyticWords) v1AnalyticsAnalyticIDLimitGetRes() {}
 
 // Ref: #
 type AnalyticsResp struct {
@@ -977,6 +978,20 @@ func (s *PositionsResp) SetPerPage(val OptInt) {
 
 func (*PositionsResp) v1AdminPositionsGetRes() {}
 
+type UserBearerAuth struct {
+	Token string
+}
+
+// GetToken returns the value of Token.
+func (s *UserBearerAuth) GetToken() string {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *UserBearerAuth) SetToken(val string) {
+	s.Token = val
+}
+
 type V1AdminAnalyticsAnalyticIDDeleteNotFound Error
 
 func (*V1AdminAnalyticsAnalyticIDDeleteNotFound) v1AdminAnalyticsAnalyticIDDeleteRes() {}
@@ -1207,6 +1222,14 @@ func (*V1AnalyticsAnalyticIDGetBadRequest) v1AnalyticsAnalyticIDGetRes() {}
 type V1AnalyticsAnalyticIDGetNotFound Error
 
 func (*V1AnalyticsAnalyticIDGetNotFound) v1AnalyticsAnalyticIDGetRes() {}
+
+type V1AnalyticsAnalyticIDLimitGetBadRequest Error
+
+func (*V1AnalyticsAnalyticIDLimitGetBadRequest) v1AnalyticsAnalyticIDLimitGetRes() {}
+
+type V1AnalyticsAnalyticIDLimitGetNotFound Error
+
+func (*V1AnalyticsAnalyticIDLimitGetNotFound) v1AnalyticsAnalyticIDLimitGetRes() {}
 
 // Ref: #
 type Word struct {

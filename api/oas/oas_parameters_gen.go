@@ -1276,3 +1276,69 @@ func decodeV1AnalyticsAnalyticIDGetParams(args [1]string, argsEscaped bool, r *h
 	}
 	return params, nil
 }
+
+// V1AnalyticsAnalyticIDLimitGetParams is parameters of GET /v1/analytics/{analyticID}/limit operation.
+type V1AnalyticsAnalyticIDLimitGetParams struct {
+	// Уникальный идентификатор аналитики.
+	AnalyticID int
+}
+
+func unpackV1AnalyticsAnalyticIDLimitGetParams(packed middleware.Parameters) (params V1AnalyticsAnalyticIDLimitGetParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "analyticID",
+			In:   "path",
+		}
+		params.AnalyticID = packed[key].(int)
+	}
+	return params
+}
+
+func decodeV1AnalyticsAnalyticIDLimitGetParams(args [1]string, argsEscaped bool, r *http.Request) (params V1AnalyticsAnalyticIDLimitGetParams, _ error) {
+	// Decode path: analyticID.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "analyticID",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToInt(val)
+				if err != nil {
+					return err
+				}
+
+				params.AnalyticID = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "analyticID",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}

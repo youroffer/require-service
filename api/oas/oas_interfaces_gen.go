@@ -65,6 +65,10 @@ type V1AnalyticsAnalyticIDGetRes interface {
 	v1AnalyticsAnalyticIDGetRes()
 }
 
+type V1AnalyticsAnalyticIDLimitGetRes interface {
+	v1AnalyticsAnalyticIDLimitGetRes()
+}
+
 type V1CategoriesGetRes interface {
 	v1CategoriesGetRes()
 }

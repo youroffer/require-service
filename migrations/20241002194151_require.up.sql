@@ -7,7 +7,7 @@ CREATE TABLE if not exists categories (
 -- Создание таблицы posts
 CREATE TABLE if not exists posts (
     id SERIAL PRIMARY KEY,
-    categories_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+    categories_id INTEGER NOT NULL REFERENCES categories(id)
     logo_id INTEGER NOT NULL,
     title VARCHAR(100) NOT NULL UNIQUE,
     public BOOLEAN NOT NULL

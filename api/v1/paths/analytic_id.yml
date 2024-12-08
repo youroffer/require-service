@@ -2,7 +2,9 @@ get:
   tags:
     - analytics
   summary: Получить аналитику по ID
-  description: Возвращает аналитику, включая навыки и ключевые слова по уникальному идентификатору аналитики.
+  description: Возвращает аналитику со всеми словами по уникальному идентификатору аналитики.
+  security:
+    - userBearerAuth: []
   parameters:
     - name: analyticID
       in: path

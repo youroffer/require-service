@@ -106,11 +106,18 @@ type Handler interface {
 	V1AdminPositionsPost(ctx context.Context, req *PositionPost) (V1AdminPositionsPostRes, error)
 	// V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
 	//
-	// Возвращает аналитику, включая навыки и ключевые
-	// слова по уникальному идентификатору аналитики.
+	// Возвращает аналитику со всеми словами по уникальному
+	// идентификатору аналитики.
 	//
 	// GET /v1/analytics/{analyticID}
 	V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error)
+	// V1AnalyticsAnalyticIDLimitGet implements GET /v1/analytics/{analyticID}/limit operation.
+	//
+	// Возвращает аналитику с ограничением на слова по
+	// уникальному идентификатору аналитики.
+	//
+	// GET /v1/analytics/{analyticID}/limit
+	V1AnalyticsAnalyticIDLimitGet(ctx context.Context, params V1AnalyticsAnalyticIDLimitGetParams) (V1AnalyticsAnalyticIDLimitGetRes, error)
 	// V1CategoriesGet implements GET /v1/categories operation.
 	//
 	// Возвращает все категории с публичными должностями.

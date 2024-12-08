@@ -23,6 +23,8 @@ paths:
 
   /v1/analytics/{analyticID}:
     $ref: "./v1/paths/analytic_id.yml" 
+  /v1/analytics/{analyticID}/limit:
+    $ref: "./v1/paths/limit_analytic_id.yml" 
   /v1/admin/analytics:
     $ref: "./v1/paths/admin/analytic/_index.yml" 
   /v1/admin/analytics/{analyticID}:
@@ -39,6 +41,10 @@ components:
       scheme: bearer
       bearerFormat: JWT
     adminBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    userBearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT

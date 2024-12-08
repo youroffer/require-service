@@ -156,11 +156,21 @@ func (UnimplementedHandler) V1AdminPositionsPost(ctx context.Context, req *Posit
 
 // V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
 //
-// Возвращает аналитику, включая навыки и ключевые
-// слова по уникальному идентификатору аналитики.
+// Возвращает аналитику со всеми словами по уникальному
+// идентификатору аналитики.
 //
 // GET /v1/analytics/{analyticID}
 func (UnimplementedHandler) V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (r V1AnalyticsAnalyticIDGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AnalyticsAnalyticIDLimitGet implements GET /v1/analytics/{analyticID}/limit operation.
+//
+// Возвращает аналитику с ограничением на слова по
+// уникальному идентификатору аналитики.
+//
+// GET /v1/analytics/{analyticID}/limit
+func (UnimplementedHandler) V1AnalyticsAnalyticIDLimitGet(ctx context.Context, params V1AnalyticsAnalyticIDLimitGetParams) (r V1AnalyticsAnalyticIDLimitGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

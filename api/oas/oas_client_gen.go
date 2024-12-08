@@ -121,11 +121,18 @@ type Invoker interface {
 	V1AdminPositionsPost(ctx context.Context, request *PositionPost) (V1AdminPositionsPostRes, error)
 	// V1AnalyticsAnalyticIDGet invokes GET /v1/analytics/{analyticID} operation.
 	//
-	// Возвращает аналитику, включая навыки и ключевые
-	// слова по уникальному идентификатору аналитики.
+	// Возвращает аналитику со всеми словами по уникальному
+	// идентификатору аналитики.
 	//
 	// GET /v1/analytics/{analyticID}
 	V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error)
+	// V1AnalyticsAnalyticIDLimitGet invokes GET /v1/analytics/{analyticID}/limit operation.
+	//
+	// Возвращает аналитику с ограничением на слова по
+	// уникальному идентификатору аналитики.
+	//
+	// GET /v1/analytics/{analyticID}/limit
+	V1AnalyticsAnalyticIDLimitGet(ctx context.Context, params V1AnalyticsAnalyticIDLimitGetParams) (V1AnalyticsAnalyticIDLimitGetRes, error)
 	// V1CategoriesGet invokes GET /v1/categories operation.
 	//
 	// Возвращает все категории с публичными должностями.
@@ -2055,8 +2062,8 @@ func (c *Client) sendV1AdminPositionsPost(ctx context.Context, request *Position
 
 // V1AnalyticsAnalyticIDGet invokes GET /v1/analytics/{analyticID} operation.
 //
-// Возвращает аналитику, включая навыки и ключевые
-// слова по уникальному идентификатору аналитики.
+// Возвращает аналитику со всеми словами по уникальному
+// идентификатору аналитики.
 //
 // GET /v1/analytics/{analyticID}
 func (c *Client) V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error) {
@@ -2127,6 +2134,39 @@ func (c *Client) sendV1AnalyticsAnalyticIDGet(ctx context.Context, params V1Anal
 		return res, errors.Wrap(err, "create request")
 	}
 
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:UserBearerAuth"
+			switch err := c.securityUserBearerAuth(ctx, "V1AnalyticsAnalyticIDGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"UserBearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
 	stage = "SendRequest"
 	resp, err := c.cfg.Client.Do(r)
 	if err != nil {
@@ -2136,6 +2176,97 @@ func (c *Client) sendV1AnalyticsAnalyticIDGet(ctx context.Context, params V1Anal
 
 	stage = "DecodeResponse"
 	result, err := decodeV1AnalyticsAnalyticIDGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1AnalyticsAnalyticIDLimitGet invokes GET /v1/analytics/{analyticID}/limit operation.
+//
+// Возвращает аналитику с ограничением на слова по
+// уникальному идентификатору аналитики.
+//
+// GET /v1/analytics/{analyticID}/limit
+func (c *Client) V1AnalyticsAnalyticIDLimitGet(ctx context.Context, params V1AnalyticsAnalyticIDLimitGetParams) (V1AnalyticsAnalyticIDLimitGetRes, error) {
+	res, err := c.sendV1AnalyticsAnalyticIDLimitGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1AnalyticsAnalyticIDLimitGet(ctx context.Context, params V1AnalyticsAnalyticIDLimitGetParams) (res V1AnalyticsAnalyticIDLimitGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/analytics/{analyticID}/limit"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AnalyticsAnalyticIDLimitGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [3]string
+	pathParts[0] = "/v1/analytics/"
+	{
+		// Encode "analyticID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "analyticID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.AnalyticID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/limit"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AnalyticsAnalyticIDLimitGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
