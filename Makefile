@@ -21,7 +21,7 @@ generate.api: $(ogen)
 # COMPOSE
 .PHONY: compose.up
 compose.up:
-	docker compose -f deployments/dev/compose.yml -p media up --build --no-log-prefix --attach media
+	docker compose -f deployments/dev/compose.yml -p require up --build --no-log-prefix --attach require
 
 .PHONY: compose.down
 compose.down:
