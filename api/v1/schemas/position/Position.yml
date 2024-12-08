@@ -9,7 +9,7 @@ properties:
     type: integer
     description: Уникальный идентификатор поста.
     example: 1
-  categories_id:
+  category_id:
     type: integer
     description: Идентификатор категории.
     example: 1

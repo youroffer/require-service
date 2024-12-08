@@ -1,0 +1,38 @@
+get:
+  tags:
+    - analytics
+  summary: Получить аналитику по ID
+  description: Возвращает аналитику, включая навыки и ключевые слова по уникальному идентификатору аналитики.
+  parameters:
+    - name: analyticID
+      in: path
+      required: true
+      description: Уникальный идентификатор аналитики.
+      schema:
+        type: integer
+        example: 1
+  responses:
+    '200':
+      description: Успешно получена аналитика с словами
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/analytic/AnalyticWords.yml'
+    '404':
+      description: Аналитика с данным ID не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/error.yml'

@@ -1,0 +1,13 @@
+type: object
+properties:
+  word:
+    type: string
+    description: Слово
+    example: "example"
+  mentions:
+    type: integer
+    description: Количество упоминаний данного слова
+    example: 15
+required:
+  - word
+  - mentions

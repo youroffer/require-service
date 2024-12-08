@@ -61,9 +61,9 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "admin/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("admin/"); len(elem) >= l && elem[0:l] == "admin/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -73,83 +73,194 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "categories"
+				case 'd': // Prefix: "dmin/"
 					origElem := elem
-					if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
+					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch r.Method {
-						case "GET":
-							s.handleV1AdminCategoriesGetRequest([0]string{}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1AdminCategoriesPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET,POST")
-						}
-
-						return
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case 'a': // Prefix: "analytics"
 						origElem := elem
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("analytics"); len(elem) >= l && elem[0:l] == "analytics" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "categoryID"
-						// Leaf parameter
-						args[0] = elem
-						elem = ""
-
 						if len(elem) == 0 {
-							// Leaf node.
 							switch r.Method {
-							case "DELETE":
-								s.handleV1AdminCategoriesCategoryIDDeleteRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
-							case "PUT":
-								s.handleV1AdminCategoriesCategoryIDPutRequest([1]string{
-									args[0],
-								}, elemIsEscaped, w, r)
+							case "GET":
+								s.handleV1AdminAnalyticsGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1AdminAnalyticsPostRequest([0]string{}, elemIsEscaped, w, r)
 							default:
-								s.notAllowed(w, r, "DELETE,PUT")
+								s.notAllowed(w, r, "GET,POST")
 							}
 
 							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "analyticID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleV1AdminAnalyticsAnalyticIDDeleteRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PUT":
+									s.handleV1AdminAnalyticsAnalyticIDPutRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,PUT")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'c': // Prefix: "categories"
+						origElem := elem
+						if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleV1AdminCategoriesGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1AdminCategoriesPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "categoryID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleV1AdminCategoriesCategoryIDDeleteRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PUT":
+									s.handleV1AdminCategoriesCategoryIDPutRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,PUT")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'f': // Prefix: "filters"
+						origElem := elem
+						if l := len("filters"); len(elem) >= l && elem[0:l] == "filters" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleV1AdminFiltersGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1AdminFiltersPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "filterID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleV1AdminFiltersFilterIDDeleteRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE")
+								}
+
+								return
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
 					}
 
 					elem = origElem
-				case 'f': // Prefix: "filters"
+				case 'n': // Prefix: "nalytics/"
 					origElem := elem
-					if l := len("filters"); len(elem) >= l && elem[0:l] == "filters" {
+					if l := len("nalytics/"); len(elem) >= l && elem[0:l] == "nalytics/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					if len(elem) == 0 {
-						switch r.Method {
-						case "GET":
-							s.handleV1AdminFiltersGetRequest([0]string{}, elemIsEscaped, w, r)
-						case "POST":
-							s.handleV1AdminFiltersPostRequest([0]string{}, elemIsEscaped, w, r)
-						default:
-							s.notAllowed(w, r, "GET,POST")
-						}
-
-						return
-					}
-					// Param: "filterID"
+					// Param: "analyticID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -157,12 +268,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch r.Method {
-						case "DELETE":
-							s.handleV1AdminFiltersFilterIDDeleteRequest([1]string{
+						case "GET":
+							s.handleV1AnalyticsAnalyticIDGetRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "DELETE")
+							s.notAllowed(w, r, "GET")
 						}
 
 						return
@@ -288,9 +399,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				break
 			}
 			switch elem[0] {
-			case 'a': // Prefix: "admin/"
+			case 'a': // Prefix: "a"
 				origElem := elem
-				if l := len("admin/"); len(elem) >= l && elem[0:l] == "admin/" {
+				if l := len("a"); len(elem) >= l && elem[0:l] == "a" {
 					elem = elem[l:]
 				} else {
 					break
@@ -300,109 +411,238 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					break
 				}
 				switch elem[0] {
-				case 'c': // Prefix: "categories"
+				case 'd': // Prefix: "dmin/"
 					origElem := elem
-					if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
+					if l := len("dmin/"); len(elem) >= l && elem[0:l] == "dmin/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
 					if len(elem) == 0 {
-						switch method {
-						case "GET":
-							r.name = "V1AdminCategoriesGet"
-							r.summary = "Получить все категории"
-							r.operationID = ""
-							r.pathPattern = "/v1/admin/categories"
-							r.args = args
-							r.count = 0
-							return r, true
-						case "POST":
-							r.name = "V1AdminCategoriesPost"
-							r.summary = "Добавить категорию"
-							r.operationID = ""
-							r.pathPattern = "/v1/admin/categories"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
+						break
 					}
 					switch elem[0] {
-					case '/': // Prefix: "/"
+					case 'a': // Prefix: "analytics"
 						origElem := elem
-						if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+						if l := len("analytics"); len(elem) >= l && elem[0:l] == "analytics" {
 							elem = elem[l:]
 						} else {
 							break
 						}
 
-						// Param: "categoryID"
-						// Leaf parameter
-						args[0] = elem
-						elem = ""
-
 						if len(elem) == 0 {
-							// Leaf node.
 							switch method {
-							case "DELETE":
-								r.name = "V1AdminCategoriesCategoryIDDelete"
-								r.summary = "Удаление категории"
+							case "GET":
+								r.name = "V1AdminAnalyticsGet"
+								r.summary = "Получить всю аналитику"
 								r.operationID = ""
-								r.pathPattern = "/v1/admin/categories/{categoryID}"
+								r.pathPattern = "/v1/admin/analytics"
 								r.args = args
-								r.count = 1
+								r.count = 0
 								return r, true
-							case "PUT":
-								r.name = "V1AdminCategoriesCategoryIDPut"
-								r.summary = "Обновить категорию"
+							case "POST":
+								r.name = "V1AdminAnalyticsPost"
+								r.summary = "Создать новую запись аналитики"
 								r.operationID = ""
-								r.pathPattern = "/v1/admin/categories/{categoryID}"
+								r.pathPattern = "/v1/admin/analytics"
 								r.args = args
-								r.count = 1
+								r.count = 0
 								return r, true
 							default:
 								return
 							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "analyticID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = "V1AdminAnalyticsAnalyticIDDelete"
+									r.summary = "Удалить аналитику по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/analytics/{analyticID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PUT":
+									r.name = "V1AdminAnalyticsAnalyticIDPut"
+									r.summary = "Обновить аналитику по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/analytics/{analyticID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'c': // Prefix: "categories"
+						origElem := elem
+						if l := len("categories"); len(elem) >= l && elem[0:l] == "categories" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = "V1AdminCategoriesGet"
+								r.summary = "Получить все категории"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/categories"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1AdminCategoriesPost"
+								r.summary = "Добавить категорию"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/categories"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "categoryID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = "V1AdminCategoriesCategoryIDDelete"
+									r.summary = "Удаление категории по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/categories/{categoryID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PUT":
+									r.name = "V1AdminCategoriesCategoryIDPut"
+									r.summary = "Обновить категорию по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/categories/{categoryID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'f': // Prefix: "filters"
+						origElem := elem
+						if l := len("filters"); len(elem) >= l && elem[0:l] == "filters" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = "V1AdminFiltersGet"
+								r.summary = "Получить все фильтры"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/filters"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1AdminFiltersPost"
+								r.summary = "Создать новый фильтр"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/filters"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "filterID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = "V1AdminFiltersFilterIDDelete"
+									r.summary = "Удалить фильтр по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/filters/{filterID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
 						}
 
 						elem = origElem
 					}
 
 					elem = origElem
-				case 'f': // Prefix: "filters"
+				case 'n': // Prefix: "nalytics/"
 					origElem := elem
-					if l := len("filters"); len(elem) >= l && elem[0:l] == "filters" {
+					if l := len("nalytics/"); len(elem) >= l && elem[0:l] == "nalytics/" {
 						elem = elem[l:]
 					} else {
 						break
 					}
 
-					if len(elem) == 0 {
-						switch method {
-						case "GET":
-							r.name = "V1AdminFiltersGet"
-							r.summary = "Получить все фильтры"
-							r.operationID = ""
-							r.pathPattern = "/v1/admin/filters"
-							r.args = args
-							r.count = 0
-							return r, true
-						case "POST":
-							r.name = "V1AdminFiltersPost"
-							r.summary = "Создать новый фильтр"
-							r.operationID = ""
-							r.pathPattern = "/v1/admin/filters"
-							r.args = args
-							r.count = 0
-							return r, true
-						default:
-							return
-						}
-					}
-					// Param: "filterID"
+					// Param: "analyticID"
 					// Leaf parameter
 					args[0] = elem
 					elem = ""
@@ -410,11 +650,11 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						// Leaf node.
 						switch method {
-						case "DELETE":
-							r.name = "V1AdminFiltersFilterIDDelete"
-							r.summary = "Удалить фильтр по ID"
+						case "GET":
+							r.name = "V1AnalyticsAnalyticIDGet"
+							r.summary = "Получить аналитику по ID"
 							r.operationID = ""
-							r.pathPattern = "/v1/admin/filters{filterID}"
+							r.pathPattern = "/v1/analytics/{analyticID}"
 							r.args = args
 							r.count = 1
 							return r, true

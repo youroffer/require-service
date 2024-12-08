@@ -19,6 +19,699 @@ import (
 	"github.com/ogen-go/ogen/ogenerrors"
 )
 
+// handleV1AdminAnalyticsAnalyticIDDeleteRequest handles DELETE /v1/admin/analytics/{analyticID} operation.
+//
+// Удаляет аналитику по уникальному идентификатору.
+//
+// DELETE /v1/admin/analytics/{analyticID}
+func (s *Server) handleV1AdminAnalyticsAnalyticIDDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics/{analyticID}"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AdminAnalyticsAnalyticIDDelete",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1AdminAnalyticsAnalyticIDDelete",
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityAdminBearerAuth(ctx, "V1AdminAnalyticsAnalyticIDDelete", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "AdminBearerAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+					defer recordError("Security:AdminBearerAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1AdminAnalyticsAnalyticIDDeleteParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1AdminAnalyticsAnalyticIDDeleteRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1AdminAnalyticsAnalyticIDDelete",
+			OperationSummary: "Удалить аналитику по ID",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "analyticID",
+					In:   "path",
+				}: params.AnalyticID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1AdminAnalyticsAnalyticIDDeleteParams
+			Response = V1AdminAnalyticsAnalyticIDDeleteRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1AdminAnalyticsAnalyticIDDeleteParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1AdminAnalyticsAnalyticIDDelete(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1AdminAnalyticsAnalyticIDDelete(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1AdminAnalyticsAnalyticIDDeleteResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1AdminAnalyticsAnalyticIDPutRequest handles PUT /v1/admin/analytics/{analyticID} operation.
+//
+// Обновляет аналитику по ее уникальному
+// идентификатору.
+//
+// PUT /v1/admin/analytics/{analyticID}
+func (s *Server) handleV1AdminAnalyticsAnalyticIDPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics/{analyticID}"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AdminAnalyticsAnalyticIDPut",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1AdminAnalyticsAnalyticIDPut",
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityAdminBearerAuth(ctx, "V1AdminAnalyticsAnalyticIDPut", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "AdminBearerAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+					defer recordError("Security:AdminBearerAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1AdminAnalyticsAnalyticIDPutParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	request, close, err := s.decodeV1AdminAnalyticsAnalyticIDPutRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response V1AdminAnalyticsAnalyticIDPutRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1AdminAnalyticsAnalyticIDPut",
+			OperationSummary: "Обновить аналитику по ID",
+			OperationID:      "",
+			Body:             request,
+			Params: middleware.Parameters{
+				{
+					Name: "analyticID",
+					In:   "path",
+				}: params.AnalyticID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *AnalyticPut
+			Params   = V1AdminAnalyticsAnalyticIDPutParams
+			Response = V1AdminAnalyticsAnalyticIDPutRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1AdminAnalyticsAnalyticIDPutParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1AdminAnalyticsAnalyticIDPut(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1AdminAnalyticsAnalyticIDPut(ctx, request, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1AdminAnalyticsAnalyticIDPutResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1AdminAnalyticsGetRequest handles GET /v1/admin/analytics operation.
+//
+// Возвращает список всех аналитик с возможностью
+// пагинации.
+//
+// GET /v1/admin/analytics
+func (s *Server) handleV1AdminAnalyticsGetRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AdminAnalyticsGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1AdminAnalyticsGet",
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityAdminBearerAuth(ctx, "V1AdminAnalyticsGet", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "AdminBearerAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+					defer recordError("Security:AdminBearerAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	params, err := decodeV1AdminAnalyticsGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1AdminAnalyticsGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1AdminAnalyticsGet",
+			OperationSummary: "Получить всю аналитику",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "page",
+					In:   "query",
+				}: params.Page,
+				{
+					Name: "per_page",
+					In:   "query",
+				}: params.PerPage,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1AdminAnalyticsGetParams
+			Response = V1AdminAnalyticsGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1AdminAnalyticsGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1AdminAnalyticsGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1AdminAnalyticsGet(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1AdminAnalyticsGetResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1AdminAnalyticsPostRequest handles POST /v1/admin/analytics operation.
+//
+// Создает новую запись аналитики.
+//
+// POST /v1/admin/analytics
+func (s *Server) handleV1AdminAnalyticsPostRequest(args [0]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AdminAnalyticsPost",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1AdminAnalyticsPost",
+			ID:   "",
+		}
+	)
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			sctx, ok, err := s.securityAdminBearerAuth(ctx, "V1AdminAnalyticsPost", r)
+			if err != nil {
+				err = &ogenerrors.SecurityError{
+					OperationContext: opErrContext,
+					Security:         "AdminBearerAuth",
+					Err:              err,
+				}
+				if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+					defer recordError("Security:AdminBearerAuth", err)
+				}
+				return
+			}
+			if ok {
+				satisfied[0] |= 1 << 0
+				ctx = sctx
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			err = &ogenerrors.SecurityError{
+				OperationContext: opErrContext,
+				Err:              ogenerrors.ErrSecurityRequirementIsNotSatisfied,
+			}
+			if encodeErr := encodeErrorResponse(s.h.NewError(ctx, err), w, span); encodeErr != nil {
+				defer recordError("Security", err)
+			}
+			return
+		}
+	}
+	request, close, err := s.decodeV1AdminAnalyticsPostRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response V1AdminAnalyticsPostRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1AdminAnalyticsPost",
+			OperationSummary: "Создать новую запись аналитики",
+			OperationID:      "",
+			Body:             request,
+			Params:           middleware.Parameters{},
+			Raw:              r,
+		}
+
+		type (
+			Request  = *AnalyticPost
+			Params   = struct{}
+			Response = V1AdminAnalyticsPostRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			nil,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1AdminAnalyticsPost(ctx, request)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1AdminAnalyticsPost(ctx, request)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1AdminAnalyticsPostResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleV1AdminCategoriesCategoryIDDeleteRequest handles DELETE /v1/admin/categories/{categoryID} operation.
 //
 // Удаляет категорию по ее уникальному идентификатору.
@@ -128,7 +821,7 @@ func (s *Server) handleV1AdminCategoriesCategoryIDDeleteRequest(args [1]string, 
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "V1AdminCategoriesCategoryIDDelete",
-			OperationSummary: "Удаление категории",
+			OperationSummary: "Удаление категории по ID",
 			OperationID:      "",
 			Body:             nil,
 			Params: middleware.Parameters{
@@ -189,7 +882,8 @@ func (s *Server) handleV1AdminCategoriesCategoryIDDeleteRequest(args [1]string, 
 
 // handleV1AdminCategoriesCategoryIDPutRequest handles PUT /v1/admin/categories/{categoryID} operation.
 //
-// Обновляет категорию.
+// Обновляет категорию по ее уникальному
+// идентификатору.
 //
 // PUT /v1/admin/categories/{categoryID}
 func (s *Server) handleV1AdminCategoriesCategoryIDPutRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
@@ -311,7 +1005,7 @@ func (s *Server) handleV1AdminCategoriesCategoryIDPutRequest(args [1]string, arg
 		mreq := middleware.Request{
 			Context:          ctx,
 			OperationName:    "V1AdminCategoriesCategoryIDPut",
-			OperationSummary: "Обновить категорию",
+			OperationSummary: "Обновить категорию по ID",
 			OperationID:      "",
 			Body:             request,
 			Params: middleware.Parameters{
@@ -711,15 +1405,15 @@ func (s *Server) handleV1AdminCategoriesPostRequest(args [0]string, argsEscaped 
 	}
 }
 
-// handleV1AdminFiltersFilterIDDeleteRequest handles DELETE /v1/admin/filters{filterID} operation.
+// handleV1AdminFiltersFilterIDDeleteRequest handles DELETE /v1/admin/filters/{filterID} operation.
 //
 // Удаляет фильтр по его уникальному идентификатору.
 //
-// DELETE /v1/admin/filters{filterID}
+// DELETE /v1/admin/filters/{filterID}
 func (s *Server) handleV1AdminFiltersFilterIDDeleteRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/admin/filters{filterID}"),
+		semconv.HTTPRouteKey.String("/v1/admin/filters/{filterID}"),
 	}
 
 	// Start a span for this request.
@@ -1212,6 +1906,129 @@ func (s *Server) handleV1AdminFiltersPostRequest(args [0]string, argsEscaped boo
 	}
 
 	if err := encodeV1AdminFiltersPostResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
+// handleV1AnalyticsAnalyticIDGetRequest handles GET /v1/analytics/{analyticID} operation.
+//
+// Возвращает аналитику, включая навыки и ключевые
+// слова по уникальному идентификатору аналитики.
+//
+// GET /v1/analytics/{analyticID}
+func (s *Server) handleV1AnalyticsAnalyticIDGetRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/analytics/{analyticID}"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), "V1AnalyticsAnalyticIDGet",
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+		attrOpt := metric.WithAttributeSet(labeler.AttributeSet())
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			s.errors.Add(ctx, 1, metric.WithAttributeSet(labeler.AttributeSet()))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: "V1AnalyticsAnalyticIDGet",
+			ID:   "",
+		}
+	)
+	params, err := decodeV1AnalyticsAnalyticIDGetParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response V1AnalyticsAnalyticIDGetRes
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    "V1AnalyticsAnalyticIDGet",
+			OperationSummary: "Получить аналитику по ID",
+			OperationID:      "",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "analyticID",
+					In:   "path",
+				}: params.AnalyticID,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = V1AnalyticsAnalyticIDGetParams
+			Response = V1AnalyticsAnalyticIDGetRes
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackV1AnalyticsAnalyticIDGetParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.V1AnalyticsAnalyticIDGet(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.V1AnalyticsAnalyticIDGet(ctx, params)
+	}
+	if err != nil {
+		if errRes, ok := errors.Into[*ErrorStatusCode](err); ok {
+			if err := encodeErrorResponse(errRes, w, span); err != nil {
+				defer recordError("Internal", err)
+			}
+			return
+		}
+		if errors.Is(err, ht.ErrNotImplemented) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+			return
+		}
+		if err := encodeErrorResponse(s.h.NewError(ctx, err), w, span); err != nil {
+			defer recordError("Internal", err)
+		}
+		return
+	}
+
+	if err := encodeV1AnalyticsAnalyticIDGetResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

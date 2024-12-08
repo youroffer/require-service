@@ -13,6 +13,44 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
+// V1AdminAnalyticsAnalyticIDDelete implements DELETE /v1/admin/analytics/{analyticID} operation.
+//
+// Удаляет аналитику по уникальному идентификатору.
+//
+// DELETE /v1/admin/analytics/{analyticID}
+func (UnimplementedHandler) V1AdminAnalyticsAnalyticIDDelete(ctx context.Context, params V1AdminAnalyticsAnalyticIDDeleteParams) (r V1AdminAnalyticsAnalyticIDDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminAnalyticsAnalyticIDPut implements PUT /v1/admin/analytics/{analyticID} operation.
+//
+// Обновляет аналитику по ее уникальному
+// идентификатору.
+//
+// PUT /v1/admin/analytics/{analyticID}
+func (UnimplementedHandler) V1AdminAnalyticsAnalyticIDPut(ctx context.Context, req *AnalyticPut, params V1AdminAnalyticsAnalyticIDPutParams) (r V1AdminAnalyticsAnalyticIDPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminAnalyticsGet implements GET /v1/admin/analytics operation.
+//
+// Возвращает список всех аналитик с возможностью
+// пагинации.
+//
+// GET /v1/admin/analytics
+func (UnimplementedHandler) V1AdminAnalyticsGet(ctx context.Context, params V1AdminAnalyticsGetParams) (r V1AdminAnalyticsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminAnalyticsPost implements POST /v1/admin/analytics operation.
+//
+// Создает новую запись аналитики.
+//
+// POST /v1/admin/analytics
+func (UnimplementedHandler) V1AdminAnalyticsPost(ctx context.Context, req *AnalyticPost) (r V1AdminAnalyticsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1AdminCategoriesCategoryIDDelete implements DELETE /v1/admin/categories/{categoryID} operation.
 //
 // Удаляет категорию по ее уникальному идентификатору.
@@ -24,7 +62,8 @@ func (UnimplementedHandler) V1AdminCategoriesCategoryIDDelete(ctx context.Contex
 
 // V1AdminCategoriesCategoryIDPut implements PUT /v1/admin/categories/{categoryID} operation.
 //
-// Обновляет категорию.
+// Обновляет категорию по ее уникальному
+// идентификатору.
 //
 // PUT /v1/admin/categories/{categoryID}
 func (UnimplementedHandler) V1AdminCategoriesCategoryIDPut(ctx context.Context, req *CategoryPut, params V1AdminCategoriesCategoryIDPutParams) (r V1AdminCategoriesCategoryIDPutRes, _ error) {
@@ -50,11 +89,11 @@ func (UnimplementedHandler) V1AdminCategoriesPost(ctx context.Context, req *Cate
 	return r, ht.ErrNotImplemented
 }
 
-// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters{filterID} operation.
+// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters/{filterID} operation.
 //
 // Удаляет фильтр по его уникальному идентификатору.
 //
-// DELETE /v1/admin/filters{filterID}
+// DELETE /v1/admin/filters/{filterID}
 func (UnimplementedHandler) V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (r V1AdminFiltersFilterIDDeleteRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -75,6 +114,16 @@ func (UnimplementedHandler) V1AdminFiltersGet(ctx context.Context, params V1Admi
 //
 // POST /v1/admin/filters
 func (UnimplementedHandler) V1AdminFiltersPost(ctx context.Context, req *V1AdminFiltersPostReq) (r V1AdminFiltersPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
+//
+// Возвращает аналитику, включая навыки и ключевые
+// слова по уникальному идентификатору аналитики.
+//
+// GET /v1/analytics/{analyticID}
+func (UnimplementedHandler) V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (r V1AnalyticsAnalyticIDGetRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

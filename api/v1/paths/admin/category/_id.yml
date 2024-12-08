@@ -1,8 +1,8 @@
 put:
   tags:
     - categories
-  summary: Обновить категорию
-  description: Обновляет категорию
+  summary: Обновить категорию по ID
+  description: Обновляет категорию по ее уникальному идентификатору.
   security:
     - adminBearerAuth: []
   parameters:
@@ -60,7 +60,7 @@ put:
 delete:
   tags:
     - categories
-  summary: Удаление категории
+  summary: Удаление категории по ID
   description: Удаляет категорию по ее уникальному идентификатору.
   security:
     - adminBearerAuth: []

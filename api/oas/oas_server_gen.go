@@ -8,6 +8,32 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
+	// V1AdminAnalyticsAnalyticIDDelete implements DELETE /v1/admin/analytics/{analyticID} operation.
+	//
+	// Удаляет аналитику по уникальному идентификатору.
+	//
+	// DELETE /v1/admin/analytics/{analyticID}
+	V1AdminAnalyticsAnalyticIDDelete(ctx context.Context, params V1AdminAnalyticsAnalyticIDDeleteParams) (V1AdminAnalyticsAnalyticIDDeleteRes, error)
+	// V1AdminAnalyticsAnalyticIDPut implements PUT /v1/admin/analytics/{analyticID} operation.
+	//
+	// Обновляет аналитику по ее уникальному
+	// идентификатору.
+	//
+	// PUT /v1/admin/analytics/{analyticID}
+	V1AdminAnalyticsAnalyticIDPut(ctx context.Context, req *AnalyticPut, params V1AdminAnalyticsAnalyticIDPutParams) (V1AdminAnalyticsAnalyticIDPutRes, error)
+	// V1AdminAnalyticsGet implements GET /v1/admin/analytics operation.
+	//
+	// Возвращает список всех аналитик с возможностью
+	// пагинации.
+	//
+	// GET /v1/admin/analytics
+	V1AdminAnalyticsGet(ctx context.Context, params V1AdminAnalyticsGetParams) (V1AdminAnalyticsGetRes, error)
+	// V1AdminAnalyticsPost implements POST /v1/admin/analytics operation.
+	//
+	// Создает новую запись аналитики.
+	//
+	// POST /v1/admin/analytics
+	V1AdminAnalyticsPost(ctx context.Context, req *AnalyticPost) (V1AdminAnalyticsPostRes, error)
 	// V1AdminCategoriesCategoryIDDelete implements DELETE /v1/admin/categories/{categoryID} operation.
 	//
 	// Удаляет категорию по ее уникальному идентификатору.
@@ -16,7 +42,8 @@ type Handler interface {
 	V1AdminCategoriesCategoryIDDelete(ctx context.Context, params V1AdminCategoriesCategoryIDDeleteParams) (V1AdminCategoriesCategoryIDDeleteRes, error)
 	// V1AdminCategoriesCategoryIDPut implements PUT /v1/admin/categories/{categoryID} operation.
 	//
-	// Обновляет категорию.
+	// Обновляет категорию по ее уникальному
+	// идентификатору.
 	//
 	// PUT /v1/admin/categories/{categoryID}
 	V1AdminCategoriesCategoryIDPut(ctx context.Context, req *CategoryPut, params V1AdminCategoriesCategoryIDPutParams) (V1AdminCategoriesCategoryIDPutRes, error)
@@ -33,11 +60,11 @@ type Handler interface {
 	//
 	// POST /v1/admin/categories
 	V1AdminCategoriesPost(ctx context.Context, req *CategoryPost) (V1AdminCategoriesPostRes, error)
-	// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters{filterID} operation.
+	// V1AdminFiltersFilterIDDelete implements DELETE /v1/admin/filters/{filterID} operation.
 	//
 	// Удаляет фильтр по его уникальному идентификатору.
 	//
-	// DELETE /v1/admin/filters{filterID}
+	// DELETE /v1/admin/filters/{filterID}
 	V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (V1AdminFiltersFilterIDDeleteRes, error)
 	// V1AdminFiltersGet implements GET /v1/admin/filters operation.
 	//
@@ -52,6 +79,13 @@ type Handler interface {
 	//
 	// POST /v1/admin/filters
 	V1AdminFiltersPost(ctx context.Context, req *V1AdminFiltersPostReq) (V1AdminFiltersPostRes, error)
+	// V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
+	//
+	// Возвращает аналитику, включая навыки и ключевые
+	// слова по уникальному идентификатору аналитики.
+	//
+	// GET /v1/analytics/{analyticID}
+	V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error)
 	// V1CategoriesGet implements GET /v1/categories operation.
 	//
 	// Возвращает все категории с публичными должностями.

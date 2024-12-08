@@ -23,6 +23,32 @@ import (
 
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
+	// V1AdminAnalyticsAnalyticIDDelete invokes DELETE /v1/admin/analytics/{analyticID} operation.
+	//
+	// Удаляет аналитику по уникальному идентификатору.
+	//
+	// DELETE /v1/admin/analytics/{analyticID}
+	V1AdminAnalyticsAnalyticIDDelete(ctx context.Context, params V1AdminAnalyticsAnalyticIDDeleteParams) (V1AdminAnalyticsAnalyticIDDeleteRes, error)
+	// V1AdminAnalyticsAnalyticIDPut invokes PUT /v1/admin/analytics/{analyticID} operation.
+	//
+	// Обновляет аналитику по ее уникальному
+	// идентификатору.
+	//
+	// PUT /v1/admin/analytics/{analyticID}
+	V1AdminAnalyticsAnalyticIDPut(ctx context.Context, request *AnalyticPut, params V1AdminAnalyticsAnalyticIDPutParams) (V1AdminAnalyticsAnalyticIDPutRes, error)
+	// V1AdminAnalyticsGet invokes GET /v1/admin/analytics operation.
+	//
+	// Возвращает список всех аналитик с возможностью
+	// пагинации.
+	//
+	// GET /v1/admin/analytics
+	V1AdminAnalyticsGet(ctx context.Context, params V1AdminAnalyticsGetParams) (V1AdminAnalyticsGetRes, error)
+	// V1AdminAnalyticsPost invokes POST /v1/admin/analytics operation.
+	//
+	// Создает новую запись аналитики.
+	//
+	// POST /v1/admin/analytics
+	V1AdminAnalyticsPost(ctx context.Context, request *AnalyticPost) (V1AdminAnalyticsPostRes, error)
 	// V1AdminCategoriesCategoryIDDelete invokes DELETE /v1/admin/categories/{categoryID} operation.
 	//
 	// Удаляет категорию по ее уникальному идентификатору.
@@ -31,7 +57,8 @@ type Invoker interface {
 	V1AdminCategoriesCategoryIDDelete(ctx context.Context, params V1AdminCategoriesCategoryIDDeleteParams) (V1AdminCategoriesCategoryIDDeleteRes, error)
 	// V1AdminCategoriesCategoryIDPut invokes PUT /v1/admin/categories/{categoryID} operation.
 	//
-	// Обновляет категорию.
+	// Обновляет категорию по ее уникальному
+	// идентификатору.
 	//
 	// PUT /v1/admin/categories/{categoryID}
 	V1AdminCategoriesCategoryIDPut(ctx context.Context, request *CategoryPut, params V1AdminCategoriesCategoryIDPutParams) (V1AdminCategoriesCategoryIDPutRes, error)
@@ -48,11 +75,11 @@ type Invoker interface {
 	//
 	// POST /v1/admin/categories
 	V1AdminCategoriesPost(ctx context.Context, request *CategoryPost) (V1AdminCategoriesPostRes, error)
-	// V1AdminFiltersFilterIDDelete invokes DELETE /v1/admin/filters{filterID} operation.
+	// V1AdminFiltersFilterIDDelete invokes DELETE /v1/admin/filters/{filterID} operation.
 	//
 	// Удаляет фильтр по его уникальному идентификатору.
 	//
-	// DELETE /v1/admin/filters{filterID}
+	// DELETE /v1/admin/filters/{filterID}
 	V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (V1AdminFiltersFilterIDDeleteRes, error)
 	// V1AdminFiltersGet invokes GET /v1/admin/filters operation.
 	//
@@ -67,6 +94,13 @@ type Invoker interface {
 	//
 	// POST /v1/admin/filters
 	V1AdminFiltersPost(ctx context.Context, request *V1AdminFiltersPostReq) (V1AdminFiltersPostRes, error)
+	// V1AnalyticsAnalyticIDGet invokes GET /v1/analytics/{analyticID} operation.
+	//
+	// Возвращает аналитику, включая навыки и ключевые
+	// слова по уникальному идентификатору аналитики.
+	//
+	// GET /v1/analytics/{analyticID}
+	V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error)
 	// V1CategoriesGet invokes GET /v1/categories operation.
 	//
 	// Возвращает все категории с публичными должностями.
@@ -127,6 +161,504 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 		return c.serverURL
 	}
 	return u
+}
+
+// V1AdminAnalyticsAnalyticIDDelete invokes DELETE /v1/admin/analytics/{analyticID} operation.
+//
+// Удаляет аналитику по уникальному идентификатору.
+//
+// DELETE /v1/admin/analytics/{analyticID}
+func (c *Client) V1AdminAnalyticsAnalyticIDDelete(ctx context.Context, params V1AdminAnalyticsAnalyticIDDeleteParams) (V1AdminAnalyticsAnalyticIDDeleteRes, error) {
+	res, err := c.sendV1AdminAnalyticsAnalyticIDDelete(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1AdminAnalyticsAnalyticIDDelete(ctx context.Context, params V1AdminAnalyticsAnalyticIDDeleteParams) (res V1AdminAnalyticsAnalyticIDDeleteRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics/{analyticID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AdminAnalyticsAnalyticIDDelete",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/admin/analytics/"
+	{
+		// Encode "analyticID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "analyticID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.AnalyticID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "DELETE", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:AdminBearerAuth"
+			switch err := c.securityAdminBearerAuth(ctx, "V1AdminAnalyticsAnalyticIDDelete", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"AdminBearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AdminAnalyticsAnalyticIDDeleteResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1AdminAnalyticsAnalyticIDPut invokes PUT /v1/admin/analytics/{analyticID} operation.
+//
+// Обновляет аналитику по ее уникальному
+// идентификатору.
+//
+// PUT /v1/admin/analytics/{analyticID}
+func (c *Client) V1AdminAnalyticsAnalyticIDPut(ctx context.Context, request *AnalyticPut, params V1AdminAnalyticsAnalyticIDPutParams) (V1AdminAnalyticsAnalyticIDPutRes, error) {
+	res, err := c.sendV1AdminAnalyticsAnalyticIDPut(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendV1AdminAnalyticsAnalyticIDPut(ctx context.Context, request *AnalyticPut, params V1AdminAnalyticsAnalyticIDPutParams) (res V1AdminAnalyticsAnalyticIDPutRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("PUT"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics/{analyticID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AdminAnalyticsAnalyticIDPut",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/admin/analytics/"
+	{
+		// Encode "analyticID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "analyticID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.AnalyticID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PUT", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1AdminAnalyticsAnalyticIDPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:AdminBearerAuth"
+			switch err := c.securityAdminBearerAuth(ctx, "V1AdminAnalyticsAnalyticIDPut", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"AdminBearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AdminAnalyticsAnalyticIDPutResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1AdminAnalyticsGet invokes GET /v1/admin/analytics operation.
+//
+// Возвращает список всех аналитик с возможностью
+// пагинации.
+//
+// GET /v1/admin/analytics
+func (c *Client) V1AdminAnalyticsGet(ctx context.Context, params V1AdminAnalyticsGetParams) (V1AdminAnalyticsGetRes, error) {
+	res, err := c.sendV1AdminAnalyticsGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1AdminAnalyticsGet(ctx context.Context, params V1AdminAnalyticsGetParams) (res V1AdminAnalyticsGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AdminAnalyticsGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/admin/analytics"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeQueryParams"
+	q := uri.NewQueryEncoder()
+	{
+		// Encode "page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Page.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "per_page" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "per_page",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.PerPage.Get(); ok {
+				return e.EncodeValue(conv.IntToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	u.RawQuery = q.Values().Encode()
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:AdminBearerAuth"
+			switch err := c.securityAdminBearerAuth(ctx, "V1AdminAnalyticsGet", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"AdminBearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AdminAnalyticsGetResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1AdminAnalyticsPost invokes POST /v1/admin/analytics operation.
+//
+// Создает новую запись аналитики.
+//
+// POST /v1/admin/analytics
+func (c *Client) V1AdminAnalyticsPost(ctx context.Context, request *AnalyticPost) (V1AdminAnalyticsPostRes, error) {
+	res, err := c.sendV1AdminAnalyticsPost(ctx, request)
+	return res, err
+}
+
+func (c *Client) sendV1AdminAnalyticsPost(ctx context.Context, request *AnalyticPost) (res V1AdminAnalyticsPostRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/admin/analytics"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AdminAnalyticsPost",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [1]string
+	pathParts[0] = "/v1/admin/analytics"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "POST", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeV1AdminAnalyticsPostRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	{
+		type bitset = [1]uint8
+		var satisfied bitset
+		{
+			stage = "Security:AdminBearerAuth"
+			switch err := c.securityAdminBearerAuth(ctx, "V1AdminAnalyticsPost", r); {
+			case err == nil: // if NO error
+				satisfied[0] |= 1 << 0
+			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
+				// Skip this security.
+			default:
+				return res, errors.Wrap(err, "security \"AdminBearerAuth\"")
+			}
+		}
+
+		if ok := func() bool {
+		nextRequirement:
+			for _, requirement := range []bitset{
+				{0b00000001},
+			} {
+				for i, mask := range requirement {
+					if satisfied[i]&mask != mask {
+						continue nextRequirement
+					}
+				}
+				return true
+			}
+			return false
+		}(); !ok {
+			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
+		}
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AdminAnalyticsPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
 }
 
 // V1AdminCategoriesCategoryIDDelete invokes DELETE /v1/admin/categories/{categoryID} operation.
@@ -253,7 +785,8 @@ func (c *Client) sendV1AdminCategoriesCategoryIDDelete(ctx context.Context, para
 
 // V1AdminCategoriesCategoryIDPut invokes PUT /v1/admin/categories/{categoryID} operation.
 //
-// Обновляет категорию.
+// Обновляет категорию по ее уникальному
+// идентификатору.
 //
 // PUT /v1/admin/categories/{categoryID}
 func (c *Client) V1AdminCategoriesCategoryIDPut(ctx context.Context, request *CategoryPut, params V1AdminCategoriesCategoryIDPutParams) (V1AdminCategoriesCategoryIDPutRes, error) {
@@ -626,11 +1159,11 @@ func (c *Client) sendV1AdminCategoriesPost(ctx context.Context, request *Categor
 	return result, nil
 }
 
-// V1AdminFiltersFilterIDDelete invokes DELETE /v1/admin/filters{filterID} operation.
+// V1AdminFiltersFilterIDDelete invokes DELETE /v1/admin/filters/{filterID} operation.
 //
 // Удаляет фильтр по его уникальному идентификатору.
 //
-// DELETE /v1/admin/filters{filterID}
+// DELETE /v1/admin/filters/{filterID}
 func (c *Client) V1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (V1AdminFiltersFilterIDDeleteRes, error) {
 	res, err := c.sendV1AdminFiltersFilterIDDelete(ctx, params)
 	return res, err
@@ -639,7 +1172,7 @@ func (c *Client) V1AdminFiltersFilterIDDelete(ctx context.Context, params V1Admi
 func (c *Client) sendV1AdminFiltersFilterIDDelete(ctx context.Context, params V1AdminFiltersFilterIDDeleteParams) (res V1AdminFiltersFilterIDDeleteRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		semconv.HTTPRequestMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/admin/filters{filterID}"),
+		semconv.HTTPRouteKey.String("/v1/admin/filters/{filterID}"),
 	}
 
 	// Run stopwatch.
@@ -672,7 +1205,7 @@ func (c *Client) sendV1AdminFiltersFilterIDDelete(ctx context.Context, params V1
 	stage = "BuildURL"
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [2]string
-	pathParts[0] = "/v1/admin/filters"
+	pathParts[0] = "/v1/admin/filters/"
 	{
 		// Encode "filterID" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
@@ -991,6 +1524,96 @@ func (c *Client) sendV1AdminFiltersPost(ctx context.Context, request *V1AdminFil
 
 	stage = "DecodeResponse"
 	result, err := decodeV1AdminFiltersPostResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// V1AnalyticsAnalyticIDGet invokes GET /v1/analytics/{analyticID} operation.
+//
+// Возвращает аналитику, включая навыки и ключевые
+// слова по уникальному идентификатору аналитики.
+//
+// GET /v1/analytics/{analyticID}
+func (c *Client) V1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (V1AnalyticsAnalyticIDGetRes, error) {
+	res, err := c.sendV1AnalyticsAnalyticIDGet(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendV1AnalyticsAnalyticIDGet(ctx context.Context, params V1AnalyticsAnalyticIDGetParams) (res V1AnalyticsAnalyticIDGetRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/analytics/{analyticID}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, "V1AnalyticsAnalyticIDGet",
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/analytics/"
+	{
+		// Encode "analyticID" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "analyticID",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.IntToString(params.AnalyticID))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeV1AnalyticsAnalyticIDGetResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

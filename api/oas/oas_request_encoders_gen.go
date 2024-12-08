@@ -11,6 +11,34 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 )
 
+func encodeV1AdminAnalyticsAnalyticIDPutRequest(
+	req *AnalyticPut,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeV1AdminAnalyticsPostRequest(
+	req *AnalyticPost,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
 func encodeV1AdminCategoriesCategoryIDPutRequest(
 	req *CategoryPut,
 	r *http.Request,

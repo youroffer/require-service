@@ -4,6 +4,7 @@ package api
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/go-faster/jx"
 )
@@ -25,6 +26,208 @@ func (s *AdminBearerAuth) GetToken() string {
 func (s *AdminBearerAuth) SetToken(val string) {
 	s.Token = val
 }
+
+// Ref: #
+type Analytic struct {
+	// Уникальный идентификатор аналитики.
+	ID int `json:"id"`
+	// Заголовок должности.
+	PostTitle string `json:"post_title"`
+	// Фильтр поискового запроса hh.ru для аналитики.
+	SearchQuery string `json:"search_query"`
+	// Дата и время последнего обновления записи.
+	ParseAt time.Time `json:"parse_at"`
+}
+
+// GetID returns the value of ID.
+func (s *Analytic) GetID() int {
+	return s.ID
+}
+
+// GetPostTitle returns the value of PostTitle.
+func (s *Analytic) GetPostTitle() string {
+	return s.PostTitle
+}
+
+// GetSearchQuery returns the value of SearchQuery.
+func (s *Analytic) GetSearchQuery() string {
+	return s.SearchQuery
+}
+
+// GetParseAt returns the value of ParseAt.
+func (s *Analytic) GetParseAt() time.Time {
+	return s.ParseAt
+}
+
+// SetID sets the value of ID.
+func (s *Analytic) SetID(val int) {
+	s.ID = val
+}
+
+// SetPostTitle sets the value of PostTitle.
+func (s *Analytic) SetPostTitle(val string) {
+	s.PostTitle = val
+}
+
+// SetSearchQuery sets the value of SearchQuery.
+func (s *Analytic) SetSearchQuery(val string) {
+	s.SearchQuery = val
+}
+
+// SetParseAt sets the value of ParseAt.
+func (s *Analytic) SetParseAt(val time.Time) {
+	s.ParseAt = val
+}
+
+func (*Analytic) v1AdminAnalyticsAnalyticIDPutRes() {}
+func (*Analytic) v1AdminAnalyticsPostRes()          {}
+
+// Ref: #
+type AnalyticPost struct {
+	// Идентификатор должности.
+	PostID int `json:"post_id"`
+	// Фильтр поискового запроса hh.ru для аналитики.
+	SearchQuery string `json:"search_query"`
+}
+
+// GetPostID returns the value of PostID.
+func (s *AnalyticPost) GetPostID() int {
+	return s.PostID
+}
+
+// GetSearchQuery returns the value of SearchQuery.
+func (s *AnalyticPost) GetSearchQuery() string {
+	return s.SearchQuery
+}
+
+// SetPostID sets the value of PostID.
+func (s *AnalyticPost) SetPostID(val int) {
+	s.PostID = val
+}
+
+// SetSearchQuery sets the value of SearchQuery.
+func (s *AnalyticPost) SetSearchQuery(val string) {
+	s.SearchQuery = val
+}
+
+// Ref: #
+type AnalyticPut struct {
+	// Идентификатор должности.
+	PostsID OptInt `json:"posts_id"`
+	// Фильтр поискового запроса hh.ru для аналитики.
+	SearchQuery OptString `json:"search_query"`
+}
+
+// GetPostsID returns the value of PostsID.
+func (s *AnalyticPut) GetPostsID() OptInt {
+	return s.PostsID
+}
+
+// GetSearchQuery returns the value of SearchQuery.
+func (s *AnalyticPut) GetSearchQuery() OptString {
+	return s.SearchQuery
+}
+
+// SetPostsID sets the value of PostsID.
+func (s *AnalyticPut) SetPostsID(val OptInt) {
+	s.PostsID = val
+}
+
+// SetSearchQuery sets the value of SearchQuery.
+func (s *AnalyticPut) SetSearchQuery(val OptString) {
+	s.SearchQuery = val
+}
+
+// Ref: #
+type AnalyticWords struct {
+	Analytic Analytic `json:"analytic"`
+	// Список навыков.
+	Skills []Word `json:"skills"`
+	// Список ключевых слов.
+	Keywords []Word `json:"keywords"`
+}
+
+// GetAnalytic returns the value of Analytic.
+func (s *AnalyticWords) GetAnalytic() Analytic {
+	return s.Analytic
+}
+
+// GetSkills returns the value of Skills.
+func (s *AnalyticWords) GetSkills() []Word {
+	return s.Skills
+}
+
+// GetKeywords returns the value of Keywords.
+func (s *AnalyticWords) GetKeywords() []Word {
+	return s.Keywords
+}
+
+// SetAnalytic sets the value of Analytic.
+func (s *AnalyticWords) SetAnalytic(val Analytic) {
+	s.Analytic = val
+}
+
+// SetSkills sets the value of Skills.
+func (s *AnalyticWords) SetSkills(val []Word) {
+	s.Skills = val
+}
+
+// SetKeywords sets the value of Keywords.
+func (s *AnalyticWords) SetKeywords(val []Word) {
+	s.Keywords = val
+}
+
+func (*AnalyticWords) v1AnalyticsAnalyticIDGetRes() {}
+
+// Ref: #
+type AnalyticsResp struct {
+	Data    []Analytic `json:"data"`
+	Page    int        `json:"page"`
+	Pages   int        `json:"pages"`
+	PerPage int        `json:"per_page"`
+}
+
+// GetData returns the value of Data.
+func (s *AnalyticsResp) GetData() []Analytic {
+	return s.Data
+}
+
+// GetPage returns the value of Page.
+func (s *AnalyticsResp) GetPage() int {
+	return s.Page
+}
+
+// GetPages returns the value of Pages.
+func (s *AnalyticsResp) GetPages() int {
+	return s.Pages
+}
+
+// GetPerPage returns the value of PerPage.
+func (s *AnalyticsResp) GetPerPage() int {
+	return s.PerPage
+}
+
+// SetData sets the value of Data.
+func (s *AnalyticsResp) SetData(val []Analytic) {
+	s.Data = val
+}
+
+// SetPage sets the value of Page.
+func (s *AnalyticsResp) SetPage(val int) {
+	s.Page = val
+}
+
+// SetPages sets the value of Pages.
+func (s *AnalyticsResp) SetPages(val int) {
+	s.Pages = val
+}
+
+// SetPerPage sets the value of PerPage.
+func (s *AnalyticsResp) SetPerPage(val int) {
+	s.PerPage = val
+}
+
+func (*AnalyticsResp) v1AdminAnalyticsGetRes() {}
 
 // Ref: #
 type CategoriesResp struct {
@@ -457,7 +660,7 @@ type Position struct {
 	// Уникальный идентификатор поста.
 	ID OptInt `json:"id"`
 	// Идентификатор категории.
-	CategoriesID int `json:"categories_id"`
+	CategoryID OptInt `json:"category_id"`
 	// Идентификатор логотипа.
 	LogoID int `json:"logo_id"`
 	// Заголовок поста.
@@ -471,9 +674,9 @@ func (s *Position) GetID() OptInt {
 	return s.ID
 }
 
-// GetCategoriesID returns the value of CategoriesID.
-func (s *Position) GetCategoriesID() int {
-	return s.CategoriesID
+// GetCategoryID returns the value of CategoryID.
+func (s *Position) GetCategoryID() OptInt {
+	return s.CategoryID
 }
 
 // GetLogoID returns the value of LogoID.
@@ -496,9 +699,9 @@ func (s *Position) SetID(val OptInt) {
 	s.ID = val
 }
 
-// SetCategoriesID sets the value of CategoriesID.
-func (s *Position) SetCategoriesID(val int) {
-	s.CategoriesID = val
+// SetCategoryID sets the value of CategoryID.
+func (s *Position) SetCategoryID(val OptInt) {
+	s.CategoryID = val
 }
 
 // SetLogoID sets the value of LogoID.
@@ -515,6 +718,63 @@ func (s *Position) SetTitle(val string) {
 func (s *Position) SetPublic(val bool) {
 	s.Public = val
 }
+
+type V1AdminAnalyticsAnalyticIDDeleteNotFound Error
+
+func (*V1AdminAnalyticsAnalyticIDDeleteNotFound) v1AdminAnalyticsAnalyticIDDeleteRes() {}
+
+// V1AdminAnalyticsAnalyticIDDeleteOK is response for V1AdminAnalyticsAnalyticIDDelete operation.
+type V1AdminAnalyticsAnalyticIDDeleteOK struct{}
+
+func (*V1AdminAnalyticsAnalyticIDDeleteOK) v1AdminAnalyticsAnalyticIDDeleteRes() {}
+
+type V1AdminAnalyticsAnalyticIDDeleteUnauthorized Error
+
+func (*V1AdminAnalyticsAnalyticIDDeleteUnauthorized) v1AdminAnalyticsAnalyticIDDeleteRes() {}
+
+type V1AdminAnalyticsAnalyticIDPutBadRequest Error
+
+func (*V1AdminAnalyticsAnalyticIDPutBadRequest) v1AdminAnalyticsAnalyticIDPutRes() {}
+
+type V1AdminAnalyticsAnalyticIDPutConflict Error
+
+func (*V1AdminAnalyticsAnalyticIDPutConflict) v1AdminAnalyticsAnalyticIDPutRes() {}
+
+type V1AdminAnalyticsAnalyticIDPutNotFound Error
+
+func (*V1AdminAnalyticsAnalyticIDPutNotFound) v1AdminAnalyticsAnalyticIDPutRes() {}
+
+type V1AdminAnalyticsAnalyticIDPutUnauthorized Error
+
+func (*V1AdminAnalyticsAnalyticIDPutUnauthorized) v1AdminAnalyticsAnalyticIDPutRes() {}
+
+type V1AdminAnalyticsGetBadRequest Error
+
+func (*V1AdminAnalyticsGetBadRequest) v1AdminAnalyticsGetRes() {}
+
+type V1AdminAnalyticsGetNotFound Error
+
+func (*V1AdminAnalyticsGetNotFound) v1AdminAnalyticsGetRes() {}
+
+type V1AdminAnalyticsGetUnauthorized Error
+
+func (*V1AdminAnalyticsGetUnauthorized) v1AdminAnalyticsGetRes() {}
+
+type V1AdminAnalyticsPostBadRequest Error
+
+func (*V1AdminAnalyticsPostBadRequest) v1AdminAnalyticsPostRes() {}
+
+type V1AdminAnalyticsPostConflict Error
+
+func (*V1AdminAnalyticsPostConflict) v1AdminAnalyticsPostRes() {}
+
+type V1AdminAnalyticsPostNotFound Error
+
+func (*V1AdminAnalyticsPostNotFound) v1AdminAnalyticsPostRes() {}
+
+type V1AdminAnalyticsPostUnauthorized Error
+
+func (*V1AdminAnalyticsPostUnauthorized) v1AdminAnalyticsPostRes() {}
 
 type V1AdminCategoriesCategoryIDDeleteConflict Error
 
@@ -625,6 +885,14 @@ type V1AdminFiltersPostUnauthorized Error
 
 func (*V1AdminFiltersPostUnauthorized) v1AdminFiltersPostRes() {}
 
+type V1AnalyticsAnalyticIDGetBadRequest Error
+
+func (*V1AnalyticsAnalyticIDGetBadRequest) v1AnalyticsAnalyticIDGetRes() {}
+
+type V1AnalyticsAnalyticIDGetNotFound Error
+
+func (*V1AnalyticsAnalyticIDGetNotFound) v1AnalyticsAnalyticIDGetRes() {}
+
 type V1CategoriesGetOK map[string][]Position
 
 func (s *V1CategoriesGetOK) init() V1CategoriesGetOK {
@@ -637,3 +905,31 @@ func (s *V1CategoriesGetOK) init() V1CategoriesGetOK {
 }
 
 func (*V1CategoriesGetOK) v1CategoriesGetRes() {}
+
+// Ref: #
+type Word struct {
+	// Слово.
+	Word string `json:"word"`
+	// Количество упоминаний данного слова.
+	Mentions int `json:"mentions"`
+}
+
+// GetWord returns the value of Word.
+func (s *Word) GetWord() string {
+	return s.Word
+}
+
+// GetMentions returns the value of Mentions.
+func (s *Word) GetMentions() int {
+	return s.Mentions
+}
+
+// SetWord sets the value of Word.
+func (s *Word) SetWord(val string) {
+	s.Word = val
+}
+
+// SetMentions sets the value of Mentions.
+func (s *Word) SetMentions(val int) {
+	s.Mentions = val
+}

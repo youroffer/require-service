@@ -142,8 +142,8 @@ paths:
     put:
       tags:
         - categories
-      summary: Обновить категорию
-      description: Обновляет категорию
+      summary: Обновить категорию по ID
+      description: Обновляет категорию по ее уникальному идентификатору.
       security:
         - adminBearerAuth: []
       parameters:
@@ -200,7 +200,7 @@ paths:
     delete:
       tags:
         - categories
-      summary: Удаление категории
+      summary: Удаление категории по ID
       description: Удаляет категорию по ее уникальному идентификатору.
       security:
         - adminBearerAuth: []
@@ -347,7 +347,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
-  /v1/admin/filters{filterID}:
+  /v1/admin/filters/{filterID}:
     delete:
       tags:
         - filters
@@ -374,6 +374,246 @@ paths:
                 $ref: '#/components/schemas/error'
         '404':
           description: Фильтр не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/analytics/{analyticID}:
+    get:
+      tags:
+        - analytics
+      summary: Получить аналитику по ID
+      description: Возвращает аналитику, включая навыки и ключевые слова по уникальному идентификатору аналитики.
+      parameters:
+        - name: analyticID
+          in: path
+          required: true
+          description: Уникальный идентификатор аналитики.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Успешно получена аналитика с словами
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticWords'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Аналитика с данным ID не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/admin/analytics:
+    post:
+      tags:
+        - analytics
+      summary: Создать новую запись аналитики
+      description: Создает новую запись аналитики.
+      security:
+        - adminBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticPost'
+      responses:
+        '201':
+          description: Аналитика успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytic'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Пост не найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Должность не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    get:
+      tags:
+        - analytics
+      summary: Получить всю аналитику
+      description: Возвращает список всех аналитик с возможностью пагинации.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы для пагинации
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество записей на странице
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+      responses:
+        '200':
+          description: Список аналитик успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsResp'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Аналитика не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/admin/analytics/{analyticID}:
+    put:
+      tags:
+        - analytics
+      summary: Обновить аналитику по ID
+      description: Обновляет аналитику по ее уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: analyticID
+          in: path
+          required: true
+          description: Уникальный идентификатор аналитики.
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticPut'
+      responses:
+        '200':
+          description: Аналитика успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Analytic'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Аналитика не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Должность не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      tags:
+        - analytics
+      summary: Удалить аналитику по ID
+      description: Удаляет аналитику по уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: analyticID
+          in: path
+          required: true
+          description: Уникальный идентификатор аналитики.
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Аналитика успешно удалена
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Аналитика не найдена
           content:
             application/json:
               schema:
@@ -420,7 +660,7 @@ components:
           type: integer
           description: Уникальный идентификатор поста.
           example: 1
-        categories_id:
+        category_id:
           type: integer
           description: Идентификатор категории.
           example: 1
@@ -535,3 +775,108 @@ components:
         - page
         - pages
         - per_page
+    Analytic:
+      type: object
+      required:
+        - id
+        - post_title
+        - search_query
+        - parse_at
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор аналитики.
+          example: 1
+        post_title:
+          type: string
+          description: Заголовок должности.
+          maxLength: 100
+          example: Заголовок поста
+        search_query:
+          type: string
+          description: Фильтр поискового запроса hh.ru для аналитики.
+          example: text=go
+        parse_at:
+          type: string
+          description: Дата и время последнего обновления записи.
+          format: date-time
+          example: '2024-12-08T15:30:00Z'
+    Word:
+      type: object
+      properties:
+        word:
+          type: string
+          description: Слово
+          example: example
+        mentions:
+          type: integer
+          description: Количество упоминаний данного слова
+          example: 15
+      required:
+        - word
+        - mentions
+    AnalyticWords:
+      type: object
+      properties:
+        analytic:
+          $ref: '#/components/schemas/Analytic'
+        skills:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          description: Список навыков
+        keywords:
+          type: array
+          items:
+            $ref: '#/components/schemas/Word'
+          description: Список ключевых слов
+      required:
+        - analytic
+        - skills
+        - keywords
+    AnalyticsResp:
+      type: object
+      required:
+        - data
+        - page
+        - pages
+        - per_page
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Analytic'
+        page:
+          type: integer
+          example: 0
+        pages:
+          type: integer
+          example: 13
+        per_page:
+          type: integer
+          example: 1
+    AnalyticPost:
+      type: object
+      required:
+        - post_id
+        - search_query
+      properties:
+        post_id:
+          type: integer
+          description: Идентификатор должности.
+          example: 1
+        search_query:
+          type: string
+          description: Фильтр поискового запроса hh.ru для аналитики.
+          example: text=go
+    AnalyticPut:
+      type: object
+      properties:
+        posts_id:
+          type: integer
+          description: Идентификатор должности.
+          example: 1
+        search_query:
+          type: string
+          description: Фильтр поискового запроса hh.ru для аналитики.
+          example: text=go
