@@ -1,23 +1,31 @@
-post:
+put:
   tags:
-    - analytics
-  summary: Создать новую запись аналитики
-  description: Создает новую запись аналитики.
+    - positions
+  summary: Изменить должность по ID
+  description: Обновляет должность по уникальному идентификатору.
   security:
     - adminBearerAuth: []
+  parameters:
+    - name: positionID
+      in: path
+      required: true
+      description: Уникальный идентификатор должности
+      schema:
+        type: integer
+        example: 1
   requestBody:
     required: true
     content:
       application/json:
         schema:
-          $ref: '../../../schemas/analytic/AnalyticPost.yml'
+          $ref: '../../../schemas/position/PositionPut.yml'
   responses:
-    '201':
-      description: Аналитика успешно создана
+    '200':
+      description: Должность успешно обновлена
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/analytic/Analytic.yml'
+            $ref: '../../../schemas/position/Position.yml'
     '400':
       description: Некорректные параметры запроса
       content:
@@ -25,13 +33,13 @@ post:
           schema:
             $ref: '../../../schemas/Error.yml'
     '404':
-      description: Пост не найден
+      description: Должность не найдена
       content:
         application/json:
           schema:
             $ref: '../../../schemas/Error.yml'
     '409':
-      description: Должность не найдена.
+      description: Категория не найдена.
       content:
         application/json:
           schema:
@@ -49,37 +57,24 @@ post:
           schema:
             $ref: '../../../schemas/Error.yml'
 
-get:
+delete:
   tags:
-    - analytics
-  summary: Получить всю аналитику
-  description: Возвращает список всех аналитик с возможностью пагинации.
+    - positions
+  summary: Удалить должность по ID
+  description: Удаляет должность по уникальному идентификатору.
   security:
     - adminBearerAuth: []
   parameters:
-    - name: page
-      in: query
-      description: Номер страницы для пагинации
-      required: false
+    - name: positionID
+      in: path
+      required: true
+      description: Уникальный идентификатор должности
       schema:
         type: integer
-        default: 0
-        minimum: 0
-    - name: per_page
-      in: query
-      description: Количество записей на странице
-      required: false
-      schema:
-        type: integer
-        default: 20
-        minimum: 1
+        example: 1
   responses:
     '200':
-      description: Список аналитик успешно получен
-      content:
-        application/json:
-          schema:
-            $ref: '../../../schemas/analytic/AnalyticsResp.yml'
+      description: Должность успешно удалена
     '400':
       description: Некорректные параметры запроса
       content:
@@ -87,7 +82,7 @@ get:
           schema:
             $ref: '../../../schemas/Error.yml'
     '404':
-      description: Аналитика не найдена
+      description: Должность не найдена
       content:
         application/json:
           schema:

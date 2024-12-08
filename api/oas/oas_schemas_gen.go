@@ -230,6 +230,59 @@ func (s *AnalyticsResp) SetPerPage(val int) {
 func (*AnalyticsResp) v1AdminAnalyticsGetRes() {}
 
 // Ref: #
+type CategoriesPostsResp map[string][]CategoriesPostsRespItemItem
+
+func (s *CategoriesPostsResp) init() CategoriesPostsResp {
+	m := *s
+	if m == nil {
+		m = map[string][]CategoriesPostsRespItemItem{}
+		*s = m
+	}
+	return m
+}
+
+func (*CategoriesPostsResp) v1CategoriesGetRes() {}
+
+type CategoriesPostsRespItemItem struct {
+	// Идентификатор логотипа.
+	LogoID int `json:"logo_id"`
+	// Заголовок должности.
+	Title string `json:"title"`
+	// Является ли пост публичным.
+	Public bool `json:"public"`
+}
+
+// GetLogoID returns the value of LogoID.
+func (s *CategoriesPostsRespItemItem) GetLogoID() int {
+	return s.LogoID
+}
+
+// GetTitle returns the value of Title.
+func (s *CategoriesPostsRespItemItem) GetTitle() string {
+	return s.Title
+}
+
+// GetPublic returns the value of Public.
+func (s *CategoriesPostsRespItemItem) GetPublic() bool {
+	return s.Public
+}
+
+// SetLogoID sets the value of LogoID.
+func (s *CategoriesPostsRespItemItem) SetLogoID(val int) {
+	s.LogoID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *CategoriesPostsRespItemItem) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetPublic sets the value of Public.
+func (s *CategoriesPostsRespItemItem) SetPublic(val bool) {
+	s.Public = val
+}
+
+// Ref: #
 type CategoriesResp struct {
 	Data    []Category `json:"data"`
 	Page    int        `json:"page"`
@@ -563,6 +616,52 @@ func (o OptBool) Or(d bool) bool {
 	return d
 }
 
+// NewOptCategory returns new OptCategory with value set to v.
+func NewOptCategory(v Category) OptCategory {
+	return OptCategory{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCategory is optional Category.
+type OptCategory struct {
+	Value Category
+	Set   bool
+}
+
+// IsSet returns true if OptCategory was set.
+func (o OptCategory) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCategory) Reset() {
+	var v Category
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCategory) SetTo(v Category) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCategory) Get() (v Category, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCategory) Or(d Category) Category {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInt returns new OptInt with value set to v.
 func NewOptInt(v int) OptInt {
 	return OptInt{
@@ -658,9 +757,8 @@ func (o OptString) Or(d string) string {
 // Ref: #
 type Position struct {
 	// Уникальный идентификатор поста.
-	ID OptInt `json:"id"`
-	// Идентификатор категории.
-	CategoryID OptInt `json:"category_id"`
+	ID       OptInt      `json:"id"`
+	Category OptCategory `json:"category"`
 	// Идентификатор логотипа.
 	LogoID int `json:"logo_id"`
 	// Заголовок поста.
@@ -674,9 +772,9 @@ func (s *Position) GetID() OptInt {
 	return s.ID
 }
 
-// GetCategoryID returns the value of CategoryID.
-func (s *Position) GetCategoryID() OptInt {
-	return s.CategoryID
+// GetCategory returns the value of Category.
+func (s *Position) GetCategory() OptCategory {
+	return s.Category
 }
 
 // GetLogoID returns the value of LogoID.
@@ -699,9 +797,9 @@ func (s *Position) SetID(val OptInt) {
 	s.ID = val
 }
 
-// SetCategoryID sets the value of CategoryID.
-func (s *Position) SetCategoryID(val OptInt) {
-	s.CategoryID = val
+// SetCategory sets the value of Category.
+func (s *Position) SetCategory(val OptCategory) {
+	s.Category = val
 }
 
 // SetLogoID sets the value of LogoID.
@@ -718,6 +816,166 @@ func (s *Position) SetTitle(val string) {
 func (s *Position) SetPublic(val bool) {
 	s.Public = val
 }
+
+func (*Position) v1AdminPositionsPositionIDPutRes() {}
+func (*Position) v1AdminPositionsPostRes()          {}
+
+// Ref: #
+type PositionPost struct {
+	// Идентификатор категории.
+	CategoryID int `json:"category_id"`
+	// Идентификатор логотипа.
+	LogoID int `json:"logo_id"`
+	// Заголовок поста.
+	Title string `json:"title"`
+	// Является ли пост публичным.
+	Public bool `json:"public"`
+}
+
+// GetCategoryID returns the value of CategoryID.
+func (s *PositionPost) GetCategoryID() int {
+	return s.CategoryID
+}
+
+// GetLogoID returns the value of LogoID.
+func (s *PositionPost) GetLogoID() int {
+	return s.LogoID
+}
+
+// GetTitle returns the value of Title.
+func (s *PositionPost) GetTitle() string {
+	return s.Title
+}
+
+// GetPublic returns the value of Public.
+func (s *PositionPost) GetPublic() bool {
+	return s.Public
+}
+
+// SetCategoryID sets the value of CategoryID.
+func (s *PositionPost) SetCategoryID(val int) {
+	s.CategoryID = val
+}
+
+// SetLogoID sets the value of LogoID.
+func (s *PositionPost) SetLogoID(val int) {
+	s.LogoID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *PositionPost) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetPublic sets the value of Public.
+func (s *PositionPost) SetPublic(val bool) {
+	s.Public = val
+}
+
+// Ref: #
+type PositionPut struct {
+	// Идентификатор категории.
+	CategoryID OptInt `json:"category_id"`
+	// Идентификатор логотипа.
+	LogoID OptInt `json:"logo_id"`
+	// Заголовок поста.
+	Title OptString `json:"title"`
+	// Является ли пост публичным.
+	Public OptBool `json:"public"`
+}
+
+// GetCategoryID returns the value of CategoryID.
+func (s *PositionPut) GetCategoryID() OptInt {
+	return s.CategoryID
+}
+
+// GetLogoID returns the value of LogoID.
+func (s *PositionPut) GetLogoID() OptInt {
+	return s.LogoID
+}
+
+// GetTitle returns the value of Title.
+func (s *PositionPut) GetTitle() OptString {
+	return s.Title
+}
+
+// GetPublic returns the value of Public.
+func (s *PositionPut) GetPublic() OptBool {
+	return s.Public
+}
+
+// SetCategoryID sets the value of CategoryID.
+func (s *PositionPut) SetCategoryID(val OptInt) {
+	s.CategoryID = val
+}
+
+// SetLogoID sets the value of LogoID.
+func (s *PositionPut) SetLogoID(val OptInt) {
+	s.LogoID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *PositionPut) SetTitle(val OptString) {
+	s.Title = val
+}
+
+// SetPublic sets the value of Public.
+func (s *PositionPut) SetPublic(val OptBool) {
+	s.Public = val
+}
+
+// Ref: #
+type PositionsResp struct {
+	Data []Position `json:"data"`
+	// Общее количество постов.
+	Total OptInt `json:"total"`
+	// Текущая страница.
+	Page OptInt `json:"page"`
+	// Количество постов на странице.
+	PerPage OptInt `json:"per_page"`
+}
+
+// GetData returns the value of Data.
+func (s *PositionsResp) GetData() []Position {
+	return s.Data
+}
+
+// GetTotal returns the value of Total.
+func (s *PositionsResp) GetTotal() OptInt {
+	return s.Total
+}
+
+// GetPage returns the value of Page.
+func (s *PositionsResp) GetPage() OptInt {
+	return s.Page
+}
+
+// GetPerPage returns the value of PerPage.
+func (s *PositionsResp) GetPerPage() OptInt {
+	return s.PerPage
+}
+
+// SetData sets the value of Data.
+func (s *PositionsResp) SetData(val []Position) {
+	s.Data = val
+}
+
+// SetTotal sets the value of Total.
+func (s *PositionsResp) SetTotal(val OptInt) {
+	s.Total = val
+}
+
+// SetPage sets the value of Page.
+func (s *PositionsResp) SetPage(val OptInt) {
+	s.Page = val
+}
+
+// SetPerPage sets the value of PerPage.
+func (s *PositionsResp) SetPerPage(val OptInt) {
+	s.PerPage = val
+}
+
+func (*PositionsResp) v1AdminPositionsGetRes() {}
 
 type V1AdminAnalyticsAnalyticIDDeleteNotFound Error
 
@@ -885,6 +1143,63 @@ type V1AdminFiltersPostUnauthorized Error
 
 func (*V1AdminFiltersPostUnauthorized) v1AdminFiltersPostRes() {}
 
+type V1AdminPositionsGetBadRequest Error
+
+func (*V1AdminPositionsGetBadRequest) v1AdminPositionsGetRes() {}
+
+type V1AdminPositionsGetNotFound Error
+
+func (*V1AdminPositionsGetNotFound) v1AdminPositionsGetRes() {}
+
+type V1AdminPositionsGetUnauthorized Error
+
+func (*V1AdminPositionsGetUnauthorized) v1AdminPositionsGetRes() {}
+
+type V1AdminPositionsPositionIDDeleteBadRequest Error
+
+func (*V1AdminPositionsPositionIDDeleteBadRequest) v1AdminPositionsPositionIDDeleteRes() {}
+
+type V1AdminPositionsPositionIDDeleteNotFound Error
+
+func (*V1AdminPositionsPositionIDDeleteNotFound) v1AdminPositionsPositionIDDeleteRes() {}
+
+// V1AdminPositionsPositionIDDeleteOK is response for V1AdminPositionsPositionIDDelete operation.
+type V1AdminPositionsPositionIDDeleteOK struct{}
+
+func (*V1AdminPositionsPositionIDDeleteOK) v1AdminPositionsPositionIDDeleteRes() {}
+
+type V1AdminPositionsPositionIDDeleteUnauthorized Error
+
+func (*V1AdminPositionsPositionIDDeleteUnauthorized) v1AdminPositionsPositionIDDeleteRes() {}
+
+type V1AdminPositionsPositionIDPutBadRequest Error
+
+func (*V1AdminPositionsPositionIDPutBadRequest) v1AdminPositionsPositionIDPutRes() {}
+
+type V1AdminPositionsPositionIDPutConflict Error
+
+func (*V1AdminPositionsPositionIDPutConflict) v1AdminPositionsPositionIDPutRes() {}
+
+type V1AdminPositionsPositionIDPutNotFound Error
+
+func (*V1AdminPositionsPositionIDPutNotFound) v1AdminPositionsPositionIDPutRes() {}
+
+type V1AdminPositionsPositionIDPutUnauthorized Error
+
+func (*V1AdminPositionsPositionIDPutUnauthorized) v1AdminPositionsPositionIDPutRes() {}
+
+type V1AdminPositionsPostBadRequest Error
+
+func (*V1AdminPositionsPostBadRequest) v1AdminPositionsPostRes() {}
+
+type V1AdminPositionsPostConflict Error
+
+func (*V1AdminPositionsPostConflict) v1AdminPositionsPostRes() {}
+
+type V1AdminPositionsPostUnauthorized Error
+
+func (*V1AdminPositionsPostUnauthorized) v1AdminPositionsPostRes() {}
+
 type V1AnalyticsAnalyticIDGetBadRequest Error
 
 func (*V1AnalyticsAnalyticIDGetBadRequest) v1AnalyticsAnalyticIDGetRes() {}
@@ -892,19 +1207,6 @@ func (*V1AnalyticsAnalyticIDGetBadRequest) v1AnalyticsAnalyticIDGetRes() {}
 type V1AnalyticsAnalyticIDGetNotFound Error
 
 func (*V1AnalyticsAnalyticIDGetNotFound) v1AnalyticsAnalyticIDGetRes() {}
-
-type V1CategoriesGetOK map[string][]Position
-
-func (s *V1CategoriesGetOK) init() V1CategoriesGetOK {
-	m := *s
-	if m == nil {
-		m = map[string][]Position{}
-		*s = m
-	}
-	return m
-}
-
-func (*V1CategoriesGetOK) v1CategoriesGetRes() {}
 
 // Ref: #
 type Word struct {

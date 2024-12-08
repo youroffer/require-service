@@ -117,6 +117,43 @@ func (UnimplementedHandler) V1AdminFiltersPost(ctx context.Context, req *V1Admin
 	return r, ht.ErrNotImplemented
 }
 
+// V1AdminPositionsGet implements GET /v1/admin/positions operation.
+//
+// Возвращает список всех должностей с возможностью
+// пагинации.
+//
+// GET /v1/admin/positions
+func (UnimplementedHandler) V1AdminPositionsGet(ctx context.Context, params V1AdminPositionsGetParams) (r V1AdminPositionsGetRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminPositionsPositionIDDelete implements DELETE /v1/admin/positions/{positionID} operation.
+//
+// Удаляет должность по уникальному идентификатору.
+//
+// DELETE /v1/admin/positions/{positionID}
+func (UnimplementedHandler) V1AdminPositionsPositionIDDelete(ctx context.Context, params V1AdminPositionsPositionIDDeleteParams) (r V1AdminPositionsPositionIDDeleteRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminPositionsPositionIDPut implements PUT /v1/admin/positions/{positionID} operation.
+//
+// Обновляет должность по уникальному идентификатору.
+//
+// PUT /v1/admin/positions/{positionID}
+func (UnimplementedHandler) V1AdminPositionsPositionIDPut(ctx context.Context, req *PositionPut, params V1AdminPositionsPositionIDPutParams) (r V1AdminPositionsPositionIDPutRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// V1AdminPositionsPost implements POST /v1/admin/positions operation.
+//
+// Создает новую должность.
+//
+// POST /v1/admin/positions
+func (UnimplementedHandler) V1AdminPositionsPost(ctx context.Context, req *PositionPost) (r V1AdminPositionsPostRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
 //
 // Возвращает аналитику, включая навыки и ключевые

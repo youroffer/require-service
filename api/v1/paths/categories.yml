@@ -9,20 +9,16 @@ get:
       content:
         application/json:
           schema:
-            type: object
-            additionalProperties:
-              type: array
-              items:
-                $ref: "../schemas/position/Position.yml"
+            $ref: "../schemas/category/CategoriesPostsResp.yml"
     '404':
       description: Категории не найдены
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yml"
+            $ref: "../schemas/Error.yml"
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: "../schemas/error.yml"
+            $ref: "../schemas/Error.yml"

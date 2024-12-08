@@ -18,6 +18,7 @@ CREATE TABLE if not exists analytics (
     id SERIAL PRIMARY KEY,
     posts_id INTEGER NOT NULL UNIQUE REFERENCES posts(id) ON DELETE CASCADE,
     search_query TEXT NOT NULL
+    -- parse_at
 );
 
 -- Создание таблицы filters

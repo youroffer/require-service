@@ -1,0 +1,18 @@
+type: object
+properties:
+  data:
+    type: array
+    items:
+      $ref: './Position.yml'
+  total:
+    type: integer
+    description: Общее количество постов.
+    example: 10
+  page:
+    type: integer
+    description: Текущая страница.
+    example: 1
+  per_page:
+    type: integer
+    description: Количество постов на странице.
+    example: 20

@@ -45,6 +45,22 @@ type V1AdminFiltersPostRes interface {
 	v1AdminFiltersPostRes()
 }
 
+type V1AdminPositionsGetRes interface {
+	v1AdminPositionsGetRes()
+}
+
+type V1AdminPositionsPositionIDDeleteRes interface {
+	v1AdminPositionsPositionIDDeleteRes()
+}
+
+type V1AdminPositionsPositionIDPutRes interface {
+	v1AdminPositionsPositionIDPutRes()
+}
+
+type V1AdminPositionsPostRes interface {
+	v1AdminPositionsPostRes()
+}
+
 type V1AnalyticsAnalyticIDGetRes interface {
 	v1AnalyticsAnalyticIDGetRes()
 }

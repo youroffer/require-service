@@ -31,25 +31,25 @@ post:
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     '409':
       description: Фильтр уже существует.
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     '401':
       description: Неавторизованный доступ
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
 
 get:
   tags:
@@ -87,22 +87,22 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     '404':
       description: Фильтры не найдены
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     '401':
       description: Неавторизованный доступ
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: "../../../schemas/error.yml"
+            $ref: "../../../schemas/Error.yml"

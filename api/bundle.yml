@@ -21,23 +21,19 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/Position'
+                $ref: '#/components/schemas/CategoriesPostsResp'
         '404':
           description: Категории не найдены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/categories:
     get:
       tags:
@@ -75,25 +71,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Категории не найдены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - categories
@@ -119,25 +115,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Категория с таким названием уже существует
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/categories/{categoryID}:
     put:
       tags:
@@ -172,31 +168,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Категория не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Категория с таким названием уже существует
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - categories
@@ -220,25 +216,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Категория не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Нельзя удалить категорию, так как на нее ссылаются должности
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/filters:
     post:
       tags:
@@ -273,25 +269,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Фильтр уже существует.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
     get:
       tags:
         - filters
@@ -328,25 +324,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Фильтры не найдены
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/filters/{filterID}:
     delete:
       tags:
@@ -371,19 +367,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Фильтр не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/analytics/{analyticID}:
     get:
       tags:
@@ -410,19 +406,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Аналитика с данным ID не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/analytics:
     post:
       tags:
@@ -449,31 +445,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Пост не найден
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Должность не найдена.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
     get:
       tags:
         - analytics
@@ -510,25 +506,25 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Аналитика не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
   /v1/admin/analytics/{analyticID}:
     put:
       tags:
@@ -563,31 +559,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '401':
           description: Неавторизованный доступ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Аналитика не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '409':
           description: Должность не найдена.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - analytics
@@ -611,19 +607,220 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         '404':
           description: Аналитика не найдена
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
         default:
           description: Неизвестная ошибка
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/error'
+                $ref: '#/components/schemas/Error'
+  /v1/admin/positions:
+    post:
+      tags:
+        - positions
+      summary: Создать новую должность
+      description: Создает новую должность.
+      security:
+        - adminBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionPost'
+      responses:
+        '201':
+          description: Должность успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Категория не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - positions
+      summary: Получить все должности
+      description: Возвращает список всех должностей с возможностью пагинации.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы для пагинации
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество должностей на странице
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+      responses:
+        '200':
+          description: Список должностей успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PositionsResp'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Должности не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /v1/admin/positions/{positionID}:
+    put:
+      tags:
+        - positions
+      summary: Изменить должность по ID
+      description: Обновляет должность по уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: positionID
+          in: path
+          required: true
+          description: Уникальный идентификатор должности
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PositionPut'
+      responses:
+        '200':
+          description: Должность успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Position'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Должность не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Категория не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - positions
+      summary: Удалить должность по ID
+      description: Удаляет должность по уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: positionID
+          in: path
+          required: true
+          description: Уникальный идентификатор должности
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: Должность успешно удалена
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Должность не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   securitySchemes:
     bearerAuth:
@@ -635,7 +832,7 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    error:
+    Error:
       type: object
       required:
         - message
@@ -648,35 +845,30 @@ components:
         details:
           type: object
           additionalProperties: true
-    Position:
+    CategoriesPostsResp:
       type: object
-      required:
-        - categories_id
-        - logo_id
-        - title
-        - public
-      properties:
-        id:
-          type: integer
-          description: Уникальный идентификатор поста.
-          example: 1
-        category_id:
-          type: integer
-          description: Идентификатор категории.
-          example: 1
-        logo_id:
-          type: integer
-          description: Идентификатор логотипа.
-          example: 1
-        title:
-          type: string
-          description: Заголовок поста.
-          maxLength: 100
-          example: Заголовок поста
-        public:
-          type: boolean
-          description: Является ли пост публичным.
-          example: true
+      additionalProperties:
+        type: array
+        items:
+          type: object
+          required:
+            - logo_id
+            - title
+            - public
+          properties:
+            logo_id:
+              type: integer
+              description: Идентификатор логотипа.
+              example: 1
+            title:
+              type: string
+              description: Заголовок должности.
+              maxLength: 100
+              example: Заголовок поста
+            public:
+              type: boolean
+              description: Является ли пост публичным.
+              example: true
     Category:
       type: object
       properties:
@@ -880,3 +1072,94 @@ components:
           type: string
           description: Фильтр поискового запроса hh.ru для аналитики.
           example: text=go
+    Position:
+      type: object
+      required:
+        - categories_id
+        - logo_id
+        - title
+        - public
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор поста.
+          example: 1
+        category:
+          $ref: '#/components/schemas/Category'
+        logo_id:
+          type: integer
+          description: Идентификатор логотипа.
+          example: 1
+        title:
+          type: string
+          description: Заголовок поста.
+          maxLength: 100
+          example: Заголовок поста
+        public:
+          type: boolean
+          description: Является ли пост публичным.
+          example: true
+    PositionsResp:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        total:
+          type: integer
+          description: Общее количество постов.
+          example: 10
+        page:
+          type: integer
+          description: Текущая страница.
+          example: 1
+        per_page:
+          type: integer
+          description: Количество постов на странице.
+          example: 20
+    PositionPost:
+      type: object
+      required:
+        - category_id
+        - logo_id
+        - title
+        - public
+      properties:
+        category_id:
+          type: integer
+          description: Идентификатор категории.
+          example: 1
+        logo_id:
+          type: integer
+          description: Идентификатор логотипа.
+          example: 1
+        title:
+          type: string
+          description: Заголовок поста.
+          maxLength: 100
+          example: Заголовок поста
+        public:
+          type: boolean
+          description: Является ли пост публичным.
+          example: true
+    PositionPut:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          description: Идентификатор категории.
+          example: 1
+        logo_id:
+          type: integer
+          description: Идентификатор логотипа.
+          example: 1
+        title:
+          type: string
+          description: Заголовок поста.
+          maxLength: 100
+          example: Заголовок поста
+        public:
+          type: boolean
+          description: Является ли пост публичным.
+          example: true

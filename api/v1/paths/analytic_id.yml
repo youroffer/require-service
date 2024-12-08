@@ -23,16 +23,16 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/error.yml'
+            $ref: '../schemas/Error.yml'
     '400':
       description: Некорректные параметры запроса
       content:
         application/json:
           schema:
-            $ref: '../schemas/error.yml'
+            $ref: '../schemas/Error.yml'
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: '../schemas/error.yml'
+            $ref: '../schemas/Error.yml'

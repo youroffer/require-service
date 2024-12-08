@@ -1,16 +1,14 @@
 type: object
 required:
-  - categories_id
+  - category_id
   - logo_id
   - title
   - public
 properties:
-  id:
+  category_id:
     type: integer
-    description: Уникальный идентификатор поста.
+    description: Идентификатор категории.
     example: 1
-  category:
-    $ref: '../category/Category.yml'
   logo_id:
     type: integer
     description: Идентификатор логотипа.

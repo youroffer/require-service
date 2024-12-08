@@ -27,6 +27,11 @@ paths:
     $ref: "./v1/paths/admin/analytic/_index.yml" 
   /v1/admin/analytics/{analyticID}:
     $ref: "./v1/paths/admin/analytic/_id.yml" 
+
+  /v1/admin/positions:
+    $ref: "./v1/paths/admin/position/_index.yml"
+  /v1/admin/positions/{positionID}:
+    $ref: "./v1/paths/admin/position/_id.yml"
 components:
   securitySchemes:
     bearerAuth:

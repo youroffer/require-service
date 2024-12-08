@@ -31,31 +31,31 @@ put:
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
     '404':
       description: Аналитика не найдена
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
     '409':
           description: Должность не найдена.
           content:
             application/json:
               schema:
-                $ref: '../../../schemas/error.yml'
+                $ref: '../../../schemas/Error.yml'
     '401':
       description: Неавторизованный доступ
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
 
 delete:
   tags:
@@ -80,16 +80,16 @@ delete:
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
     '401':
       description: Неавторизованный доступ
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'
     default:
       description: Неизвестная ошибка
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/error.yml'
+            $ref: '../../../schemas/Error.yml'

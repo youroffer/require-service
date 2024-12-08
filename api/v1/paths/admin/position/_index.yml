@@ -1,8 +1,8 @@
 post:
   tags:
-    - analytics
-  summary: Создать новую запись аналитики
-  description: Создает новую запись аналитики.
+    - positions
+  summary: Создать новую должность
+  description: Создает новую должность.
   security:
     - adminBearerAuth: []
   requestBody:
@@ -10,28 +10,22 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../../../schemas/analytic/AnalyticPost.yml'
+          $ref: '../../../schemas/position/PositionPost.yml'
   responses:
     '201':
-      description: Аналитика успешно создана
+      description: Должность успешно создана
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/analytic/Analytic.yml'
+            $ref: '../../../schemas/position/Position.yml'
     '400':
       description: Некорректные параметры запроса
       content:
         application/json:
           schema:
             $ref: '../../../schemas/Error.yml'
-    '404':
-      description: Пост не найден
-      content:
-        application/json:
-          schema:
-            $ref: '../../../schemas/Error.yml'
     '409':
-      description: Должность не найдена.
+      description: Категория не найдена.
       content:
         application/json:
           schema:
@@ -51,9 +45,9 @@ post:
 
 get:
   tags:
-    - analytics
-  summary: Получить всю аналитику
-  description: Возвращает список всех аналитик с возможностью пагинации.
+    - positions
+  summary: Получить все должности
+  description: Возвращает список всех должностей с возможностью пагинации.
   security:
     - adminBearerAuth: []
   parameters:
@@ -67,7 +61,7 @@ get:
         minimum: 0
     - name: per_page
       in: query
-      description: Количество записей на странице
+      description: Количество должностей на странице
       required: false
       schema:
         type: integer
@@ -75,11 +69,11 @@ get:
         minimum: 1
   responses:
     '200':
-      description: Список аналитик успешно получен
+      description: Список должностей успешно получен
       content:
         application/json:
           schema:
-            $ref: '../../../schemas/analytic/AnalyticsResp.yml'
+            $ref: '../../../schemas/position/PositionsResp.yml'
     '400':
       description: Некорректные параметры запроса
       content:
@@ -87,7 +81,7 @@ get:
           schema:
             $ref: '../../../schemas/Error.yml'
     '404':
-      description: Аналитика не найдена
+      description: Должности не найдены
       content:
         application/json:
           schema:

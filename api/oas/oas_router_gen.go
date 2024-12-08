@@ -249,6 +249,62 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						}
 
 						elem = origElem
+					case 'p': // Prefix: "positions"
+						origElem := elem
+						if l := len("positions"); len(elem) >= l && elem[0:l] == "positions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch r.Method {
+							case "GET":
+								s.handleV1AdminPositionsGetRequest([0]string{}, elemIsEscaped, w, r)
+							case "POST":
+								s.handleV1AdminPositionsPostRequest([0]string{}, elemIsEscaped, w, r)
+							default:
+								s.notAllowed(w, r, "GET,POST")
+							}
+
+							return
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "positionID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "DELETE":
+									s.handleV1AdminPositionsPositionIDDeleteRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								case "PUT":
+									s.handleV1AdminPositionsPositionIDPutRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "DELETE,PUT")
+								}
+
+								return
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
 					}
 
 					elem = origElem
@@ -619,6 +675,78 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									r.summary = "Удалить фильтр по ID"
 									r.operationID = ""
 									r.pathPattern = "/v1/admin/filters/{filterID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						}
+
+						elem = origElem
+					case 'p': // Prefix: "positions"
+						origElem := elem
+						if l := len("positions"); len(elem) >= l && elem[0:l] == "positions" {
+							elem = elem[l:]
+						} else {
+							break
+						}
+
+						if len(elem) == 0 {
+							switch method {
+							case "GET":
+								r.name = "V1AdminPositionsGet"
+								r.summary = "Получить все должности"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/positions"
+								r.args = args
+								r.count = 0
+								return r, true
+							case "POST":
+								r.name = "V1AdminPositionsPost"
+								r.summary = "Создать новую должность"
+								r.operationID = ""
+								r.pathPattern = "/v1/admin/positions"
+								r.args = args
+								r.count = 0
+								return r, true
+							default:
+								return
+							}
+						}
+						switch elem[0] {
+						case '/': // Prefix: "/"
+							origElem := elem
+							if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							// Param: "positionID"
+							// Leaf parameter
+							args[0] = elem
+							elem = ""
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "DELETE":
+									r.name = "V1AdminPositionsPositionIDDelete"
+									r.summary = "Удалить должность по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/positions/{positionID}"
+									r.args = args
+									r.count = 1
+									return r, true
+								case "PUT":
+									r.name = "V1AdminPositionsPositionIDPut"
+									r.summary = "Изменить должность по ID"
+									r.operationID = ""
+									r.pathPattern = "/v1/admin/positions/{positionID}"
 									r.args = args
 									r.count = 1
 									return r, true

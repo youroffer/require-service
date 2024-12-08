@@ -79,6 +79,31 @@ type Handler interface {
 	//
 	// POST /v1/admin/filters
 	V1AdminFiltersPost(ctx context.Context, req *V1AdminFiltersPostReq) (V1AdminFiltersPostRes, error)
+	// V1AdminPositionsGet implements GET /v1/admin/positions operation.
+	//
+	// Возвращает список всех должностей с возможностью
+	// пагинации.
+	//
+	// GET /v1/admin/positions
+	V1AdminPositionsGet(ctx context.Context, params V1AdminPositionsGetParams) (V1AdminPositionsGetRes, error)
+	// V1AdminPositionsPositionIDDelete implements DELETE /v1/admin/positions/{positionID} operation.
+	//
+	// Удаляет должность по уникальному идентификатору.
+	//
+	// DELETE /v1/admin/positions/{positionID}
+	V1AdminPositionsPositionIDDelete(ctx context.Context, params V1AdminPositionsPositionIDDeleteParams) (V1AdminPositionsPositionIDDeleteRes, error)
+	// V1AdminPositionsPositionIDPut implements PUT /v1/admin/positions/{positionID} operation.
+	//
+	// Обновляет должность по уникальному идентификатору.
+	//
+	// PUT /v1/admin/positions/{positionID}
+	V1AdminPositionsPositionIDPut(ctx context.Context, req *PositionPut, params V1AdminPositionsPositionIDPutParams) (V1AdminPositionsPositionIDPutRes, error)
+	// V1AdminPositionsPost implements POST /v1/admin/positions operation.
+	//
+	// Создает новую должность.
+	//
+	// POST /v1/admin/positions
+	V1AdminPositionsPost(ctx context.Context, req *PositionPost) (V1AdminPositionsPostRes, error)
 	// V1AnalyticsAnalyticIDGet implements GET /v1/analytics/{analyticID} operation.
 	//
 	// Возвращает аналитику, включая навыки и ключевые
