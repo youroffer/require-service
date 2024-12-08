@@ -1,0 +1,13 @@
+type: object
+required:
+  - word
+properties:
+  id:
+    type: integer
+    description: Уникальный идентификатор фильтра.
+    example: 1
+  word:
+    type: string
+    description: Уникальный фильтр.
+    maxLength: 100
+    example: "example"

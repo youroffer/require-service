@@ -1,0 +1,28 @@
+get:
+  tags:
+    - categories
+  summary: Получить все категории с должностями
+  description: Возвращает все категории с публичными должностями
+  responses:
+    '200':
+      description: Все категории с должностями успешно получены
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              type: array
+              items:
+                $ref: "../schemas/position/Position.yml"
+    '404':
+      description: Категории не найдены
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yml"
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/error.yml"

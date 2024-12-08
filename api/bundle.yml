@@ -1,0 +1,356 @@
+openapi: 3.0.3
+info:
+  title: Ubrato core
+  description: ubrato core oas
+  version: 1.0.0
+servers:
+  - description: local
+    url: /
+  - description: dev
+    url: https://api.ubrato.ru
+paths:
+  /v1/categories:
+    get:
+      tags:
+        - categories
+      summary: Получить все категории с должностями
+      description: Возвращает все категории с публичными должностями
+      responses:
+        '200':
+          description: Все категории с должностями успешно получен
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Position'
+        '404':
+          description: Категории не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/admin/categories:
+    get:
+      tags:
+        - categories
+      summary: Получить все категории
+      description: Возвращает список всех категорий с возможностью пагинации
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          description: Номер страницы для пагинации
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
+        - name: per_page
+          in: query
+          description: Количество категорий на странице
+          required: false
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+      responses:
+        '200':
+          description: Список категорий успешно получен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoriesResp'
+        '400':
+          description: Некорректные параметры запроса
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Категории не найдены
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      tags:
+        - categories
+      summary: Добавить категорию
+      description: Создает новую категорию
+      security:
+        - adminBearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryPost'
+      responses:
+        '201':
+          description: Категория успешно добавлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Некорректные данные.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Категория с таким названием уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /v1/admin/categories/{categoryID}:
+    put:
+      tags:
+        - categories
+      summary: Обновить категорию
+      description: Обновляет категорию
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - in: path
+          name: categoryID
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: Уникальный идентификатор категории
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CategoryPut'
+      responses:
+        '200':
+          description: Категория успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Некорректные данные.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Категория не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Категория с таким названием уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      tags:
+        - categories
+      summary: Удаление категории
+      description: Удаляет категорию по ее уникальному идентификатору.
+      security:
+        - adminBearerAuth: []
+      parameters:
+        - in: path
+          name: categoryID
+          schema:
+            type: integer
+            minimum: 1
+          required: true
+          description: Уникальный идентификатор категории
+      responses:
+        '204':
+          description: Категория успешно удалена
+        '401':
+          description: Неавторизованный доступ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Категория не найдена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '409':
+          description: Нельзя удалить категорию, так как на нее ссылаются должности
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        default:
+          description: Неизвестная ошибка
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    adminBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    error:
+      type: object
+      required:
+        - message
+        - details
+      properties:
+        message:
+          type: string
+          description: error message
+          example: Invalid
+        details:
+          type: object
+          additionalProperties: true
+    Position:
+      type: object
+      required:
+        - categories_id
+        - logo_id
+        - title
+        - public
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор поста.
+          example: 1
+        categories_id:
+          type: integer
+          description: Идентификатор категории.
+          example: 2
+        logo_id:
+          type: integer
+          description: Идентификатор логотипа.
+          example: 3
+        title:
+          type: string
+          description: Заголовок поста.
+          maxLength: 100
+          example: Заголовок поста
+        public:
+          type: boolean
+          description: Является ли пост публичным.
+          example: true
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: Golang
+        public:
+          type: boolean
+          example: true
+      required:
+        - id
+        - title
+        - public
+    CategoriesResp:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+        page:
+          type: integer
+          example: 0
+        pages:
+          type: integer
+          example: 13
+        per_page:
+          type: integer
+          example: 1
+      required:
+        - data
+        - page
+        - pages
+        - per_page
+    CategoryPost:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Golang
+        public:
+          type: boolean
+          example: true
+      required:
+        - title
+        - public
+    CategoryPut:
+      type: object
+      properties:
+        title:
+          type: string
+          minLength: 3
+          maxLength: 50
+          example: Golang
+        public:
+          type: boolean
+          example: true

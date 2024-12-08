@@ -1,0 +1,30 @@
+openapi: 3.0.3
+servers:
+  - description: local
+    url: /
+  - description: dev
+    url: https://api.ubrato.ru
+info:
+  title: Ubrato core
+  description: ubrato core oas
+  version: 1.0.0
+paths:
+  /v1/categories:
+    $ref: "./v1/paths/categories.yml"  
+  /v1/admin/categories:
+    $ref: "./v1/paths/admin/category/_index.yml"   
+  /v1/admin/categories/{categoryID}:     
+    $ref: "./v1/paths/admin/category/_id.yml" 
+
+  /v1/admin/filters:
+    $ref: "./v1/paths/admin/filter/_index.yml" 
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    adminBearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

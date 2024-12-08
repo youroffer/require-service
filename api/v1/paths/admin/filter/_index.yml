@@ -1,0 +1,36 @@
+post:
+  tags:
+    - filters
+  summary: Создать новый фильтр
+  description: Создает новый фильтр с уникальным словом.
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/filter/Filter.yml'
+  responses:
+    '201':
+      description: Фильтр успешно создан
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/filter/Filter'
+    '400':
+      description: Некорректные данные.
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/error.yml"
+    '409':
+      description: Фильтр уже существует.
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/error.yml"
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/error.yml"
