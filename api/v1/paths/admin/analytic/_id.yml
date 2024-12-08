@@ -1,0 +1,95 @@
+put:
+  tags:
+    - analytics
+  summary: Обновить аналитику по ID
+  description: Обновляет аналитику по ее уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: analyticID
+      in: path
+      required: true
+      description: Уникальный идентификатор аналитики.
+      schema:
+        type: integer
+        example: 1
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/analytic/AnalyticPut.yml'
+  responses:
+    '200':
+      description: Аналитика успешно обновлена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/analytic/Analytic.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Аналитика не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '409':
+          description: Должность не найдена.
+          content:
+            application/json:
+              schema:
+                $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+
+delete:
+  tags:
+    - analytics
+  summary: Удалить аналитику по ID
+  description: Удаляет аналитику по уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: analyticID
+      in: path
+      required: true
+      description: Уникальный идентификатор аналитики.
+      schema:
+        type: integer
+        example: 1
+  responses:
+    '200':
+      description: Аналитика успешно удалена
+    '404':
+      description: Аналитика не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'

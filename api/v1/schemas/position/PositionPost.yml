@@ -1,0 +1,24 @@
+type: object
+required:
+  - category_id
+  - logo_id
+  - title
+  - public
+properties:
+  category_id:
+    type: integer
+    description: Идентификатор категории.
+    example: 1
+  logo_id:
+    type: integer
+    description: Идентификатор логотипа.
+    example: 1
+  title:
+    type: string
+    description: Заголовок поста.
+    maxLength: 100
+    example: "Заголовок поста"
+  public:
+    type: boolean
+    description: Является ли пост публичным.
+    example: true

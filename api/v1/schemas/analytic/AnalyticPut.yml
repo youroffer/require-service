@@ -1,0 +1,10 @@
+type: object
+properties:
+  posts_id:
+    type: integer
+    description: Идентификатор должности.
+    example: 1
+  search_query:
+    type: string
+    description: Фильтр поискового запроса hh.ru для аналитики.
+    example: "text=go"

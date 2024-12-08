@@ -1,0 +1,100 @@
+post:
+  tags:
+    - positions
+  summary: Создать новую должность
+  description: Создает новую должность.
+  security:
+    - adminBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/position/PositionPost.yml'
+  responses:
+    '201':
+      description: Должность успешно создана
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/position/Position.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '409':
+      description: Категория не найдена.
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+
+get:
+  tags:
+    - positions
+  summary: Получить все должности
+  description: Возвращает список всех должностей с возможностью пагинации.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: page
+      in: query
+      description: Номер страницы для пагинации
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    - name: per_page
+      in: query
+      description: Количество должностей на странице
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+  responses:
+    '200':
+      description: Список должностей успешно получен
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/position/PositionsResp.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Должности не найдены
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'

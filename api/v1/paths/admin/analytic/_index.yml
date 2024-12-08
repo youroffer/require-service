@@ -1,0 +1,106 @@
+post:
+  tags:
+    - analytics
+  summary: Создать новую запись аналитики
+  description: Создает новую запись аналитики.
+  security:
+    - adminBearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/analytic/AnalyticPost.yml'
+  responses:
+    '201':
+      description: Аналитика успешно создана
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/analytic/Analytic.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Пост не найден
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '409':
+      description: Должность не найдена.
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+
+get:
+  tags:
+    - analytics
+  summary: Получить всю аналитику
+  description: Возвращает список всех аналитик с возможностью пагинации.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: page
+      in: query
+      description: Номер страницы для пагинации
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    - name: per_page
+      in: query
+      description: Количество записей на странице
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+  responses:
+    '200':
+      description: Список аналитик успешно получен
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/analytic/AnalyticsResp.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Аналитика не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'

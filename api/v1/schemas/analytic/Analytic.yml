@@ -1,0 +1,25 @@
+type: object
+required:
+  - id
+  - post_title
+  - search_query
+  - parse_at
+properties:
+  id:
+    type: integer
+    description: Уникальный идентификатор аналитики.
+    example: 1
+  post_title:
+    type: string
+    description: Заголовок должности.
+    maxLength: 100
+    example: "Заголовок поста"
+  search_query:
+    type: string
+    description: Фильтр поискового запроса hh.ru для аналитики.
+    example: "text=go"
+  parse_at:
+    type: string
+    description: Дата и время последнего обновления записи.
+    format: date-time
+    example: "2024-12-08T15:30:00Z"

@@ -1,0 +1,26 @@
+type: object
+required:
+  - categories_id
+  - logo_id
+  - title
+  - public
+properties:
+  id:
+    type: integer
+    description: Уникальный идентификатор поста.
+    example: 1
+  category:
+    $ref: '../category/Category.yml'
+  logo_id:
+    type: integer
+    description: Идентификатор логотипа.
+    example: 1
+  title:
+    type: string
+    description: Заголовок поста.
+    maxLength: 100
+    example: "Заголовок поста"
+  public:
+    type: boolean
+    description: Является ли пост публичным.
+    example: true

@@ -1,0 +1,18 @@
+type: object
+properties:
+  analytic:
+    $ref: './Analytic.yml'
+  skills:
+    type: array
+    items:
+      $ref: './Word.yml'
+    description: Список навыков
+  keywords:
+    type: array
+    items:
+      $ref: './Word.yml'
+    description: Список ключевых слов 
+required:
+  - analytic
+  - skills
+  - keywords

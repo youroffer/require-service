@@ -1,0 +1,101 @@
+put:
+  tags:
+    - positions
+  summary: Изменить должность по ID
+  description: Обновляет должность по уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: positionID
+      in: path
+      required: true
+      description: Уникальный идентификатор должности
+      schema:
+        type: integer
+        example: 1
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../../schemas/position/PositionPut.yml'
+  responses:
+    '200':
+      description: Должность успешно обновлена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/position/Position.yml'
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Должность не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '409':
+      description: Категория не найдена.
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+
+delete:
+  tags:
+    - positions
+  summary: Удалить должность по ID
+  description: Удаляет должность по уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: positionID
+      in: path
+      required: true
+      description: Уникальный идентификатор должности
+      schema:
+        type: integer
+        example: 1
+  responses:
+    '200':
+      description: Должность успешно удалена
+    '400':
+      description: Некорректные параметры запроса
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '404':
+      description: Должность не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'

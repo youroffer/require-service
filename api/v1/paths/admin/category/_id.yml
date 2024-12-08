@@ -1,0 +1,101 @@
+put:
+  tags:
+    - categories
+  summary: Обновить категорию по ID
+  description: Обновляет категорию по ее уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - in: path
+      name: categoryID
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      description: Уникальный идентификатор категории
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../../schemas/category/CategoryPut.yml"
+  responses:
+    '200':
+      description: Категория успешно обновлена
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/category/Category.yml"
+    '400':
+      description: Некорректные данные.
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    '404':
+      description: Категория не найдена
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    '409':
+      description: Категория с таким названием уже существует
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+
+delete:
+  tags:
+    - categories
+  summary: Удаление категории по ID
+  description: Удаляет категорию по ее уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - in: path
+      name: categoryID
+      schema:
+        type: integer
+        minimum: 1
+      required: true
+      description: Уникальный идентификатор категории
+  responses:
+    '204':
+      description: Категория успешно удалена
+    '404':
+      description: Категория не найдена
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    '409':
+      description: Нельзя удалить категорию, так как на нее ссылаются должности
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"

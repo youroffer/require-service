@@ -1,0 +1,36 @@
+delete:
+  tags:
+    - filters
+  summary: Удалить фильтр по ID
+  description: Удаляет фильтр по его уникальному идентификатору.
+  security:
+    - adminBearerAuth: []
+  parameters:
+    - name: filterID
+      in: path
+      required: true
+      description: Уникальный идентификатор фильтра.
+      schema:
+        type: integer
+        example: 1
+  responses:
+    '200':
+      description: Фильтр успешно удален
+    '404':
+      description: Фильтр не найден
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+    '401':
+      description: Неавторизованный доступ
+      content:
+        application/json:
+          schema:
+            $ref: "../../../schemas/Error.yml"
+    default:
+      description: Неизвестная ошибка
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
