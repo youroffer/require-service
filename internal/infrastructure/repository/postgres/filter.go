@@ -2,12 +2,10 @@ package postgres
 
 import (
 	"context"
-	"errors"
 
 	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
 
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -17,27 +15,6 @@ type FilterRepo struct {
 
 func NewFilterRepo(db *pgxpool.Pool) *FilterRepo {
 	return &FilterRepo{DB: db}
-}
-
-func (r *FilterRepo) Add(ctx context.Context, filter string) (*entity.Filter, error) {
-	newFilter := &entity.Filter{}
-
-	err := r.DB.QueryRow(ctx, `
-	insert into filters 
-		(word) 
-	values 
-		($1) 
-	returning *;`, filter).Scan(
-		&newFilter.ID, &newFilter.Word)
-
-	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) {
-		if pgErr.Code == repoerr.UniqueConstraint {
-			return nil, repoerr.ErrFilterExist
-		}
-	}
-
-	return newFilter, err
 }
 
 func (r *FilterRepo) Delete(ctx context.Context, filter string) error {

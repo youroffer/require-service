@@ -13,7 +13,3 @@ func (h *Handler) V1AdminFiltersFilterIDDelete(ctx context.Context, params api.V
 func (h *Handler) V1AdminFiltersGet(ctx context.Context, params api.V1AdminFiltersGetParams) (api.V1AdminFiltersGetRes, error) {
 	return nil, nil
 }
-
-func (h *Handler) V1AdminFiltersPost(ctx context.Context, req *api.V1AdminFiltersPostReq) (api.V1AdminFiltersPostRes, error) {
-	return nil, nil
-}
