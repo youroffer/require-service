@@ -2,58 +2,58 @@ package repository
 
 import (
 	"context"
+	"errors"
+	"fmt"
 
-	"github.com/himmel520/uoffer/require/internal/entity"
-	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
-
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgconn"
 )
+
+// TODO: убрать зависимость интерфейса от pgx
 
 type (
-	Repository struct {
-		Post     PostRepo
-		Category CategoryRepo
-		Analytic AnalyticRepo
-		Filter   FilterRepo
+	DBTX struct {
+		qe Querier
 	}
 
-	PostRepo interface {
-		Add(ctx context.Context, post *entity.Post) (*entity.PostResponse, error)
-		Update(ctx context.Context, id int, post *entity.PostUpdate) (*entity.PostResponse, error)
-		Delete(ctx context.Context, id int) error
+	Querier interface {
+		Begin(ctx context.Context) (pgx.Tx, error)
+		Exec(ctx context.Context, sql string, arguments ...any) (pgconn.CommandTag, error)
+		Query(ctx context.Context, sql string, args ...any) (pgx.Rows, error)
+		QueryRow(ctx context.Context, sql string, args ...any) pgx.Row
 	}
 
-	CategoryRepo interface {
-		GetAllWithPosts(ctx context.Context, public bool) (map[string][]*entity.PostResponse, error)
-		GetAll(ctx context.Context) ([]*entity.Category, error)
-		Add(ctx context.Context, category *entity.Category) (*entity.Category, error)
-		Update(ctx context.Context, category, title string) (*entity.Category, error)
-		Delete(ctx context.Context, category string) error
+	QuerierTX interface {
+		Querier
+		Commit(ctx context.Context) error
+		Rollback(ctx context.Context) error
 	}
 
-	AnalyticRepo interface {
-		Add(ctx context.Context, analytic *entity.Analytic) (*entity.Analytic, error)
-		Update(ctx context.Context, id int, analytics *entity.AnalyticUpdate) (*entity.Analytic, error)
-		Delete(ctx context.Context, id int) error
-		Get(ctx context.Context, postID int) (*entity.AnalyticResp, error)
-		GetPostID(ctx context.Context, analyticId int) (int, error)
-		GetAll(ctx context.Context) ([]*entity.Analytic, error)
-	}
-
-	FilterRepo interface {
-		Add(ctx context.Context, filter string) (*entity.Filter, error)
-		Delete(ctx context.Context, filter string) error
-		GetAll(ctx context.Context) ([]*entity.Filter, error)
-		GetWithPagination(ctx context.Context, limit, offset int) ([]*entity.Filter, error)
-		GetCount(ctx context.Context) (int, error)
-	}
+	TransactionFunc func(ctx context.Context, qe Querier) error
 )
 
-func New(pool *pgxpool.Pool) *Repository {
-	return &Repository{
-		Post:     postgres.NewPostRepo(pool),
-		Category: postgres.NewCategoryRepo(pool),
-		Analytic: postgres.NewAnalyticRepo(pool),
-		Filter:   postgres.NewFilterRepo(pool),
+func NewDBTX(db Querier) *DBTX {
+	return &DBTX{qe: db}
+}
+
+func (d *DBTX) DB() Querier {
+	return d.qe
+}
+
+func (d *DBTX) InTransaction(ctx context.Context, fn TransactionFunc) error {
+	tx, err := d.qe.Begin(ctx)
+	if err != nil {
+		return fmt.Errorf("begin transaction: %w", err)
 	}
+
+	err = fn(ctx, tx)
+	if err != nil {
+		// TODO: убоать pgx.ErrTxClosed
+		if rbErr := tx.Rollback(ctx); rbErr != nil && !errors.Is(err, pgx.ErrTxClosed) {
+			return fmt.Errorf("rollback err: %w; err: %w", rbErr, err)
+		}
+		return err
+	}
+
+	return tx.Commit(ctx)
 }

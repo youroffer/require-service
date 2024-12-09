@@ -15,6 +15,7 @@ import (
 	errHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/error"
 	filterHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/filter"
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
 
 	log "github.com/youroffer/logger"
@@ -40,6 +41,8 @@ func main() {
 		log.FatalMsg(err, "unable to connect to pool")
 	}
 	defer pool.Close()
+	dbtx := repository.NewDBTX(pool)
+	_ = dbtx
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
@@ -62,7 +65,7 @@ func main() {
 		Error:    errHandler.New(),
 		Analytic: analyticHandler.New(),
 		Category: categoryHandler.New(),
-		Filter: filterHandler.New(),
+		Filter:   filterHandler.New(),
 		Position: positionHandler.New(),
 	})
 
