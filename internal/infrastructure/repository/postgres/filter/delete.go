@@ -18,8 +18,6 @@ func (r *FilterRepo) Delete(ctx context.Context, qe repository.Querier, id int) 
 		return err
 	}
 
-	fmt.Println(query, "\n", args)
-
 	cmdTag, err := qe.Exec(ctx, query, args...)
 	if err != nil {
 		return fmt.Errorf("row exec: %w", err)

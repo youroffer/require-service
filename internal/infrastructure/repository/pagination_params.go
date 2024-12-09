@@ -1,6 +1,8 @@
 package repository
 
+import "github.com/himmel520/uoffer/require/internal/entity"
+
 type PaginationParams struct {
-	Limit  uint64
-	Offset uint64
+	Limit  entity.Optional[uint64]
+	Offset entity.Optional[uint64]
 }

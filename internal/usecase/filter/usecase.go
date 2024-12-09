@@ -21,6 +21,8 @@ type (
 	FilterRepo interface {
 		Create(ctx context.Context, qe repository.Querier, filter string) (*entity.Filter, error)
 		Delete(ctx context.Context, qe repository.Querier, id int) error
+		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Filter, error)
+		Count(ctx context.Context, qe repository.Querier) (int, error)
 	}
 )
 
