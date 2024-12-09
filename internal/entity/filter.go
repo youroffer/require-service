@@ -1,11 +1,34 @@
 package entity
 
+import (
+	api "github.com/himmel520/uoffer/require/api/oas"
+	"github.com/himmel520/uoffer/require/internal/lib/convert"
+)
+
 type Filter struct {
-	ID   int    `json:"id,omitempty"`
-	Word string `json:"word" binding:"required,min=1"`
+	ID   int
+	Word string
 }
 
-type FilterResp struct {
-	Filters []*Filter `json:"filters"`
-	Total   int       `json:"total"`
+func ConvertFilterToApi(f *Filter) *api.Filter {
+	return &api.Filter{
+		ID:   f.ID,
+		Word: f.Word,
+	}
+}
+
+type FiltersResp struct {
+	Data    []*Filter
+	Page    uint64
+	Pages   uint64
+	PerPage uint64
+}
+
+func (c *FiltersResp) ToApi() *api.FiltersResp {
+	return &api.FiltersResp{
+		Data:    convert.ApplyPointerToSlice(c.Data, ConvertFilterToApi),
+		Page:    int(c.Page),
+		Pages:   int(c.Pages),
+		PerPage: int(c.PerPage),
+	}
 }

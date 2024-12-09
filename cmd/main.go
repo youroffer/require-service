@@ -17,6 +17,8 @@ import (
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
+	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
+	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 
 	log "github.com/youroffer/logger"
 )
@@ -42,7 +44,10 @@ func main() {
 	}
 	defer pool.Close()
 	dbtx := repository.NewDBTX(pool)
-	_ = dbtx
+
+	filterRepo := filterRepo.New()
+
+	filterUC := filterUC.New(dbtx, filterRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
@@ -65,7 +70,7 @@ func main() {
 		Error:    errHandler.New(),
 		Analytic: analyticHandler.New(),
 		Category: categoryHandler.New(),
-		Filter:   filterHandler.New(),
+		Filter:   filterHandler.New(filterUC),
 		Position: positionHandler.New(),
 	})
 
