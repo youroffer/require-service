@@ -18,10 +18,6 @@ func (h *Handler) V1AdminCategoriesGet(ctx context.Context, params api.V1AdminCa
 	return nil, nil
 }
 
-func (h *Handler) V1AdminCategoriesPost(ctx context.Context, req *api.CategoryPost) (api.V1AdminCategoriesPostRes, error) {
-	return nil, nil
-}
-
 func (h *Handler) V1CategoriesGet(ctx context.Context) (api.V1CategoriesGetRes, error) {
 	return nil, nil
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -93,26 +92,6 @@ func (r *CategoryRepo) GetAll(ctx context.Context) ([]*entity.Category, error) {
 	}
 
 	return categories, nil
-}
-
-func (r *CategoryRepo) Add(ctx context.Context, category *entity.Category) (*entity.Category, error) {
-	newCategory := &entity.Category{}
-
-	err := r.DB.QueryRow(ctx, `
-	insert into categories 
-		(title) 
-	values 
-		($1) 
-	returning *`, category.Title).Scan(&newCategory.ID, &newCategory.Title)
-
-	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) {
-		if pgErr.Code == repoerr.UniqueConstraint {
-			return nil, repoerr.ErrCategoryExists
-		}
-	}
-
-	return newCategory, err
 }
 
 func (r *CategoryRepo) Update(ctx context.Context, category, title string) (*entity.Category, error) {

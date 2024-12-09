@@ -17,7 +17,9 @@ import (
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
+	categoryRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/category"
 	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
+	categoryUC "github.com/himmel520/uoffer/require/internal/usecase/category"
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 
 	log "github.com/youroffer/logger"
@@ -47,7 +49,11 @@ func main() {
 
 	filterRepo := filterRepo.New()
 
+	categoryRepo := categoryRepo.New()
+
 	filterUC := filterUC.New(dbtx, filterRepo)
+
+	categoryUC := categoryUC.New(dbtx, categoryRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
@@ -69,7 +75,7 @@ func main() {
 		Auth:     authHandler.New(nil),
 		Error:    errHandler.New(),
 		Analytic: analyticHandler.New(),
-		Category: categoryHandler.New(),
+		Category: categoryHandler.New(categoryUC),
 		Filter:   filterHandler.New(filterUC),
 		Position: positionHandler.New(),
 	})
