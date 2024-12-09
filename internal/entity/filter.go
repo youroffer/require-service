@@ -14,7 +14,7 @@ func (f *Filter) ConvertFilterToApi() *api.Filter {
 	}
 }
 
-type FilterResp struct {
+type FiltersResp struct {
 	Filters []*Filter
 	Total   int
 }

@@ -499,9 +499,9 @@ func encodeV1AdminCategoriesPostResponse(response V1AdminCategoriesPostRes, w ht
 
 func encodeV1AdminFiltersFilterIDDeleteResponse(response V1AdminFiltersFilterIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1AdminFiltersFilterIDDeleteOK:
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
+	case *V1AdminFiltersFilterIDDeleteNoContent:
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 

@@ -1562,9 +1562,9 @@ func decodeV1AdminCategoriesPostResponse(resp *http.Response) (res V1AdminCatego
 
 func decodeV1AdminFiltersFilterIDDeleteResponse(resp *http.Response) (res V1AdminFiltersFilterIDDeleteRes, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &V1AdminFiltersFilterIDDeleteOK{}, nil
+	case 204:
+		// Code 204.
+		return &V1AdminFiltersFilterIDDeleteNoContent{}, nil
 	case 401:
 		// Code 401.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))

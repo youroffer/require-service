@@ -1106,14 +1106,14 @@ type V1AdminCategoriesPostUnauthorized Error
 
 func (*V1AdminCategoriesPostUnauthorized) v1AdminCategoriesPostRes() {}
 
+// V1AdminFiltersFilterIDDeleteNoContent is response for V1AdminFiltersFilterIDDelete operation.
+type V1AdminFiltersFilterIDDeleteNoContent struct{}
+
+func (*V1AdminFiltersFilterIDDeleteNoContent) v1AdminFiltersFilterIDDeleteRes() {}
+
 type V1AdminFiltersFilterIDDeleteNotFound Error
 
 func (*V1AdminFiltersFilterIDDeleteNotFound) v1AdminFiltersFilterIDDeleteRes() {}
-
-// V1AdminFiltersFilterIDDeleteOK is response for V1AdminFiltersFilterIDDelete operation.
-type V1AdminFiltersFilterIDDeleteOK struct{}
-
-func (*V1AdminFiltersFilterIDDeleteOK) v1AdminFiltersFilterIDDeleteRes() {}
 
 type V1AdminFiltersFilterIDDeleteUnauthorized Error
 

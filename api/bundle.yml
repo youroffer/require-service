@@ -360,7 +360,7 @@ paths:
             type: integer
             example: 1
       responses:
-        '200':
+        '204':
           description: Фильтр успешно удален
         '401':
           description: Неавторизованный доступ

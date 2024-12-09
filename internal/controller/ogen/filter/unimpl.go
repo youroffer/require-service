@@ -6,10 +6,6 @@ import (
 	api "github.com/himmel520/uoffer/require/api/oas"
 )
 
-func (h *Handler) V1AdminFiltersFilterIDDelete(ctx context.Context, params api.V1AdminFiltersFilterIDDeleteParams) (api.V1AdminFiltersFilterIDDeleteRes, error) {
-	return nil, nil
-}
-
 func (h *Handler) V1AdminFiltersGet(ctx context.Context, params api.V1AdminFiltersGetParams) (api.V1AdminFiltersGetRes, error) {
-	return nil, nil
+	return &api.FiltersResp{}, nil
 }

@@ -13,6 +13,7 @@ type (
 
 	FilterUc interface {
 		Create(ctx context.Context, filter string) (*entity.Filter, error)
+		Delete(ctx context.Context, id int) error
 	}
 )
 
