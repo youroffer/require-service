@@ -17,10 +17,10 @@ func (r *CategoryRepo) Update(ctx context.Context, qe repository.Querier, id int
 		Update("categories").
 		Where(squirrel.Eq{"id": id}).
 		Suffix(`
-	returning 
-	id, 
-	title, 
-	public`).
+		returning 
+		id, 
+		title, 
+		public`).
 		PlaceholderFormat(squirrel.Dollar)
 
 	if category.Title.Set {
