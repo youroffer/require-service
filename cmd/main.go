@@ -48,11 +48,9 @@ func main() {
 	dbtx := repository.NewDBTX(pool)
 
 	filterRepo := filterRepo.New()
-
 	categoryRepo := categoryRepo.New()
 
 	filterUC := filterUC.New(dbtx, filterRepo)
-
 	categoryUC := categoryUC.New(dbtx, categoryRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
