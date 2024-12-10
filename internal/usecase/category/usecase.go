@@ -21,6 +21,8 @@ type (
 	CategoryRepo interface {
 		Create(ctx context.Context, qe repository.Querier, category string) (*entity.Category, error)
 		Delete(ctx context.Context, qe repository.Querier, id int) error
+		Count(ctx context.Context, qe repository.Querier) (int, error)
+		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error)
 	}
 )
 

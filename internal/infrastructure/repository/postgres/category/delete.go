@@ -1,4 +1,4 @@
-package category
+package CategoryRepo
 
 import (
 	"context"

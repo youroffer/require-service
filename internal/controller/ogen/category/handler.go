@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/himmel520/uoffer/require/internal/entity"
+	"github.com/himmel520/uoffer/require/internal/usecase"
 )
 
 type (
@@ -14,6 +15,7 @@ type (
 	CategoryUC interface {
 		Create(ctx context.Context, category string) (*entity.Category, error)
 		Delete(ctx context.Context, id int) error
+		Get(ctx context.Context, params usecase.PageParams) (*entity.CategoriesResp, error)
 	}
 )
 

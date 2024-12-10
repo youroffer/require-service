@@ -1,4 +1,4 @@
-package category
+package CategoryRepo
 
 type CategoryRepo struct {
 }
