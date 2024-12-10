@@ -5,6 +5,15 @@ import (
 	"github.com/himmel520/uoffer/require/internal/lib/convert"
 )
 
+type CategoryUpdate struct {
+	Title  Optional[string]
+	Public Optional[bool]
+}
+
+func (c *CategoryUpdate) IsSet() bool {
+	return c.Title.Set || c.Public.Set
+}
+
 type Category struct {
 	ID     int
 	Title  string

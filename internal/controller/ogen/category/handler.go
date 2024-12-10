@@ -16,6 +16,7 @@ type (
 		Create(ctx context.Context, category string) (*entity.Category, error)
 		Delete(ctx context.Context, id int) error
 		Get(ctx context.Context, params usecase.PageParams) (*entity.CategoriesResp, error)
+		Update(ctx context.Context, id int, category *entity.CategoryUpdate) (*entity.Category, error)
 	}
 )
 

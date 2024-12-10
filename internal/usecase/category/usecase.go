@@ -23,6 +23,7 @@ type (
 		Delete(ctx context.Context, qe repository.Querier, id int) error
 		Count(ctx context.Context, qe repository.Querier) (int, error)
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error)
+		Update(ctx context.Context, qe repository.Querier, id int, category *entity.CategoryUpdate) (*entity.Category, error)
 	}
 )
 
