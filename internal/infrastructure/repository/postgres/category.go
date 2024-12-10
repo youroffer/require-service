@@ -110,10 +110,3 @@ func (r *CategoryRepo) Update(ctx context.Context, category, title string) (*ent
 	return newCategory, err
 }
 
-func (r *CategoryRepo) Delete(ctx context.Context, category string) error {
-	cmdTag, err := r.DB.Exec(ctx, `delete from categories where title = $1;`, category)
-	if cmdTag.RowsAffected() == 0 {
-		return repoerr.ErrCategoryNotFound
-	}
-	return err
-}

@@ -13,6 +13,7 @@ type (
 
 	CategoryUC interface {
 		Create(ctx context.Context, category string) (*entity.Category, error)
+		Delete(ctx context.Context, id int) error
 	}
 )
 

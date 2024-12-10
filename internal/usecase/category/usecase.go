@@ -20,6 +20,7 @@ type (
 
 	CategoryRepo interface {
 		Create(ctx context.Context, qe repository.Querier, category string) (*entity.Category, error)
+		Delete(ctx context.Context, qe repository.Querier, id int) error
 	}
 )
 

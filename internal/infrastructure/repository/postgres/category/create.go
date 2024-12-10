@@ -14,8 +14,8 @@ import (
 func (r *CategoryRepo) Create(ctx context.Context, qe repository.Querier, category string) (*entity.Category, error) {
 	query, args, err := squirrel.
 		Insert("categories").
-		Columns("title").
-		Values(category).
+		Columns("title", "public").
+		Values(category, false).
 		Suffix("returning id, title, public").
 		PlaceholderFormat(squirrel.Dollar).
 		ToSql()
