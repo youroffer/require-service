@@ -12,7 +12,6 @@ import (
 )
 
 func (h *Handler) V1AdminCategoriesCategoryIDPut(ctx context.Context, req *api.CategoryPut, params api.V1AdminCategoriesCategoryIDPutParams) (api.V1AdminCategoriesCategoryIDPutRes, error) {
-
 	newCategory := &entity.CategoryUpdate{
 		Title:  entity.Optional[string]{Value: req.GetTitle().Value, Set: req.GetTitle().Set},
 		Public: entity.Optional[bool]{Value: req.GetPublic().Value, Set: req.GetPublic().Set},
