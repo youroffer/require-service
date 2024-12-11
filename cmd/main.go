@@ -51,12 +51,10 @@ func main() {
 
 	filterRepo := filterRepo.New()
 	categoryRepo := categoryRepo.New()
+	analyticRepo := analyticRepo.New()
 
 	filterUC := filterUC.New(dbtx, filterRepo)
 	categoryUC := categoryUC.New(dbtx, categoryRepo)
-
-	analyticRepo := analyticRepo.New()
-
 	analyticUC := analyticUC.New(dbtx, analyticRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
