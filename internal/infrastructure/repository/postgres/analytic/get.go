@@ -51,6 +51,7 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 			parseAt      sql.NullTime
 			vacanciesNum sql.NullInt64
 		)
+		
 		analytic := &entity.AnalyticResp{}
 		if err := rows.Scan(
 			&analytic.ID,
@@ -63,6 +64,7 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 
 		analytic.ParseAt = entity.Optional[time.Time]{Value: parseAt.Time, Set: parseAt.Valid}
 		analytic.VacanciesNum = entity.Optional[int]{Value: int(vacanciesNum.Int64), Set: vacanciesNum.Valid}
+		
 		analyticResp = append(analyticResp, analytic)
 	}
 
