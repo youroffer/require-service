@@ -1,40 +1,56 @@
 package analyticRepo
 
-// import (
-// 	"context"
-// 	"errors"
+import (
+	"context"
+	"database/sql"
+	"errors"
+	"time"
 
-// 	"github.com/Masterminds/squirrel"
-// 	"github.com/himmel520/uoffer/require/internal/entity"
-// 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
-// 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
-// 	"github.com/jackc/pgx/v5/pgconn"
-// )
+	"github.com/Masterminds/squirrel"
+	"github.com/himmel520/uoffer/require/internal/entity"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
+	"github.com/jackc/pgx/v5/pgconn"
+)
 
-// func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analytic *entity.Analytic) (*entity.AnalyticResp, error) {
-// 	query, args, err := squirrel.
-// 		Insert("analytics").
-// 		Columns("post_id", "search_query").
-// 		Values(analytic.PostID, analytic.SearchQuery).
-// 		Suffix("returning id, word").
-// 		PlaceholderFormat(squirrel.Dollar).
-// 		ToSql()
-// 	if err != nil {
-// 		return nil, err
-// 	}
+func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analytic *entity.Analytic) (*entity.AnalyticResp, error) {
+	query, args, err := squirrel.
+		Insert("analytics").
+		Columns("posts_id", "search_query").
+		Values(analytic.PostID, analytic.SearchQuery).
+		Suffix("RETURNING id, posts_id, search_query, parse_at, vacancies_num").
+		PlaceholderFormat(squirrel.Dollar).
+		ToSql()
+	if err != nil {
+		return nil, err
+	}
 
-// 	var id int
-// 	err = qe.QueryRow(ctx, query, args...).Scan(&id)
+	analyticResp := &entity.AnalyticResp{}
+	var parseAt sql.NullTime
+	var vacanciesNum sql.NullInt64
 
-// 	var pgErr *pgconn.PgError
-// 	if err != nil {
-// 		if errors.As(err, &pgErr) {
-// 			if pgErr.Code == repoerr.FKViolation {
-// 				return nil, repoerr.ErrAnalyticDependencyNotFound
-// 			}
-// 		}
-// 		return nil, err
-// 	}
+	err = qe.QueryRow(ctx, query, args...).Scan(
+		&analyticResp.ID,
+		&analyticResp.PostTitle,
+		&analyticResp.SearchQuery,
+		&parseAt,
+		&vacanciesNum,
+	)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			switch {
+			case pgErr.Code == repoerr.FKViolation:
+				return nil, repoerr.ErrAnalyticDependencyNotFound
+			case pgErr.Code == repoerr.UniqueConstraint:
+				return nil, repoerr.ErrAnalyticExist
+			}
+		}
+		return nil, err
+	}
 
-// 	return r.GetByID(ctx, qe, id)
-// }
+	analyticResp.ParseAt = entity.Optional[time.Time]{Value: parseAt.Time, Set: parseAt.Valid}
+	analyticResp.VacanciesNum = entity.Optional[int]{Value: int(vacanciesNum.Int64), Set: vacanciesNum.Valid}
+
+	return analyticResp, nil
+}

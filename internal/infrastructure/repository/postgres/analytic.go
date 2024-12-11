@@ -35,7 +35,7 @@ func (r *AnalyticRepo) Add(ctx context.Context, analytic *entity.Analytic) (*ent
 		case repoerr.FKViolation:
 			return nil, repoerr.ErrAnalyticDependencyNotFound
 		case repoerr.UniqueConstraint:
-			return nil, repoerr.ErrPostIDExist
+			return nil, repoerr.ErrAnalyticExist
 		}
 	}
 

@@ -500,7 +500,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '409':
-          description: Должность не найдена.
+          description: Аналитика уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Должность не найдена
           content:
             application/json:
               schema:

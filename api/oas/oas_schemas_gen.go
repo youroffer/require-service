@@ -1107,6 +1107,10 @@ type V1AdminAnalyticsPostUnauthorized Error
 
 func (*V1AdminAnalyticsPostUnauthorized) v1AdminAnalyticsPostRes() {}
 
+type V1AdminAnalyticsPostUnprocessableEntity Error
+
+func (*V1AdminAnalyticsPostUnprocessableEntity) v1AdminAnalyticsPostRes() {}
+
 type V1AdminCategoriesCategoryIDDeleteConflict Error
 
 func (*V1AdminCategoriesCategoryIDDeleteConflict) v1AdminCategoriesCategoryIDDeleteRes() {}

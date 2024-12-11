@@ -31,7 +31,7 @@ post:
           schema:
             $ref: '../../../schemas/Error.yml'
     '409':
-      description: Должность не найдена.
+      description: Аналитика уже существует
       content:
         application/json:
           schema:
@@ -42,6 +42,13 @@ post:
         application/json:
           schema:
             $ref: '../../../schemas/Error.yml'
+    '422':
+      description: Должность не найдена
+      content:
+        application/json:
+          schema:
+            $ref: '../../../schemas/Error.yml'
+
     default:
       description: Неизвестная ошибка
       content:
