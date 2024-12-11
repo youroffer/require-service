@@ -49,6 +49,10 @@ func AnalyticRespToApi(a *AnalyticResp) *api.Analytic {
 	}
 }
 
+func (a *AnalyticUpdate) IsSet() bool {
+	return a.PostID.Set || a.SearchQuery.Set
+}
+
 type AnalyticsResp struct {
 	Data    []*AnalyticResp
 	Page    uint64

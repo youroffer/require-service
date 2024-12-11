@@ -16,6 +16,7 @@ type (
 		Get(ctx context.Context, params usecase.PageParams) (*entity.AnalyticsResp, error)
 		Create(ctx context.Context, analytic *entity.Analytic) (*entity.AnalyticResp, error)
 		Delete(ctx context.Context, id int) error
+		Update(ctx context.Context, id int, analytic *entity.AnalyticUpdate) (*entity.AnalyticResp, error)
 	}
 )
 
