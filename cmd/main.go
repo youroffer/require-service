@@ -18,8 +18,10 @@ import (
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
 	analyticRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/analytic"
+	categoryRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/category"
 	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
-	analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
+	categoryUC "github.com/himmel520/uoffer/require/internal/usecase/category"
+  analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 
 	log "github.com/youroffer/logger"
@@ -48,8 +50,10 @@ func main() {
 	dbtx := repository.NewDBTX(pool)
 
 	filterRepo := filterRepo.New()
+	categoryRepo := categoryRepo.New()
 
 	filterUC := filterUC.New(dbtx, filterRepo)
+	categoryUC := categoryUC.New(dbtx, categoryRepo)
 
 	analyticRepo := analyticRepo.New()
 
@@ -75,7 +79,7 @@ func main() {
 		Auth:     authHandler.New(nil),
 		Error:    errHandler.New(),
 		Analytic: analyticHandler.New(analyticUC),
-		Category: categoryHandler.New(),
+		Category: categoryHandler.New(categoryUC),
 		Filter:   filterHandler.New(filterUC),
 		Position: positionHandler.New(),
 	})
