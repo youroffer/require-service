@@ -15,6 +15,7 @@ type (
 	AnalyticUc interface {
 		Get(ctx context.Context, params usecase.PageParams) (*entity.AnalyticsResp, error)
 		Create(ctx context.Context, analytic *entity.Analytic) (*entity.AnalyticResp, error)
+		Delete(ctx context.Context, id int) error
 	}
 )
 

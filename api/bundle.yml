@@ -647,7 +647,7 @@ paths:
             type: integer
             example: 1
       responses:
-        '200':
+        '204':
           description: Аналитика успешно удалена
         '401':
           description: Неавторизованный доступ

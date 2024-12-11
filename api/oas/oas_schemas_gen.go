@@ -1050,14 +1050,14 @@ func (s *UserBearerAuth) SetToken(val string) {
 	s.Token = val
 }
 
+// V1AdminAnalyticsAnalyticIDDeleteNoContent is response for V1AdminAnalyticsAnalyticIDDelete operation.
+type V1AdminAnalyticsAnalyticIDDeleteNoContent struct{}
+
+func (*V1AdminAnalyticsAnalyticIDDeleteNoContent) v1AdminAnalyticsAnalyticIDDeleteRes() {}
+
 type V1AdminAnalyticsAnalyticIDDeleteNotFound Error
 
 func (*V1AdminAnalyticsAnalyticIDDeleteNotFound) v1AdminAnalyticsAnalyticIDDeleteRes() {}
-
-// V1AdminAnalyticsAnalyticIDDeleteOK is response for V1AdminAnalyticsAnalyticIDDelete operation.
-type V1AdminAnalyticsAnalyticIDDeleteOK struct{}
-
-func (*V1AdminAnalyticsAnalyticIDDeleteOK) v1AdminAnalyticsAnalyticIDDeleteRes() {}
 
 type V1AdminAnalyticsAnalyticIDDeleteUnauthorized Error
 

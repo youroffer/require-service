@@ -15,9 +15,9 @@ import (
 
 func encodeV1AdminAnalyticsAnalyticIDDeleteResponse(response V1AdminAnalyticsAnalyticIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1AdminAnalyticsAnalyticIDDeleteOK:
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
+	case *V1AdminAnalyticsAnalyticIDDeleteNoContent:
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 

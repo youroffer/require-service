@@ -22,6 +22,7 @@ type (
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.AnalyticResp, error)
 		Count(ctx context.Context, qe repository.Querier) (int, error)
 		Create(ctx context.Context, qe repository.Querier, analytic *entity.Analytic) (*entity.AnalyticResp, error)
+		Delete(ctx context.Context, qe repository.Querier, id int) error
 	}
 )
 

@@ -16,9 +16,9 @@ import (
 
 func decodeV1AdminAnalyticsAnalyticIDDeleteResponse(resp *http.Response) (res V1AdminAnalyticsAnalyticIDDeleteRes, _ error) {
 	switch resp.StatusCode {
-	case 200:
-		// Code 200.
-		return &V1AdminAnalyticsAnalyticIDDeleteOK{}, nil
+	case 204:
+		// Code 204.
+		return &V1AdminAnalyticsAnalyticIDDeleteNoContent{}, nil
 	case 401:
 		// Code 401.
 		ct, _, err := mime.ParseMediaType(resp.Header.Get("Content-Type"))
