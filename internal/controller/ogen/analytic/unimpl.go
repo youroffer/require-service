@@ -14,9 +14,7 @@ func (h *Handler) V1AdminAnalyticsAnalyticIDPut(ctx context.Context, req *api.An
 	return nil, nil
 }
 
-func (h *Handler) V1AdminAnalyticsGet(ctx context.Context, params api.V1AdminAnalyticsGetParams) (api.V1AdminAnalyticsGetRes, error) {
-	return nil, nil
-}
+
 
 func (h *Handler) V1AdminAnalyticsPost(ctx context.Context, req *api.AnalyticPost) (api.V1AdminAnalyticsPostRes, error) {
 	return nil, nil

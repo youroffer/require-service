@@ -1,12 +1,11 @@
 package entity
 
 type Category struct {
-	ID    int    `json:"id,omitempty"`
-	Title string `json:"title" binding:"required,min=3,max=50"`
+	ID    int
+	Title string
 }
 
-type CategoryResponse struct {
-	CategoryID int     `json:"id"`
-	Posts      []*PostResponse `json:"posts"`
+type CategoryResp struct {
+	CategoryID int
+	Posts      []*PostResponse
 }
-

@@ -36,7 +36,9 @@ type Analytic struct {
 	// Фильтр поискового запроса hh.ru для аналитики.
 	SearchQuery string `json:"search_query"`
 	// Дата и время последнего обновления записи.
-	ParseAt time.Time `json:"parse_at"`
+	ParseAt OptDateTime `json:"parse_at"`
+	// Количество вакансий.
+	VacanciesNum OptInt `json:"vacancies_num"`
 }
 
 // GetID returns the value of ID.
@@ -55,8 +57,13 @@ func (s *Analytic) GetSearchQuery() string {
 }
 
 // GetParseAt returns the value of ParseAt.
-func (s *Analytic) GetParseAt() time.Time {
+func (s *Analytic) GetParseAt() OptDateTime {
 	return s.ParseAt
+}
+
+// GetVacanciesNum returns the value of VacanciesNum.
+func (s *Analytic) GetVacanciesNum() OptInt {
+	return s.VacanciesNum
 }
 
 // SetID sets the value of ID.
@@ -75,8 +82,13 @@ func (s *Analytic) SetSearchQuery(val string) {
 }
 
 // SetParseAt sets the value of ParseAt.
-func (s *Analytic) SetParseAt(val time.Time) {
+func (s *Analytic) SetParseAt(val OptDateTime) {
 	s.ParseAt = val
+}
+
+// SetVacanciesNum sets the value of VacanciesNum.
+func (s *Analytic) SetVacanciesNum(val OptInt) {
+	s.VacanciesNum = val
 }
 
 func (*Analytic) v1AdminAnalyticsAnalyticIDPutRes() {}
@@ -657,6 +669,52 @@ func (o OptCategory) Get() (v Category, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptCategory) Or(d Category) Category {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptDateTime returns new OptDateTime with value set to v.
+func NewOptDateTime(v time.Time) OptDateTime {
+	return OptDateTime{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptDateTime is optional time.Time.
+type OptDateTime struct {
+	Value time.Time
+	Set   bool
+}
+
+// IsSet returns true if OptDateTime was set.
+func (o OptDateTime) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptDateTime) Reset() {
+	var v time.Time
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptDateTime) SetTo(v time.Time) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptDateTime) Get() (v time.Time, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptDateTime) Or(d time.Time) time.Time {
 	if v, ok := o.Get(); ok {
 		return v
 	}

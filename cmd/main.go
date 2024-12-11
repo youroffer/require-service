@@ -17,7 +17,9 @@ import (
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
+	analyticRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/analytic"
 	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
+	analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 
 	log "github.com/youroffer/logger"
@@ -49,6 +51,10 @@ func main() {
 
 	filterUC := filterUC.New(dbtx, filterRepo)
 
+	analyticRepo := analyticRepo.New()
+
+	analyticUC := analyticUC.New(dbtx, analyticRepo)
+
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
 	// 	log.Fatalf("unable to connect to cache: %v", err)
@@ -68,7 +74,7 @@ func main() {
 	handler := ogen.NewHandler(ogen.HandlerParams{
 		Auth:     authHandler.New(nil),
 		Error:    errHandler.New(),
-		Analytic: analyticHandler.New(),
+		Analytic: analyticHandler.New(analyticUC),
 		Category: categoryHandler.New(),
 		Filter:   filterHandler.New(filterUC),
 		Position: positionHandler.New(),

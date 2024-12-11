@@ -3,8 +3,6 @@ package postgres
 import (
 	"context"
 	"errors"
-	"fmt"
-	"strings"
 
 	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
@@ -44,45 +42,45 @@ func (r *AnalyticRepo) Add(ctx context.Context, analytic *entity.Analytic) (*ent
 	return newAnalytic, err
 }
 
-func (r *AnalyticRepo) Update(ctx context.Context, id int, analytics *entity.AnalyticUpdate) (*entity.Analytic, error) {
-	var keys []string
-	var values []interface{}
+// func (r *AnalyticRepo) Update(ctx context.Context, id int, analytics *entity.AnalyticUpdate) (*entity.Analytic, error) {
+// 	var keys []string
+// 	var values []interface{}
 
-	if analytics.PostID != nil {
-		keys = append(keys, "posts_id=$1")
-		values = append(values, analytics.PostID)
-	}
+// 	if analytics.PostID != nil {
+// 		keys = append(keys, "posts_id=$1")
+// 		values = append(values, analytics.PostID)
+// 	}
 
-	if analytics.SearchQuery != nil {
-		keys = append(keys, fmt.Sprintf("search_query=$%d", len(values)+1))
-		values = append(values, analytics.SearchQuery)
-	}
+// 	if analytics.SearchQuery != nil {
+// 		keys = append(keys, fmt.Sprintf("search_query=$%d", len(values)+1))
+// 		values = append(values, analytics.SearchQuery)
+// 	}
 
-	values = append(values, id)
-	query := fmt.Sprintf(`
-	update analytics 
-	set %v 
-	where id=$%d
-	returning *;`, strings.Join(keys, ", "), len(values))
+// 	values = append(values, id)
+// 	query := fmt.Sprintf(`
+// 	update analytics
+// 	set %v
+// 	where id=$%d
+// 	returning *;`, strings.Join(keys, ", "), len(values))
 
-	newAnalytic := &entity.Analytic{}
-	err := r.DB.QueryRow(ctx, query, values...).Scan(&newAnalytic.ID, &newAnalytic.PostID, &newAnalytic.SearchQuery)
-	if errors.Is(err, pgx.ErrNoRows) {
-		return nil, repoerr.ErrAnalyticNotFound
-	}
+// 	newAnalytic := &entity.Analytic{}
+// 	err := r.DB.QueryRow(ctx, query, values...).Scan(&newAnalytic.ID, &newAnalytic.PostID, &newAnalytic.SearchQuery)
+// 	if errors.Is(err, pgx.ErrNoRows) {
+// 		return nil, repoerr.ErrAnalyticNotFound
+// 	}
 
-	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) {
-		switch pgErr.Code {
-		case repoerr.FKViolation:
-			return nil, repoerr.ErrAnalyticDependencyNotFound
-		case repoerr.UniqueConstraint:
-			return nil, repoerr.ErrPostIDExist
-		}
-	}
+// 	var pgErr *pgconn.PgError
+// 	if errors.As(err, &pgErr) {
+// 		switch pgErr.Code {
+// 		case repoerr.FKViolation:
+// 			return nil, repoerr.ErrAnalyticDependencyNotFound
+// 		case repoerr.UniqueConstraint:
+// 			return nil, repoerr.ErrPostIDExist
+// 		}
+// 	}
 
-	return newAnalytic, err
-}
+// 	return newAnalytic, err
+// }
 
 func (r *AnalyticRepo) Delete(ctx context.Context, id int) error {
 	cmdTag, err := r.DB.Exec(ctx, `delete from analytics where id = $1`, id)

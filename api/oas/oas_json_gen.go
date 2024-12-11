@@ -5,6 +5,7 @@ package api
 import (
 	"math/bits"
 	"strconv"
+	"time"
 
 	"github.com/go-faster/errors"
 	"github.com/go-faster/jx"
@@ -35,16 +36,25 @@ func (s *Analytic) encodeFields(e *jx.Encoder) {
 		e.Str(s.SearchQuery)
 	}
 	{
-		e.FieldStart("parse_at")
-		json.EncodeDateTime(e, s.ParseAt)
+		if s.ParseAt.Set {
+			e.FieldStart("parse_at")
+			s.ParseAt.Encode(e, json.EncodeDateTime)
+		}
+	}
+	{
+		if s.VacanciesNum.Set {
+			e.FieldStart("vacancies_num")
+			s.VacanciesNum.Encode(e)
+		}
 	}
 }
 
-var jsonFieldsNameOfAnalytic = [4]string{
+var jsonFieldsNameOfAnalytic = [5]string{
 	0: "id",
 	1: "post_title",
 	2: "search_query",
 	3: "parse_at",
+	4: "vacancies_num",
 }
 
 // Decode decodes Analytic from json.
@@ -93,16 +103,24 @@ func (s *Analytic) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"search_query\"")
 			}
 		case "parse_at":
-			requiredBitSet[0] |= 1 << 3
 			if err := func() error {
-				v, err := json.DecodeDateTime(d)
-				s.ParseAt = v
-				if err != nil {
+				s.ParseAt.Reset()
+				if err := s.ParseAt.Decode(d, json.DecodeDateTime); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"parse_at\"")
+			}
+		case "vacancies_num":
+			if err := func() error {
+				s.VacanciesNum.Reset()
+				if err := s.VacanciesNum.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"vacancies_num\"")
 			}
 		default:
 			return d.Skip()
@@ -114,7 +132,7 @@ func (s *Analytic) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00001111,
+		0b00000111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.
@@ -1839,6 +1857,41 @@ func (s OptCategory) MarshalJSON() ([]byte, error) {
 func (s *OptCategory) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
+}
+
+// Encode encodes time.Time as json.
+func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
+	if !o.Set {
+		return
+	}
+	format(e, o.Value)
+}
+
+// Decode decodes time.Time from json.
+func (o *OptDateTime) Decode(d *jx.Decoder, format func(*jx.Decoder) (time.Time, error)) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptDateTime to nil")
+	}
+	o.Set = true
+	v, err := format(d)
+	if err != nil {
+		return err
+	}
+	o.Value = v
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptDateTime) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e, json.EncodeDateTime)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptDateTime) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d, json.DecodeDateTime)
 }
 
 // Encode encodes int as json.

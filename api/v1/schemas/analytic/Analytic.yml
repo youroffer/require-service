@@ -3,7 +3,6 @@ required:
   - id
   - post_title
   - search_query
-  - parse_at
 properties:
   id:
     type: integer
@@ -23,3 +22,7 @@ properties:
     description: Дата и время последнего обновления записи.
     format: date-time
     example: "2024-12-08T15:30:00Z"
+  vacancies_num:
+    type: integer
+    description: Количество вакансий
+    example: 142
