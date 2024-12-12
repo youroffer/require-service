@@ -73,7 +73,7 @@ delete:
         type: integer
         example: 1
   responses:
-    '200':
+    '204':
       description: Аналитика успешно удалена
     '404':
       description: Аналитика не найдена

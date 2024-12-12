@@ -500,7 +500,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '409':
-          description: Должность не найдена.
+          description: Аналитика уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: Должность не найдена
           content:
             application/json:
               schema:
@@ -641,7 +647,7 @@ paths:
             type: integer
             example: 1
       responses:
-        '200':
+        '204':
           description: Аналитика успешно удалена
         '401':
           description: Неавторизованный доступ
@@ -1018,7 +1024,6 @@ components:
         - id
         - post_title
         - search_query
-        - parse_at
       properties:
         id:
           type: integer
@@ -1038,6 +1043,10 @@ components:
           description: Дата и время последнего обновления записи.
           format: date-time
           example: '2024-12-08T15:30:00Z'
+        vacancies_num:
+          type: integer
+          description: Количество вакансий
+          example: 142
     Word:
       type: object
       properties:

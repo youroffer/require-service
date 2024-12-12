@@ -25,7 +25,7 @@ var (
 
 // Analytic
 var (
-	ErrPostIDExist                = errors.New("post_id must be unique")
+	ErrAnalyticExist              = errors.New("post_id must be unique")
 	ErrAnalyticDependencyNotFound = errors.New("cannot add or update analytic because there is no record reference to post")
 	ErrAnalyticNotFound           = errors.New("analytic not found")
 )

@@ -17,9 +17,11 @@ import (
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
+	analyticRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/analytic"
 	categoryRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/category"
 	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
 	categoryUC "github.com/himmel520/uoffer/require/internal/usecase/category"
+  analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 
 	log "github.com/youroffer/logger"
@@ -49,9 +51,11 @@ func main() {
 
 	filterRepo := filterRepo.New()
 	categoryRepo := categoryRepo.New()
+	analyticRepo := analyticRepo.New()
 
 	filterUC := filterUC.New(dbtx, filterRepo)
 	categoryUC := categoryUC.New(dbtx, categoryRepo)
+	analyticUC := analyticUC.New(dbtx, analyticRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
@@ -72,7 +76,7 @@ func main() {
 	handler := ogen.NewHandler(ogen.HandlerParams{
 		Auth:     authHandler.New(nil),
 		Error:    errHandler.New(),
-		Analytic: analyticHandler.New(),
+		Analytic: analyticHandler.New(analyticUC),
 		Category: categoryHandler.New(categoryUC),
 		Filter:   filterHandler.New(filterUC),
 		Position: positionHandler.New(),

@@ -15,9 +15,9 @@ import (
 
 func encodeV1AdminAnalyticsAnalyticIDDeleteResponse(response V1AdminAnalyticsAnalyticIDDeleteRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
-	case *V1AdminAnalyticsAnalyticIDDeleteOK:
-		w.WriteHeader(200)
-		span.SetStatus(codes.Ok, http.StatusText(200))
+	case *V1AdminAnalyticsAnalyticIDDeleteNoContent:
+		w.WriteHeader(204)
+		span.SetStatus(codes.Ok, http.StatusText(204))
 
 		return nil
 
@@ -241,6 +241,19 @@ func encodeV1AdminAnalyticsPostResponse(response V1AdminAnalyticsPostRes, w http
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(409)
 		span.SetStatus(codes.Error, http.StatusText(409))
+
+		e := new(jx.Encoder)
+		response.Encode(e)
+		if _, err := e.WriteTo(w); err != nil {
+			return errors.Wrap(err, "write")
+		}
+
+		return nil
+
+	case *V1AdminAnalyticsPostUnprocessableEntity:
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		w.WriteHeader(422)
+		span.SetStatus(codes.Error, http.StatusText(422))
 
 		e := new(jx.Encoder)
 		response.Encode(e)

@@ -14,12 +14,13 @@ CREATE TABLE if not exists posts (
     public BOOLEAN DEFAULT FALSE
 );
 
--- Создание таблицы colors
-CREATE TABLE if not exists analytics (
+-- Создание таблицы analytics
+CREATE TABLE IF NOT EXISTS analytics (
     id SERIAL PRIMARY KEY,
     posts_id INTEGER NOT NULL UNIQUE REFERENCES posts(id) ON DELETE CASCADE,
-    search_query TEXT NOT NULL
-    -- parse_at
+    search_query TEXT NOT NULL,
+    parse_at TIMESTAMPTZ,
+    vacancies_num INTEGER
 );
 
 -- Создание таблицы filters
