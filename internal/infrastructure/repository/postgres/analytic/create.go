@@ -25,9 +25,11 @@ func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analyt
 		return nil, err
 	}
 
-	analyticResp := &entity.AnalyticResp{}
-	var parseAt sql.NullTime
-	var vacanciesNum sql.NullInt64
+	var (
+		analyticResp = &entity.AnalyticResp{}
+		parseAt      sql.NullTime
+		vacanciesNum sql.NullInt64
+	)
 
 	err = qe.QueryRow(ctx, query, args...).Scan(
 		&analyticResp.ID,
