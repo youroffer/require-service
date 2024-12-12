@@ -34,7 +34,7 @@ func (r *AnalyticRepo) Update(ctx context.Context, qe repository.Querier, id int
 	}
 
 	var (
-		analyticResp *entity.AnalyticResp
+		analyticResp entity.AnalyticResp
 		parseAt      sql.NullTime
 		vacanciesNum sql.NullInt64
 	)
@@ -59,5 +59,5 @@ func (r *AnalyticRepo) Update(ctx context.Context, qe repository.Querier, id int
 	analyticResp.ParseAt = entity.Optional[time.Time]{Value: parseAt.Time, Set: parseAt.Valid}
 	analyticResp.VacanciesNum = entity.Optional[int]{Value: int(vacanciesNum.Int64), Set: vacanciesNum.Valid}
 
-	return analyticResp, nil
+	return &analyticResp, nil
 }
