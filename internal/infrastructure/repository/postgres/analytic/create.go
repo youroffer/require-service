@@ -26,7 +26,7 @@ func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analyt
 	}
 
 	var (
-		analyticResp = &entity.AnalyticResp{}
+		analyticResp *entity.AnalyticResp
 		parseAt      sql.NullTime
 		vacanciesNum sql.NullInt64
 	)

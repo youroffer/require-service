@@ -33,9 +33,11 @@ func (r *AnalyticRepo) Update(ctx context.Context, qe repository.Querier, id int
 		return nil, err
 	}
 
-	analyticResp := &entity.AnalyticResp{}
-	var parseAt sql.NullTime
-	var vacanciesNum sql.NullInt64
+	var (
+		analyticResp *entity.AnalyticResp
+		parseAt      sql.NullTime
+		vacanciesNum sql.NullInt64
+	)
 
 	err = qe.QueryRow(ctx, query, args...).Scan(
 		&analyticResp.ID,

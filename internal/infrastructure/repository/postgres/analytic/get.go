@@ -48,7 +48,7 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 	analyticResp := []*entity.AnalyticResp{}
 	for rows.Next() {
 		var (
-			analytic     = &entity.AnalyticResp{}
+			analytic     *entity.AnalyticResp
 			parseAt      sql.NullTime
 			vacanciesNum sql.NullInt64
 		)
