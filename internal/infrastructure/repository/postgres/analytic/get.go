@@ -15,7 +15,7 @@ import (
 func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.AnalyticResp, error) {
 	builder := squirrel.Select(
 		"a.id",
-		"p.id",
+		"p.title",
 		"a.search_query",
 		"a.parse_at",
 		"a.vacancies_num").

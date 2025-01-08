@@ -15,6 +15,34 @@ import (
 )
 
 func (r *AnalyticRepo) Update(ctx context.Context, qe repository.Querier, id int, analytic *entity.AnalyticUpdate) (*entity.AnalyticResp, error) {
+	var title string
+
+	if analytic.PostID.Set {
+		query, args, err := squirrel.
+			Select(
+				"p.title",
+			).
+			From("posts AS p").
+			Where(squirrel.Eq{"p.id": analytic.PostID.Value}).
+			PlaceholderFormat(squirrel.Dollar).
+			ToSql()
+		if err != nil {
+			return nil, err
+		}
+
+		post := &entity.AnalyticResp{}
+		if err = qe.QueryRow(ctx, query, args...).Scan(
+			&post.PostTitle,
+		); err != nil {
+			if errors.Is(err, pgx.ErrNoRows) {
+				return nil, repoerr.ErrAnalyticNotFound
+			}
+			return nil, err
+		}
+
+		title = post.PostTitle
+	}
+
 	builder := squirrel.Update("analytics").
 		Where(squirrel.Eq{"id": id}).
 		Suffix(`RETURNING id, posts_id, search_query, parse_at, vacancies_num`).
@@ -58,6 +86,7 @@ func (r *AnalyticRepo) Update(ctx context.Context, qe repository.Querier, id int
 
 	analyticResp.ParseAt = entity.Optional[time.Time]{Value: parseAt.Time, Set: parseAt.Valid}
 	analyticResp.VacanciesNum = entity.Optional[int]{Value: int(vacanciesNum.Int64), Set: vacanciesNum.Valid}
+	analyticResp.PostTitle = title
 
 	return &analyticResp, nil
 }

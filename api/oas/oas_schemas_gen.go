@@ -882,7 +882,7 @@ func (*Position) v1AdminPositionsPostRes()          {}
 // Ref: #
 type PositionPost struct {
 	// Идентификатор категории.
-	CategoryID int `json:"category_id"`
+	CategoriesID int `json:"categories_id"`
 	// Идентификатор логотипа.
 	LogoID int `json:"logo_id"`
 	// Заголовок поста.
@@ -891,9 +891,9 @@ type PositionPost struct {
 	Public bool `json:"public"`
 }
 
-// GetCategoryID returns the value of CategoryID.
-func (s *PositionPost) GetCategoryID() int {
-	return s.CategoryID
+// GetCategoriesID returns the value of CategoriesID.
+func (s *PositionPost) GetCategoriesID() int {
+	return s.CategoriesID
 }
 
 // GetLogoID returns the value of LogoID.
@@ -911,9 +911,9 @@ func (s *PositionPost) GetPublic() bool {
 	return s.Public
 }
 
-// SetCategoryID sets the value of CategoryID.
-func (s *PositionPost) SetCategoryID(val int) {
-	s.CategoryID = val
+// SetCategoriesID sets the value of CategoriesID.
+func (s *PositionPost) SetCategoriesID(val int) {
+	s.CategoriesID = val
 }
 
 // SetLogoID sets the value of LogoID.
@@ -934,7 +934,7 @@ func (s *PositionPost) SetPublic(val bool) {
 // Ref: #
 type PositionPut struct {
 	// Идентификатор категории.
-	CategoryID OptInt `json:"category_id"`
+	CategoriesID OptInt `json:"categories_id"`
 	// Идентификатор логотипа.
 	LogoID OptInt `json:"logo_id"`
 	// Заголовок поста.
@@ -943,9 +943,9 @@ type PositionPut struct {
 	Public OptBool `json:"public"`
 }
 
-// GetCategoryID returns the value of CategoryID.
-func (s *PositionPut) GetCategoryID() OptInt {
-	return s.CategoryID
+// GetCategoriesID returns the value of CategoriesID.
+func (s *PositionPut) GetCategoriesID() OptInt {
+	return s.CategoriesID
 }
 
 // GetLogoID returns the value of LogoID.
@@ -963,9 +963,9 @@ func (s *PositionPut) GetPublic() OptBool {
 	return s.Public
 }
 
-// SetCategoryID sets the value of CategoryID.
-func (s *PositionPut) SetCategoryID(val OptInt) {
-	s.CategoryID = val
+// SetCategoriesID sets the value of CategoriesID.
+func (s *PositionPut) SetCategoriesID(val OptInt) {
+	s.CategoriesID = val
 }
 
 // SetLogoID sets the value of LogoID.

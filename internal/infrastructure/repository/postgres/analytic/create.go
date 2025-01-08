@@ -10,11 +10,36 @@ import (
 	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analytic *entity.Analytic) (*entity.AnalyticResp, error) {
 	query, args, err := squirrel.
+		Select(
+			"p.title",
+		).
+		From("posts AS p").
+		Where(squirrel.Eq{"p.id": analytic.PostID}).
+		PlaceholderFormat(squirrel.Dollar).
+		ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	post := &entity.AnalyticResp{}
+	if err = qe.QueryRow(ctx, query, args...).Scan(
+		&post.PostTitle,
+	); err != nil {
+		return nil, err
+	}
+	title := post.PostTitle
+
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, repoerr.ErrAnalyticNotFound
+	}
+
+	query, args, err = squirrel.
 		Insert("analytics").
 		Columns("posts_id", "search_query").
 		Values(analytic.PostID, analytic.SearchQuery).
@@ -53,6 +78,7 @@ func (r *AnalyticRepo) Create(ctx context.Context, qe repository.Querier, analyt
 
 	analyticResp.ParseAt = entity.Optional[time.Time]{Value: parseAt.Time, Set: parseAt.Valid}
 	analyticResp.VacanciesNum = entity.Optional[int]{Value: int(vacanciesNum.Int64), Set: vacanciesNum.Valid}
+	analyticResp.PostTitle = title
 
 	return &analyticResp, nil
 }
