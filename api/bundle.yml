@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Require service
-  description: require service oas
+  title: Ubrato core
+  description: ubrato core oas
   version: 1.0.0
 servers:
   - description: local
@@ -1160,14 +1160,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Position'
+        total:
+          type: integer
+          description: Общее количество постов.
+          example: 10
         page:
           type: integer
           description: Текущая страница.
           example: 1
-        pages:
-          type: integer
-          description: Общее количество постов.
-          example: 10
         per_page:
           type: integer
           description: Количество постов на странице.
@@ -1175,12 +1175,12 @@ components:
     PositionPost:
       type: object
       required:
-        - category_id
+        - categories_id
         - logo_id
         - title
         - public
       properties:
-        category_id:
+        categories_id:
           type: integer
           description: Идентификатор категории.
           example: 1
@@ -1200,7 +1200,7 @@ components:
     PositionPut:
       type: object
       properties:
-        category_id:
+        categories_id:
           type: integer
           description: Идентификатор категории.
           example: 1

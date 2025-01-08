@@ -1,11 +1,11 @@
 type: object
 required:
-  - category_id
+  - categories_id
   - logo_id
   - title
   - public
 properties:
-  category_id:
+  categories_id:
     type: integer
     description: Идентификатор категории.
     example: 1

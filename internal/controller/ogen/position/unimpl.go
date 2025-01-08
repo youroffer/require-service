@@ -18,6 +18,3 @@ func (h *Handler) V1AdminPositionsPositionIDPut(ctx context.Context, req *api.Po
 	return nil, nil
 }
 
-func (h *Handler) V1AdminPositionsPost(ctx context.Context, req *api.PositionPost) (api.V1AdminPositionsPostRes, error) {
-	return nil, nil
-}

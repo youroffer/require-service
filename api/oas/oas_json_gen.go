@@ -2138,8 +2138,8 @@ func (s *PositionPost) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PositionPost) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("category_id")
-		e.Int(s.CategoryID)
+		e.FieldStart("categories_id")
+		e.Int(s.CategoriesID)
 	}
 	{
 		e.FieldStart("logo_id")
@@ -2156,7 +2156,7 @@ func (s *PositionPost) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfPositionPost = [4]string{
-	0: "category_id",
+	0: "categories_id",
 	1: "logo_id",
 	2: "title",
 	3: "public",
@@ -2171,17 +2171,17 @@ func (s *PositionPost) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "category_id":
+		case "categories_id":
 			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
 				v, err := d.Int()
-				s.CategoryID = int(v)
+				s.CategoriesID = int(v)
 				if err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"category_id\"")
+				return errors.Wrap(err, "decode field \"categories_id\"")
 			}
 		case "logo_id":
 			requiredBitSet[0] |= 1 << 1
@@ -2285,9 +2285,9 @@ func (s *PositionPut) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *PositionPut) encodeFields(e *jx.Encoder) {
 	{
-		if s.CategoryID.Set {
-			e.FieldStart("category_id")
-			s.CategoryID.Encode(e)
+		if s.CategoriesID.Set {
+			e.FieldStart("categories_id")
+			s.CategoriesID.Encode(e)
 		}
 	}
 	{
@@ -2311,7 +2311,7 @@ func (s *PositionPut) encodeFields(e *jx.Encoder) {
 }
 
 var jsonFieldsNameOfPositionPut = [4]string{
-	0: "category_id",
+	0: "categories_id",
 	1: "logo_id",
 	2: "title",
 	3: "public",
@@ -2325,15 +2325,15 @@ func (s *PositionPut) Decode(d *jx.Decoder) error {
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
-		case "category_id":
+		case "categories_id":
 			if err := func() error {
-				s.CategoryID.Reset()
-				if err := s.CategoryID.Decode(d); err != nil {
+				s.CategoriesID.Reset()
+				if err := s.CategoriesID.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"category_id\"")
+				return errors.Wrap(err, "decode field \"categories_id\"")
 			}
 		case "logo_id":
 			if err := func() error {

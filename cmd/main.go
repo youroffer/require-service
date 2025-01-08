@@ -20,9 +20,11 @@ import (
 	analyticRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/analytic"
 	categoryRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/category"
 	filterRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/filter"
+	positionRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/positions"
+	analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
 	categoryUC "github.com/himmel520/uoffer/require/internal/usecase/category"
-  analyticUC "github.com/himmel520/uoffer/require/internal/usecase/analytic"
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
+	positionUC "github.com/himmel520/uoffer/require/internal/usecase/positions"
 
 	log "github.com/youroffer/logger"
 )
@@ -52,10 +54,12 @@ func main() {
 	filterRepo := filterRepo.New()
 	categoryRepo := categoryRepo.New()
 	analyticRepo := analyticRepo.New()
+	positionRepo := positionRepo.New()
 
 	filterUC := filterUC.New(dbtx, filterRepo)
 	categoryUC := categoryUC.New(dbtx, categoryRepo)
 	analyticUC := analyticUC.New(dbtx, analyticRepo)
+	positionUC := positionUC.New(dbtx, positionRepo)
 
 	// rdb, err := redis.New(cfg.Cache.Conn)
 	// if err != nil {
@@ -79,7 +83,7 @@ func main() {
 		Analytic: analyticHandler.New(analyticUC),
 		Category: categoryHandler.New(categoryUC),
 		Filter:   filterHandler.New(filterUC),
-		Position: positionHandler.New(),
+		Position: positionHandler.New(positionUC),
 	})
 
 	app, err := ogen.NewServer(handler, cfg.Srv.Addr)
