@@ -13,7 +13,5 @@ func (uc *PositionUC) Create(ctx context.Context, post *entity.Position) (*entit
 		return nil, fmt.Errorf("create position: %w", err)
 	}
 
-	fmt.Println("newPosition", newPosition)
-
 	return newPosition, nil
 }

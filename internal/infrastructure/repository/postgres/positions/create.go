@@ -3,7 +3,6 @@ package positions
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/himmel520/uoffer/require/internal/entity"
@@ -44,8 +43,6 @@ func (r *PositionsRepo) Create(ctx context.Context, qe repository.Querier, post 
 		}
 		return nil, err
 	}
-
-	fmt.Println("query", query)
 
 	return r.GetByID(ctx, qe, id)
 }

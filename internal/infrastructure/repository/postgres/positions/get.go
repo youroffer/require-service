@@ -3,7 +3,6 @@ package positions
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/himmel520/uoffer/require/internal/entity"
@@ -47,8 +46,6 @@ func (r *PositionsRepo) GetByID(ctx context.Context, qe repository.Querier, id i
 	if errors.Is(err, pgx.ErrNoRows) {
 		return nil, repoerr.ErrPostNotFound
 	}
-
-	fmt.Println("positionResp", positionResp)
 
 	return positionResp, err
 }
