@@ -19,6 +19,9 @@ type (
 
 	PositionRepo interface {
 		Create(ctx context.Context, qe repository.Querier, post *entity.Position) (*entity.PositionResp, error)
+		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.PositionResp, error)
+		Count(ctx context.Context, qe repository.Querier) (int, error)
+		Delete(ctx context.Context, qe repository.Querier, id int) error
 	}
 )
 

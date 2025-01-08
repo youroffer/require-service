@@ -1,6 +1,9 @@
 package entity
 
-import api "github.com/himmel520/uoffer/require/api/oas"
+import (
+	api "github.com/himmel520/uoffer/require/api/oas"
+	"github.com/himmel520/uoffer/require/internal/lib/convert"
+)
 
 type Position struct {
 	ID           int    `json:"id,omitempty"`
@@ -29,5 +32,21 @@ func PositionRespToApi(p *PositionResp) *api.Position {
 		LogoID: p.LogoID,
 		Title:  p.Title,
 		Public: p.Public,
+	}
+}
+
+type PositionsResp struct {
+	Data    []*PositionResp `json:"data"`
+	Page    uint64          `json:"page"`
+	Pages   uint64          `json:"pages"`
+	PerPage uint64          `json:"per_page"`
+}
+
+func (c *PositionsResp) ToApi() *api.PositionsResp {
+	return &api.PositionsResp{
+		Data:    convert.ApplyPointerToSlice(c.Data, PositionRespToApi),
+		Page:    api.NewOptInt(int(c.Page)),
+		Total:   api.NewOptInt(int(c.Pages)),
+		PerPage: api.NewOptInt(int(c.PerPage)),
 	}
 }
