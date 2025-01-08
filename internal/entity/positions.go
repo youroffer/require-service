@@ -13,6 +13,17 @@ type Position struct {
 	Public       bool   `json:"public"`
 }
 
+type PositionUpdate struct {
+	CategoriesID Optional[int]    `json:"categories_id"`
+	LogoID       Optional[int]    `json:"logo_id"`
+	Title        Optional[string] `json:"title"`
+	Public       Optional[bool]   `json:"public"`
+}
+
+func (p *PositionUpdate) IsSet() bool {
+	return p.CategoriesID.Set || p.LogoID.Set || p.Title.Set || p.Public.Set
+}
+
 type PositionResp struct {
 	ID       int      `json:"id,omitempty"`
 	Category Category `json:"categories_id"`
