@@ -26,27 +26,28 @@ import (
 	filterUC "github.com/himmel520/uoffer/require/internal/usecase/filter"
 	positionUC "github.com/himmel520/uoffer/require/internal/usecase/positions"
 
-	log "github.com/youroffer/logger"
+	"github.com/rs/zerolog/log"
+	logSetup "github.com/youroffer/logger"
 )
 
 func init() {
 	logLevel := flag.String("loglevel", "info", "log level: debug, info, warn, error")
 	flag.Parse()
 
-	log.SetupLogger(*logLevel)
+	logSetup.SetupLogger(*logLevel)
 }
 
 func main() {
 	// config
 	cfg, err := config.New()
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("invalid env")
 	}
 
 	// db
 	pool, err := postgres.NewPG(cfg.DB.DBConn)
 	if err != nil {
-		log.FatalMsg(err, "unable to connect to pool")
+		log.Fatal().Err(err).Msg("unable to connect to pool")
 	}
 	defer pool.Close()
 	dbtx := repository.NewDBTX(pool)
@@ -61,16 +62,13 @@ func main() {
 	analyticUC := analyticUC.New(dbtx, analyticRepo)
 	positionUC := positionUC.New(dbtx, positionRepo)
 
-	// rdb, err := redis.New(cfg.Cache.Conn)
-	// if err != nil {
-	// 	log.Fatalf("unable to connect to cache: %v", err)
-	// }
-	// defer rdb.Close()
-
-	// cache := cache.New(rdb, cfg.Cache.Exp)
-	// repo := repository.New(pool)
-	// uc := usecase.New(repo, cache, cfg.Srv.JWT.PublicKey, log)
-	// handler := httpctrl.New(uc, log)
+	// cache
+	rdb, err := cache.NewRedis(cfg.Cache.Conn)
+	if err != nil {
+		log.Fatal().Err(err).Msg("unable to connect to cache")
+	}
+	defer rdb.Close()
+	cache := cache.NewCache(rdb, cfg.Cache.Exp)
 
 	// сервер
 	// parser := parser.NewParser(cfg.API_HH, repo, cache, log)
