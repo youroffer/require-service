@@ -3,6 +3,7 @@ module github.com/himmel520/uoffer/require
 go 1.23.2
 
 require (
+	github.com/go-chi/chi v1.5.5
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/go-chi/cors v1.2.1
 	github.com/go-faster/errors v0.7.1
@@ -22,7 +23,6 @@ require (
 )
 
 require (
-	github.com/go-chi/chi v1.5.5 // indirect
 	github.com/lann/builder v0.0.0-20180802200727-47ae307949d0 // indirect
 	github.com/lann/ps v0.0.0-20150810152359-62de8c46ede0 // indirect
 )
@@ -68,7 +68,7 @@ require (
 	github.com/swaggo/swag v1.8.1 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/crypto v0.29.0 // indirect
-	golang.org/x/exp v0.0.0-20230905200255-921286631fa9 // indirect
+	golang.org/x/exp v0.0.0-20230905200255-921286631fa9
 	golang.org/x/net v0.31.0 // indirect
 	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
