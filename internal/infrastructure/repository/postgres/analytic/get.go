@@ -12,6 +12,16 @@ import (
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
 )
 
+func (r *AnalyticRepo) GetByID(ctx context.Context, qe repository.Querier, analyticID int) (*entity.AnalyticResp, error) {
+	analytics, err := r.Get(ctx,qe, repository.PaginationParams{
+		IDs: entity.NewOptional([]int{analyticID})})
+	if err != nil {
+		return nil, fmt.Errorf("get analytic by id: %w", err)
+	}
+
+	return analytics[0], nil
+}
+
 func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.AnalyticResp, error) {
 	builder := squirrel.Select(
 		"a.id",
@@ -30,6 +40,10 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 
 	if params.Offset.Set {
 		builder = builder.Offset(params.Offset.Value)
+	}
+
+	if params.IDs.Set{
+		builder = builder.Where(squirrel.Eq{"a.id": params.IDs.Value})
 	}
 
 	query, args, err := builder.ToSql()

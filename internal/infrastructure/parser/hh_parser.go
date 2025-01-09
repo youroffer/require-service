@@ -39,6 +39,7 @@ type Parser struct {
 type (
 	AnalyticRepo interface {
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.AnalyticResp, error)
+		Update(ctx context.Context, qe repository.Querier, id int, analytic *entity.AnalyticUpdate) (*entity.AnalyticResp, error)
 	}
 
 	FilterRepo interface {
@@ -168,19 +169,17 @@ func (p *Parser) Parse(ctx context.Context) {
 					Keywords: keywords,
 				}
 
-				log.Info().
-					Str("position", analytic.PostTitle).
-					Interface("skills", skills).
-					Interface("words", keywords).
-					Msg("End parsing")
-
 				// отправляем в кэш
 				if err := p.cache.Set(context.Background(), fmt.Sprintf(cache.AnalyticKeyFmt, analytic.ID), analyticWords); err != nil {
 					log.Err(err).Str("position", analytic.PostTitle).Msg("set cache")
 					return
 				}
 
-
+				if _, err := p.analyticRepo.Update(ctx, p.qe.DB(), analytic.ID, &entity.AnalyticUpdate{
+					VacanciesNum: analytic.VacanciesNum,
+					ParseAt:      analytic.ParseAt}); err != nil {
+					log.Err(err).Str("position", analytic.PostTitle).Msg("update analytic")
+				}
 			}()
 		}
 	}
