@@ -9,11 +9,11 @@ import (
 
 type (
 	FilterUC struct {
-		db   DBXT
+		db   DBTX
 		repo FilterRepo
 	}
 
-	DBXT interface {
+	DBTX interface {
 		DB() repository.Querier
 		InTransaction(ctx context.Context, fn repository.TransactionFunc) error
 	}
@@ -26,6 +26,6 @@ type (
 	}
 )
 
-func New(db DBXT, repo FilterRepo) *FilterUC {
+func New(db DBTX, repo FilterRepo) *FilterUC {
 	return &FilterUC{db: db, repo: repo}
 }

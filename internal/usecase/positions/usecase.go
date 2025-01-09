@@ -9,11 +9,11 @@ import (
 
 type (
 	PositionUC struct {
-		db   DBXT
+		db   DBTX
 		repo PositionRepo
 	}
 
-	DBXT interface {
+	DBTX interface {
 		DB() repository.Querier
 	}
 
@@ -26,7 +26,7 @@ type (
 	}
 )
 
-func New(db DBXT, repo PositionRepo) *PositionUC {
+func New(db DBTX, repo PositionRepo) *PositionUC {
 	return &PositionUC{
 		db:   db,
 		repo: repo,

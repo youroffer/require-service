@@ -8,7 +8,8 @@ import (
 	api "github.com/himmel520/uoffer/require/api/oas"
 	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
-	log "github.com/youroffer/logger"
+	"github.com/rs/zerolog/log"
+	logSetup "github.com/youroffer/logger"
 )
 
 func (h *Handler) V1AdminCategoriesCategoryIDPut(ctx context.Context, req *api.CategoryPut, params api.V1AdminCategoriesCategoryIDPutParams) (api.V1AdminCategoriesCategoryIDPutRes, error) {
@@ -28,9 +29,7 @@ func (h *Handler) V1AdminCategoriesCategoryIDPut(ctx context.Context, req *api.C
 	case errors.Is(err, repoerr.ErrCategoryExists):
 		return &api.V1AdminCategoriesCategoryIDPutConflict{Message: err.Error()}, nil
 	case err != nil:
-		log.ErrFields(err, log.Fields{
-			log.RequestID: middleware.GetReqID(ctx),
-		})
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
 		return nil, err
 	}
 

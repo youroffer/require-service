@@ -15,6 +15,9 @@ import (
 	errHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/error"
 	filterHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/filter"
 	positionHandler "github.com/himmel520/uoffer/require/internal/controller/ogen/position"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/cache"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/parser"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/parser/cron"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres"
 	analyticRepo "github.com/himmel520/uoffer/require/internal/infrastructure/repository/postgres/analytic"
@@ -52,16 +55,6 @@ func main() {
 	defer pool.Close()
 	dbtx := repository.NewDBTX(pool)
 
-	filterRepo := filterRepo.New()
-	categoryRepo := categoryRepo.New()
-	analyticRepo := analyticRepo.New()
-	positionRepo := positionRepo.New()
-
-	filterUC := filterUC.New(dbtx, filterRepo)
-	categoryUC := categoryUC.New(dbtx, categoryRepo)
-	analyticUC := analyticUC.New(dbtx, analyticRepo)
-	positionUC := positionUC.New(dbtx, positionRepo)
-
 	// cache
 	rdb, err := cache.NewRedis(cfg.Cache.Conn)
 	if err != nil {
@@ -70,11 +63,19 @@ func main() {
 	defer rdb.Close()
 	cache := cache.NewCache(rdb, cfg.Cache.Exp)
 
-	// сервер
-	// parser := parser.NewParser(cfg.API_HH, repo, cache, log)
-	// cron := cron.NewCron(context.Background(), cfg.API_HH.Interval, parser, log)
-	// app := server.New(handler.InitRoutes(), cron, cfg.Srv.Addr)
+	// repo
+	filterRepo := filterRepo.New()
+	categoryRepo := categoryRepo.New()
+	analyticRepo := analyticRepo.New()
+	positionRepo := positionRepo.New()
 
+	// uc
+	filterUC := filterUC.New(dbtx, filterRepo)
+	categoryUC := categoryUC.New(dbtx, categoryRepo)
+	analyticUC := analyticUC.New(dbtx, analyticRepo)
+	positionUC := positionUC.New(dbtx, positionRepo)
+
+	// handler
 	handler := ogen.NewHandler(ogen.HandlerParams{
 		Auth:     authHandler.New(nil),
 		Error:    errHandler.New(),
@@ -84,16 +85,29 @@ func main() {
 		Position: positionHandler.New(positionUC),
 	})
 
+	// parser
+	parser := parser.NewParser(parser.ParserParams{
+		Cfg:          cfg.API_HH,
+		AnalyticRepo: analyticRepo,
+		FilterRepo:   filterRepo,
+		Cache:        cache,
+		DBTX:         dbtx,
+	})
+	cron := cron.NewCron(context.Background(), cfg.API_HH.Interval, parser)
+	go cron.Start()
+	defer cron.Stop()
+
+	// server
 	app, err := ogen.NewServer(handler, cfg.Srv.Addr)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal().Err(err).Msg("create server")
 	}
 
 	go func() {
-		log.Infof("the server is starting on %v", cfg.Srv.Addr)
+		log.Info().Msgf("the server is starting on %v", cfg.Srv.Addr)
 
 		if err := app.Run(); err != nil {
-			log.FatalMsg(err, "error occured while running http server")
+			log.Fatal().Err(err).Msg("error occured while running http server")
 		}
 	}()
 
@@ -102,8 +116,6 @@ func main() {
 	<-done
 
 	if err := app.Shutdown(context.Background()); err != nil {
-		log.ErrMsg(err, "error occured on server shutting down")
+		log.Err(err).Msg("error occured on server shutting down")
 	}
-
-	log.Info("the server is shut down")
 }

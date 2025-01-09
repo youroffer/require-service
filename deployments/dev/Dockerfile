@@ -13,9 +13,11 @@ RUN CGO_ENABLED=0 GOOS=linux  \
     go build  -o /bin/app ./cmd/main.go
 
 # Step 3: Final
-FROM scratch
+FROM alpine
 COPY --from=builder bin/app /
 COPY --from=builder app/config /config
 COPY --from=builder app/api /api
+
+RUN apk --no-cache add ca-certificates
 
 CMD ["/app", "--loglevel=debug"]

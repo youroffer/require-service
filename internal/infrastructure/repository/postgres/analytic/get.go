@@ -22,8 +22,6 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 		From("analytics AS a").
 		Join("posts AS p ON p.id = a.posts_id").
 		OrderBy("a.id").
-		Limit(params.Limit.Value).
-		Offset(params.Offset.Value).
 		PlaceholderFormat(squirrel.Dollar)
 
 	if params.Limit.Set {

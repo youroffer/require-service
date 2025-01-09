@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 )
 
 type Parser interface {
@@ -15,24 +15,24 @@ type Cron struct {
 	parser   Parser
 	interval time.Duration
 
-	log      *logrus.Logger
-	ctx      context.Context
-	cancel   context.CancelFunc
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
-func NewCron(ctx context.Context, interval time.Duration, parser Parser, log *logrus.Logger) *Cron {
+func NewCron(ctx context.Context, interval time.Duration, parser Parser) *Cron {
 	ctx, cancel := context.WithCancel(ctx)
 	return &Cron{
 		interval: interval,
 		ctx:      ctx,
 		cancel:   cancel,
 		parser:   parser,
-		log:      log,
 	}
 }
 
 func (c *Cron) Start() {
-	c.log.Info("cron is running")
+	log.Info().Msg("cron is running")
+	c.parser.Parse(c.ctx)
+	
 	ticker := time.NewTicker(c.interval)
 	for {
 		select {
@@ -46,6 +46,6 @@ func (c *Cron) Start() {
 }
 
 func (c *Cron) Stop() {
-	c.log.Info("cron stopped")
+	log.Info().Msg("cron stopped")
 	c.cancel()
 }
