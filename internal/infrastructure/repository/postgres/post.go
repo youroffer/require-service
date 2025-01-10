@@ -22,15 +22,15 @@ func NewPostRepo(db *pgxpool.Pool) *PostRepo {
 	return &PostRepo{DB: db}
 }
 
-func (r *PostRepo) Add(ctx context.Context, post *entity.Post) (*entity.PostResponse, error) {
-	postResp := &entity.PostResponse{}
+func (r *PostRepo) Add(ctx context.Context, post *entity.Position) (*entity.PositionResp, error) {
+	postResp := &entity.PositionResp{}
 
 	err := r.DB.QueryRow(ctx, `
 	insert into posts 
 		(categories_id, logo_id, title, public) 
 	values 
 		($1, $2, $3, $4) 
-	returning id, logo_id, title, public;`, post.CategoriesID, post.LogosID, post.Title, post.Public).Scan(
+	returning id, logo_id, title, public;`, post.CategoriesID, post.LogoID, post.Title, post.Public).Scan(
 		&postResp.ID, &postResp.LogoID, &postResp.Title, &postResp.Public)
 
 	var pgErr *pgconn.PgError
@@ -46,28 +46,28 @@ func (r *PostRepo) Add(ctx context.Context, post *entity.Post) (*entity.PostResp
 	return postResp, err
 }
 
-func (r *PostRepo) Update(ctx context.Context, id int, post *entity.PostUpdate) (*entity.PostResponse, error) {
+func (r *PostRepo) Update(ctx context.Context, id int, post *entity.PositionUpdate) (*entity.PositionResp, error) {
 	var keys []string
 	var values []interface{}
 
-	if post.CategoriesID != nil {
+	if post.CategoriesID.Set {
 		keys = append(keys, "categories_id=$1")
-		values = append(values, post.CategoriesID)
+		values = append(values, post.CategoriesID.Value)
 	}
 
-	if post.LogosID != nil {
+	if post.LogoID.Set{
 		keys = append(keys, fmt.Sprintf("logo_id=$%d", len(keys)+1))
-		values = append(values, post.LogosID)
+		values = append(values, post.LogoID.Value)
 	}
 
-	if post.Title != nil {
+	if post.Title.Set {
 		keys = append(keys, fmt.Sprintf("title=$%d", len(keys)+1))
-		values = append(values, post.Title)
+		values = append(values, post.Title.Value)
 	}
 
-	if post.Public != nil {
+	if post.Public.Set {
 		keys = append(keys, fmt.Sprintf("public=$%d", len(keys)+1))
-		values = append(values, post.Public)
+		values = append(values, post.Public.Value)
 	}
 
 	values = append(values, id)
@@ -76,7 +76,7 @@ func (r *PostRepo) Update(ctx context.Context, id int, post *entity.PostUpdate) 
 		where id = $%d
 	returning id, logo_id, title, public`, strings.Join(keys, ", "), len(values))
 
-	postResp := &entity.PostResponse{}
+	postResp := &entity.PositionResp{}
 	err := r.DB.QueryRow(ctx, query, values...).Scan(
 		&postResp.ID, &postResp.LogoID, &postResp.Title, &postResp.Public)
 

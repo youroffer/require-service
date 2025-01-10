@@ -18,7 +18,7 @@ func NewCategoryRepo(db *pgxpool.Pool) *CategoryRepo {
 	return &CategoryRepo{DB: db}
 }
 
-func (r *CategoryRepo) GetAllWithPosts(ctx context.Context, public bool) (map[string][]*entity.PostResponse, error) {
+func (r *CategoryRepo) GetAllWithPosts(ctx context.Context, public bool) (map[string][]*entity.PositionResp, error) {
 	query := `
 	SELECT 
 		c.title AS category_title,
@@ -41,10 +41,10 @@ func (r *CategoryRepo) GetAllWithPosts(ctx context.Context, public bool) (map[st
 	}
 	defer rows.Close()
 
-	categories := make(map[string][]*entity.PostResponse)
+	categories := make(map[string][]*entity.PositionResp)
 	for rows.Next() {
 		c := &entity.Category{}
-		p := &entity.PostResponse{}
+		p := &entity.PositionResp{}
 
 		if err := rows.Scan(
 			&c.Title,
@@ -55,7 +55,7 @@ func (r *CategoryRepo) GetAllWithPosts(ctx context.Context, public bool) (map[st
 
 		// Добавление категории
 		if _, exists := categories[c.Title]; !exists {
-			categories[c.Title] = []*entity.PostResponse{}
+			categories[c.Title] = []*entity.PositionResp{}
 		}
 
 		// Добавление должностей
