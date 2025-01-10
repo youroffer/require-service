@@ -1,13 +1,13 @@
 openapi: 3.0.3
 info:
-  title: Ubrato core
-  description: ubrato core oas
+  title: Uoffer require
+  description: uoffer require oas
   version: 1.0.0
 servers:
   - description: local
     url: /
   - description: dev
-    url: https://api.ubrato.ru
+    url: http://194.87.226.28:8081
 paths:
   /v1/categories:
     get:

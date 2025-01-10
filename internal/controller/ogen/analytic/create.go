@@ -8,8 +8,8 @@ import (
 	api "github.com/himmel520/uoffer/require/api/oas"
 	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
-
-	log "github.com/youroffer/logger"
+	"github.com/rs/zerolog/log"
+	logSetup "github.com/youroffer/logger"
 )
 
 func (h *Handler) V1AdminAnalyticsPost(ctx context.Context, req *api.AnalyticPost) (api.V1AdminAnalyticsPostRes, error) {
@@ -24,9 +24,7 @@ func (h *Handler) V1AdminAnalyticsPost(ctx context.Context, req *api.AnalyticPos
 	case errors.Is(err, repoerr.ErrAnalyticExist):
 		return &api.V1AdminAnalyticsPostUnprocessableEntity{Message: err.Error()}, nil
 	case err != nil:
-		log.ErrFields(err, log.Fields{
-			log.RequestID: middleware.GetReqID(ctx),
-		})
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
 		return nil, err
 	}
 

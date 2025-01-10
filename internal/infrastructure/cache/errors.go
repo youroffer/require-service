@@ -1,4 +1,4 @@
-package errcache
+package cache
 
 import "errors"
 

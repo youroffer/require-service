@@ -16,8 +16,10 @@ type Analytic struct {
 }
 
 type AnalyticUpdate struct {
-	PostID      Optional[int]
-	SearchQuery Optional[string]
+	PostID       Optional[int]
+	SearchQuery  Optional[string]
+	VacanciesNum Optional[int]
+	ParseAt      Optional[time.Time]
 }
 
 type AnalyticResp struct {

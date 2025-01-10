@@ -9,17 +9,17 @@ import (
 
 type (
 	CategoryUC struct {
-		db   DBXT
+		db   DBTX
 		repo CategoryRepo
 	}
 
-	DBXT interface {
+	DBTX interface {
 		DB() repository.Querier
 		InTransaction(ctx context.Context, fn repository.TransactionFunc) error
 	}
 
 	CategoryRepo interface {
-		Create(ctx context.Context, qe repository.Querier, category string) (*entity.Category, error)
+		Create(ctx context.Context, qe repository.Querier, category *entity.Category) (*entity.Category, error)
 		Delete(ctx context.Context, qe repository.Querier, id int) error
 		Count(ctx context.Context, qe repository.Querier) (int, error)
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error)
@@ -27,6 +27,6 @@ type (
 	}
 )
 
-func New(db DBXT, repo CategoryRepo) *CategoryUC {
+func New(db DBTX, repo CategoryRepo) *CategoryUC {
 	return &CategoryUC{db: db, repo: repo}
 }

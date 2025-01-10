@@ -4,10 +4,13 @@ import (
 	"context"
 	"errors"
 
+	"github.com/go-chi/chi/middleware"
 	api "github.com/himmel520/uoffer/require/api/oas"
 	"github.com/himmel520/uoffer/require/internal/controller/ogen"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
 	"github.com/himmel520/uoffer/require/internal/usecase"
+	"github.com/rs/zerolog/log"
+	logSetup "github.com/youroffer/logger"
 )
 
 func (h *Handler) V1AdminAnalyticsGet(ctx context.Context, params api.V1AdminAnalyticsGetParams) (api.V1AdminAnalyticsGetRes, error) {
@@ -20,6 +23,7 @@ func (h *Handler) V1AdminAnalyticsGet(ctx context.Context, params api.V1AdminAna
 	case errors.Is(err, repoerr.ErrAnalyticNotFound):
 		return &api.V1AdminAnalyticsGetNotFound{Message: err.Error()}, nil
 	case err != nil:
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
 		return nil, err
 	}
 

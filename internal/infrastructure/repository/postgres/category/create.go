@@ -11,11 +11,11 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-func (r *CategoryRepo) Create(ctx context.Context, qe repository.Querier, category string) (*entity.Category, error) {
+func (r *CategoryRepo) Create(ctx context.Context, qe repository.Querier, category *entity.Category) (*entity.Category, error) {
 	query, args, err := squirrel.
 		Insert("categories").
 		Columns("title", "public").
-		Values(category, false).
+		Values(category.Title, category.Public).
 		Suffix("returning id, title, public").
 		PlaceholderFormat(squirrel.Dollar).
 		ToSql()

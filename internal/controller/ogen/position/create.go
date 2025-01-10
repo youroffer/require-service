@@ -3,7 +3,6 @@ package position
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/go-chi/chi/middleware"
 	api "github.com/himmel520/uoffer/require/api/oas"
@@ -29,8 +28,6 @@ func (h *Handler) V1AdminPositionsPost(ctx context.Context, req *api.PositionPos
 		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
 		return nil, err
 	}
-
-	fmt.Println("handler", post)
 
 	return entity.PositionRespToApi(post), nil
 }

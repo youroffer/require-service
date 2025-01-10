@@ -9,11 +9,11 @@ import (
 
 type (
 	AnalyticUC struct {
-		db   DBXT
+		db   DBTX
 		repo AnalyticRepo
 	}
 
-	DBXT interface {
+	DBTX interface {
 		DB() repository.Querier
 		InTransaction(ctx context.Context, fn repository.TransactionFunc) error
 	}
@@ -27,6 +27,6 @@ type (
 	}
 )
 
-func New(db DBXT, repo AnalyticRepo) *AnalyticUC {
+func New(db DBTX, repo AnalyticRepo) *AnalyticUC {
 	return &AnalyticUC{db: db, repo: repo}
 }
