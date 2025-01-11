@@ -9,8 +9,9 @@ import (
 
 type (
 	CategoryUC struct {
-		db   DBTX
-		repo CategoryRepo
+		db    DBTX
+		repo  CategoryRepo
+		cache Cache
 	}
 
 	DBTX interface {
@@ -24,9 +25,15 @@ type (
 		Count(ctx context.Context, qe repository.Querier) (int, error)
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error)
 		Update(ctx context.Context, qe repository.Querier, id int, category *entity.CategoryUpdate) (*entity.Category, error)
+		GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoryPublic, error)
+	}
+
+	Cache interface {
+		Get(ctx context.Context, key string) (string, error)
+		Set(ctx context.Context, key string, value any) error
 	}
 )
 
-func New(db DBTX, repo CategoryRepo) *CategoryUC {
-	return &CategoryUC{db: db, repo: repo}
+func New(db DBTX, repo CategoryRepo, cache Cache) *CategoryUC {
+	return &CategoryUC{db: db, repo: repo, cache: cache}
 }
