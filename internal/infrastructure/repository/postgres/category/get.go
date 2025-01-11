@@ -3,6 +3,7 @@ package CategoryRepo
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/himmel520/uoffer/require/internal/entity"
@@ -13,8 +14,8 @@ import (
 func (r *CategoryRepo) Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error) {
 	builder := squirrel.
 		Select(
-			"id", 
-			"title", 
+			"id",
+			"title",
 			"public").
 		From("categories").
 		OrderBy("title").
@@ -53,4 +54,46 @@ func (r *CategoryRepo) Get(ctx context.Context, qe repository.Querier, params re
 	}
 
 	return categories, nil
+}
+
+func (r *CategoryRepo) GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoryPublic, error) {
+	query, args, err := squirrel.
+		Select(
+			"p.logo_id",
+			"c.title",
+			"c.public").
+		From("categories AS c").
+		Join("posts AS p ON p.categories_id = c.id").
+		OrderBy("c.title").
+		Where(squirrel.Eq{"c.public": true}).
+		PlaceholderFormat(squirrel.Dollar).
+		ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := qe.Query(ctx, query, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	categories := entity.CategoryPublic{}
+	for rows.Next() {
+		category := &entity.CategoriesPostsRespItemItem{}
+		if err := rows.Scan(
+			&category.LogoID,
+			&category.Title,
+			&category.Public); err != nil {
+			return nil, err
+		}
+
+		categories[strconv.Itoa(category.LogoID)] = *category
+	}
+
+	if len(categories) == 0 {
+		return nil, repoerr.ErrCategoryNotFound
+	}
+
+	return categories, err
 }

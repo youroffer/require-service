@@ -43,3 +43,25 @@ func (c *CategoriesResp) ToApi() *api.CategoriesResp {
 		PerPage: int(c.PerPage),
 	}
 }
+
+type CategoriesPostsRespItemItem struct {
+	LogoID int
+	Title  string
+	Public bool
+}
+
+type CategoryPublic map[string]CategoriesPostsRespItemItem
+
+func CategoryPublicToApi(category CategoryPublic) *api.CategoriesPostsResp {
+	apiCategory := api.CategoriesPostsResp{}
+
+	for id, category := range category {
+		apiCategory[id] = append(apiCategory[id], api.CategoriesPostsRespItemItem{
+			LogoID: category.LogoID,
+			Title:  category.Title,
+			Public: category.Public,
+		})
+	}
+
+	return &apiCategory
+}
