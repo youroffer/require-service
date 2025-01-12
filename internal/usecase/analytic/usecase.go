@@ -24,6 +24,7 @@ type (
 		Create(ctx context.Context, qe repository.Querier, analytic *entity.Analytic) (*entity.AnalyticResp, error)
 		Delete(ctx context.Context, qe repository.Querier, id int) error
 		Update(ctx context.Context, qe repository.Querier, id int, analytic *entity.AnalyticUpdate) (*entity.AnalyticResp, error)
+		GetByID(ctx context.Context, qe repository.Querier, analyticID int) (*entity.AnalyticResp, error)
 	}
 )
 

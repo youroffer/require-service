@@ -17,6 +17,7 @@ type (
 		Create(ctx context.Context, analytic *entity.Analytic) (*entity.AnalyticResp, error)
 		Delete(ctx context.Context, id int) error
 		Update(ctx context.Context, id int, analytic *entity.AnalyticUpdate) (*entity.AnalyticResp, error)
+		GetByIDForUsers(ctx context.Context, analyticID int) (*entity.AnalyticWithWords, error)
 	}
 )
 

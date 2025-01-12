@@ -3,6 +3,7 @@ package analytic
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/go-chi/chi/middleware"
 	api "github.com/himmel520/uoffer/require/api/oas"
@@ -28,4 +29,14 @@ func (h *Handler) V1AdminAnalyticsGet(ctx context.Context, params api.V1AdminAna
 	}
 
 	return analyticsResp.ToApi(), nil
+}
+
+func (h *Handler) V1AnalyticsAnalyticIDGet(ctx context.Context, params api.V1AnalyticsAnalyticIDGetParams) (api.V1AnalyticsAnalyticIDGetRes, error) {
+	analytic, err := h.uc.GetByIDForUsers(ctx, params.AnalyticID)
+	if err != nil {
+		return nil, fmt.Errorf("analytic get: %w", err)
+	}
+
+	return analytic.ToApiWithWords(), nil
+
 }

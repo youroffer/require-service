@@ -30,3 +30,16 @@ func (uc *AnalyticUC) Get(ctx context.Context, params usecase.PageParams) (*enti
 		PerPage: params.PerPage,
 	}, err
 }
+
+func (uc *AnalyticUC) GetByIDForUsers(ctx context.Context, analyticID int) (*entity.AnalyticWithWords, error) {
+	analytic, err := uc.repo.GetByID(ctx, uc.db.DB(), analyticID)
+	if err != nil {
+		return nil, fmt.Errorf("repo get by ID: %w", err)
+	}
+
+	return &entity.AnalyticWithWords{
+		Analytic: analytic,
+		Skills:   []*entity.TopWords{},
+		Keywords: []*entity.TopWords{},
+	}, err
+}
