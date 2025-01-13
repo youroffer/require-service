@@ -96,7 +96,7 @@ jobs:
               --env API_HH_APP_NAME=${{ vars.API_HH_APP_NAME }} \
               --env API_HH_EMAIL=${{ vars.API_HH_EMAIL }} \
               --env API_HH_INTERVAL=${{ vars.API_HH_INTERVAL }} \
-              --env API_HH_ACCESS_TOKEN=${{ secrets.API_HH_ACCESS_TOKEN }} \
+              --env API_HH_ACCESS_TOKEN="${{ secrets.API_HH_ACCESS_TOKEN }}" \
               --env SERVER_ADDRESS=${{ vars.SERVER_ADDRESS }} \
               --env JWT_KEY_PATH=${{ vars.JWT_KEY_PATH }} \
               --env POSTGRES_CONN="${{ vars.POSTGRES_CONN }}" \
