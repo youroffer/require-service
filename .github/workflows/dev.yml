@@ -93,6 +93,9 @@ jobs:
               --restart always \
               -p ${{ vars.APP_PORT }}:8080 \
               -v ${{ vars.JWT_HOST_PUBLIC_KEY_PATH }}:/jwt:ro \
+              --env API_HH_APP_NAME=${{ vars.API_HH_APP_NAME }} \
+              --env API_HH_EMAIL=${{ vars.API_HH_EMAIL }} \
+              --env API_HH_INTERVAL=${{ vars.API_HH_INTERVAL }} \
               --env SERVER_ADDRESS=${{ vars.SERVER_ADDRESS }} \
               --env JWT_KEY_PATH=${{ vars.JWT_KEY_PATH }} \
               --env POSTGRES_CONN="${{ vars.POSTGRES_CONN }}" \
