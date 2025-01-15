@@ -2,12 +2,16 @@ package analyticUC
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/himmel520/uoffer/require/internal/entity"
+	"github.com/himmel520/uoffer/require/internal/infrastructure/cache"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository"
 	"github.com/himmel520/uoffer/require/internal/lib/paging"
 	"github.com/himmel520/uoffer/require/internal/usecase"
+	"github.com/rs/zerolog/log"
 )
 
 func (uc *AnalyticUC) Get(ctx context.Context, params usecase.PageParams) (*entity.AnalyticsResp, error) {
@@ -31,15 +35,33 @@ func (uc *AnalyticUC) Get(ctx context.Context, params usecase.PageParams) (*enti
 	}, err
 }
 
-func (uc *AnalyticUC) GetByIDForUsers(ctx context.Context, analyticID int) (*entity.AnalyticWithWords, error) {
-	analytic, err := uc.repo.GetByID(ctx, uc.db.DB(), analyticID)
+func (uc *AnalyticUC) GetWithWordsByID(ctx context.Context, analyticID int, limit bool) (*entity.AnalyticWithWords, error) {
+	cacheData, err := uc.cache.Get(ctx, fmt.Sprintf(cache.AnalyticKeyFmt, analyticID))
 	if err != nil {
-		return nil, fmt.Errorf("repo get by ID: %w", err)
+		if !errors.Is(err, cache.ErrKeyNotFound) {
+			log.Err(err)
+		}
+
+		analytic, err := uc.repo.GetByID(ctx, uc.db.DB(), analyticID)
+		if err != nil {
+			return nil, fmt.Errorf("repo get by ID: %w", err)
+		}
+
+		return &entity.AnalyticWithWords{
+			Analytic: analytic,
+			Skills:   []*entity.TopWords{},
+			Keywords: []*entity.TopWords{}}, nil
 	}
 
-	return &entity.AnalyticWithWords{
-		Analytic: analytic,
-		Skills:   []*entity.TopWords{},
-		Keywords: []*entity.TopWords{},
-	}, err
+	analytic := &entity.AnalyticWithWords{}
+	if err = json.Unmarshal([]byte(cacheData), analytic); err != nil {
+		return nil, fmt.Errorf("funmarshal cache: %w", err)
+	}
+
+	if limit && len(analytic.Keywords) > 8 && len(analytic.Keywords) > 8 {
+		analytic.Keywords = analytic.Keywords[:8]
+		analytic.Skills = analytic.Skills[:8]
+	}
+
+	return analytic, err
 }

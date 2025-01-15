@@ -3,7 +3,6 @@ package analytic
 import (
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/go-chi/chi/middleware"
 	api "github.com/himmel520/uoffer/require/api/oas"
@@ -32,11 +31,29 @@ func (h *Handler) V1AdminAnalyticsGet(ctx context.Context, params api.V1AdminAna
 }
 
 func (h *Handler) V1AnalyticsAnalyticIDGet(ctx context.Context, params api.V1AnalyticsAnalyticIDGetParams) (api.V1AnalyticsAnalyticIDGetRes, error) {
-	analytic, err := h.uc.GetByIDForUsers(ctx, params.AnalyticID)
-	if err != nil {
-		return nil, fmt.Errorf("analytic get: %w", err)
+	analytic, err := h.uc.GetWithWordsByID(ctx, params.AnalyticID, false)
+
+	switch {
+	case errors.Is(err, repoerr.ErrAnalyticNotFound):
+		return &api.V1AnalyticsAnalyticIDGetNotFound{Message: err.Error()}, nil
+	case err != nil:
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
+		return nil, err
 	}
 
 	return analytic.ToApiWithWords(), nil
+}
 
+func (h *Handler) V1AnalyticsAnalyticIDLimitGet(ctx context.Context, params api.V1AnalyticsAnalyticIDLimitGetParams) (api.V1AnalyticsAnalyticIDLimitGetRes, error) {
+	analytic, err := h.uc.GetWithWordsByID(ctx, params.AnalyticID, true)
+
+	switch {
+	case errors.Is(err, repoerr.ErrAnalyticNotFound):
+		return &api.V1AnalyticsAnalyticIDLimitGetNotFound{Message: err.Error()}, nil
+	case err != nil:
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
+		return nil, err
+	}
+
+	return analytic.ToApiWithWords(), nil
 }
