@@ -11,8 +11,11 @@ func SetCors() func(http.Handler) http.Handler {
 		AllowedOrigins: []string{
 			"http://localhost",
 			"http://localhost:5173",
+			"http://194.87.226.28",
+			"http://api.uoffer.ru/",
 			"http://admin.localhost",
 			"http://admin.localhost:5173",
+			"http://admin.api.uoffer.ru/",
 		},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"*"},
