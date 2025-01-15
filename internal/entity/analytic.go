@@ -41,6 +41,13 @@ type AnalyticWithWords struct {
 	Keywords []*TopWords
 }
 
+func TopWordsToApi(a *TopWords) *api.Word {
+	return &api.Word{
+		Word:     a.Word,
+		Mentions: a.Mentions,
+	}
+}
+
 func AnalyticRespToApi(a *AnalyticResp) *api.Analytic {
 	return &api.Analytic{
 		ID:           a.ID,
@@ -68,5 +75,13 @@ func (c *AnalyticsResp) ToApi() *api.AnalyticsResp {
 		Page:    int(c.Page),
 		Pages:   int(c.Pages),
 		PerPage: int(c.PerPage),
+	}
+}
+
+func (c *AnalyticWithWords) ToApiWithWords() *api.AnalyticWords {
+	return &api.AnalyticWords{
+		Analytic: *AnalyticRespToApi(c.Analytic),
+		Skills:   convert.ApplyPointerToSlice(c.Skills, TopWordsToApi),
+		Keywords: convert.ApplyPointerToSlice(c.Keywords, TopWordsToApi),
 	}
 }

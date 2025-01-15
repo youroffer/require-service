@@ -13,7 +13,7 @@ import (
 )
 
 func (r *AnalyticRepo) GetByID(ctx context.Context, qe repository.Querier, analyticID int) (*entity.AnalyticResp, error) {
-	analytics, err := r.Get(ctx,qe, repository.PaginationParams{
+	analytics, err := r.Get(ctx, qe, repository.PaginationParams{
 		IDs: entity.NewOptional([]int{analyticID})})
 	if err != nil {
 		return nil, fmt.Errorf("get analytic by id: %w", err)
@@ -42,7 +42,7 @@ func (r *AnalyticRepo) Get(ctx context.Context, qe repository.Querier, params re
 		builder = builder.Offset(params.Offset.Value)
 	}
 
-	if params.IDs.Set{
+	if params.IDs.Set {
 		builder = builder.Where(squirrel.Eq{"a.id": params.IDs.Value})
 	}
 
