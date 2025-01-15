@@ -35,6 +35,10 @@ func (h *Handler) V1AdminCategoriesGet(ctx context.Context, params api.V1AdminCa
 func (h *Handler) V1CategoriesGet(ctx context.Context) (api.V1CategoriesGetRes, error) {
 	categories, err := h.uc.GetPublic(ctx)
 	if err != nil {
+		if errors.Is(err, repoerr.ErrCategoryNotFound) {
+			return &api.Error{Message: err.Error()}, nil
+		}
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
 		return nil, fmt.Errorf("categories get: %w", err)
 	}
 
