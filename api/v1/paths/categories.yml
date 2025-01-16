@@ -11,7 +11,7 @@ get:
           schema:
             $ref: "../schemas/category/CategoriesPostsResp.yml"
     '404':
-      description: Категории не найдены
+      description: Публичные категории не найдены
       content:
         application/json:
           schema:

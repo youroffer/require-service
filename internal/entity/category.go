@@ -20,11 +20,11 @@ type Category struct {
 	Public bool
 }
 
-func ConvertCategoryToApi(f *Category) *api.Category {
+func ConvertCategoryToApi(c *Category) *api.Category {
 	return &api.Category{
-		ID:     f.ID,
-		Title:  f.Title,
-		Public: f.Public,
+		ID:     c.ID,
+		Title:  c.Title,
+		Public: c.Public,
 	}
 }
 
@@ -42,4 +42,32 @@ func (c *CategoriesResp) ToApi() *api.CategoriesResp {
 		Pages:   int(c.Pages),
 		PerPage: int(c.PerPage),
 	}
+}
+
+type CategoryPosition struct {
+	ID     int    `json:"id"`
+	LogoID int    `json:"logo_id"`
+	Title  string `json:"title"`
+	Public bool   `json:"public"`
+}
+
+func ConvertCategoryPositionToApi(position CategoryPosition) api.CategoryPosition {
+	return api.CategoryPosition{
+		ID:     position.ID,
+		LogoID: position.LogoID,
+		Title:  position.Title,
+		Public: position.Public,
+	}
+}
+
+type CategoriesPublicPostsResp map[string][]CategoryPosition
+
+func ConvertCategoriesPublicPostsRespToApi(categories CategoriesPublicPostsResp) *api.CategoriesPostsResp {
+	apiCategories := api.CategoriesPostsResp{}
+
+	for category, position := range categories {
+		apiCategories[category] = convert.ApplyToSlice(position, ConvertCategoryPositionToApi)
+	}
+
+	return &apiCategories
 }

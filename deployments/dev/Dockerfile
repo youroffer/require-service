@@ -16,7 +16,7 @@ RUN CGO_ENABLED=0 GOOS=linux  \
 FROM alpine
 COPY --from=builder bin/app /
 COPY --from=builder app/config /config
-COPY --from=builder app/api /api
+COPY --from=builder app/api/bundle.yml /api/
 
 RUN apk --no-cache add ca-certificates
 

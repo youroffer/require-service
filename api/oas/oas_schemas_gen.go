@@ -243,57 +243,18 @@ func (s *AnalyticsResp) SetPerPage(val int) {
 func (*AnalyticsResp) v1AdminAnalyticsGetRes() {}
 
 // Ref: #
-type CategoriesPostsResp map[string][]CategoriesPostsRespItemItem
+type CategoriesPostsResp map[string][]CategoryPosition
 
 func (s *CategoriesPostsResp) init() CategoriesPostsResp {
 	m := *s
 	if m == nil {
-		m = map[string][]CategoriesPostsRespItemItem{}
+		m = map[string][]CategoryPosition{}
 		*s = m
 	}
 	return m
 }
 
 func (*CategoriesPostsResp) v1CategoriesGetRes() {}
-
-type CategoriesPostsRespItemItem struct {
-	// Идентификатор логотипа.
-	LogoID int `json:"logo_id"`
-	// Заголовок должности.
-	Title string `json:"title"`
-	// Является ли пост публичным.
-	Public bool `json:"public"`
-}
-
-// GetLogoID returns the value of LogoID.
-func (s *CategoriesPostsRespItemItem) GetLogoID() int {
-	return s.LogoID
-}
-
-// GetTitle returns the value of Title.
-func (s *CategoriesPostsRespItemItem) GetTitle() string {
-	return s.Title
-}
-
-// GetPublic returns the value of Public.
-func (s *CategoriesPostsRespItemItem) GetPublic() bool {
-	return s.Public
-}
-
-// SetLogoID sets the value of LogoID.
-func (s *CategoriesPostsRespItemItem) SetLogoID(val int) {
-	s.LogoID = val
-}
-
-// SetTitle sets the value of Title.
-func (s *CategoriesPostsRespItemItem) SetTitle(val string) {
-	s.Title = val
-}
-
-// SetPublic sets the value of Public.
-func (s *CategoriesPostsRespItemItem) SetPublic(val bool) {
-	s.Public = val
-}
 
 // Ref: #
 type CategoriesResp struct {
@@ -384,6 +345,58 @@ func (s *Category) SetPublic(val bool) {
 
 func (*Category) v1AdminCategoriesCategoryIDPutRes() {}
 func (*Category) v1AdminCategoriesPostRes()          {}
+
+// Ref: #
+type CategoryPosition struct {
+	// Уникальный идентификатор поста.
+	ID int `json:"id"`
+	// Идентификатор логотипа.
+	LogoID int `json:"logo_id"`
+	// Заголовок поста.
+	Title string `json:"title"`
+	// Является ли пост публичным.
+	Public bool `json:"public"`
+}
+
+// GetID returns the value of ID.
+func (s *CategoryPosition) GetID() int {
+	return s.ID
+}
+
+// GetLogoID returns the value of LogoID.
+func (s *CategoryPosition) GetLogoID() int {
+	return s.LogoID
+}
+
+// GetTitle returns the value of Title.
+func (s *CategoryPosition) GetTitle() string {
+	return s.Title
+}
+
+// GetPublic returns the value of Public.
+func (s *CategoryPosition) GetPublic() bool {
+	return s.Public
+}
+
+// SetID sets the value of ID.
+func (s *CategoryPosition) SetID(val int) {
+	s.ID = val
+}
+
+// SetLogoID sets the value of LogoID.
+func (s *CategoryPosition) SetLogoID(val int) {
+	s.LogoID = val
+}
+
+// SetTitle sets the value of Title.
+func (s *CategoryPosition) SetTitle(val string) {
+	s.Title = val
+}
+
+// SetPublic sets the value of Public.
+func (s *CategoryPosition) SetPublic(val bool) {
+	s.Public = val
+}
 
 // Ref: #
 type CategoryPost struct {
@@ -629,52 +642,6 @@ func (o OptBool) Or(d bool) bool {
 	return d
 }
 
-// NewOptCategory returns new OptCategory with value set to v.
-func NewOptCategory(v Category) OptCategory {
-	return OptCategory{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptCategory is optional Category.
-type OptCategory struct {
-	Value Category
-	Set   bool
-}
-
-// IsSet returns true if OptCategory was set.
-func (o OptCategory) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptCategory) Reset() {
-	var v Category
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptCategory) SetTo(v Category) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptCategory) Get() (v Category, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptCategory) Or(d Category) Category {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptDateTime returns new OptDateTime with value set to v.
 func NewOptDateTime(v time.Time) OptDateTime {
 	return OptDateTime{
@@ -816,8 +783,8 @@ func (o OptString) Or(d string) string {
 // Ref: #
 type Position struct {
 	// Уникальный идентификатор поста.
-	ID       OptInt      `json:"id"`
-	Category OptCategory `json:"category"`
+	ID       int      `json:"id"`
+	Category Category `json:"category"`
 	// Идентификатор логотипа.
 	LogoID int `json:"logo_id"`
 	// Заголовок поста.
@@ -827,12 +794,12 @@ type Position struct {
 }
 
 // GetID returns the value of ID.
-func (s *Position) GetID() OptInt {
+func (s *Position) GetID() int {
 	return s.ID
 }
 
 // GetCategory returns the value of Category.
-func (s *Position) GetCategory() OptCategory {
+func (s *Position) GetCategory() Category {
 	return s.Category
 }
 
@@ -852,12 +819,12 @@ func (s *Position) GetPublic() bool {
 }
 
 // SetID sets the value of ID.
-func (s *Position) SetID(val OptInt) {
+func (s *Position) SetID(val int) {
 	s.ID = val
 }
 
 // SetCategory sets the value of Category.
-func (s *Position) SetCategory(val OptCategory) {
+func (s *Position) SetCategory(val Category) {
 	s.Category = val
 }
 

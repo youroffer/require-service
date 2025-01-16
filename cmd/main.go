@@ -71,8 +71,9 @@ func main() {
 
 	// uc
 	filterUC := filterUC.New(dbtx, filterRepo)
-	categoryUC := categoryUC.New(dbtx, categoryRepo)
 	analyticUC := analyticUC.New(dbtx, analyticRepo, cache)
+	categoryUC := categoryUC.New(dbtx, categoryRepo, cache)
+	
 	positionUC := positionUC.New(dbtx, positionRepo)
 
 	// handler

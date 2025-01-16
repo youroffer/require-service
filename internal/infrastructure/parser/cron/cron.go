@@ -31,7 +31,7 @@ func NewCron(ctx context.Context, interval time.Duration, parser Parser) *Cron {
 
 func (c *Cron) Start() {
 	log.Info().Msg("cron is running")
-	c.parser.Parse(c.ctx)
+	// c.parser.Parse(c.ctx)
 	
 	ticker := time.NewTicker(c.interval)
 	for {

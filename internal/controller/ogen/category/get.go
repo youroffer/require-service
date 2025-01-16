@@ -3,10 +3,12 @@ package category
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/go-chi/chi/middleware"
 	api "github.com/himmel520/uoffer/require/api/oas"
 	"github.com/himmel520/uoffer/require/internal/controller/ogen"
+	"github.com/himmel520/uoffer/require/internal/entity"
 	"github.com/himmel520/uoffer/require/internal/infrastructure/repository/repoerr"
 	"github.com/himmel520/uoffer/require/internal/usecase"
 	"github.com/rs/zerolog/log"
@@ -28,4 +30,17 @@ func (h *Handler) V1AdminCategoriesGet(ctx context.Context, params api.V1AdminCa
 	}
 
 	return CategoriesResp.ToApi(), nil
+}
+
+func (h *Handler) V1CategoriesGet(ctx context.Context) (api.V1CategoriesGetRes, error) {
+	categories, err := h.uc.GetPublic(ctx)
+	if err != nil {
+		if errors.Is(err, repoerr.ErrCategoryNotFound) {
+			return &api.Error{Message: err.Error()}, nil
+		}
+		log.Err(err).Str(logSetup.RequestID, middleware.GetReqID(ctx))
+		return nil, fmt.Errorf("categories get: %w", err)
+	}
+
+	return entity.ConvertCategoriesPublicPostsRespToApi(categories), nil
 }
