@@ -25,7 +25,7 @@ type (
 		Count(ctx context.Context, qe repository.Querier) (int, error)
 		Get(ctx context.Context, qe repository.Querier, params repository.PaginationParams) ([]*entity.Category, error)
 		Update(ctx context.Context, qe repository.Querier, id int, category *entity.CategoryUpdate) (*entity.Category, error)
-		GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoryPublic, error)
+		GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoriesPublicPostsResp, error)
 	}
 
 	Cache interface {

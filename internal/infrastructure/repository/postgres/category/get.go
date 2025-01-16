@@ -3,7 +3,6 @@ package CategoryRepo
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/Masterminds/squirrel"
 	"github.com/himmel520/uoffer/require/internal/entity"
@@ -56,12 +55,14 @@ func (r *CategoryRepo) Get(ctx context.Context, qe repository.Querier, params re
 	return categories, nil
 }
 
-func (r *CategoryRepo) GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoryPublic, error) {
+func (r *CategoryRepo) GetPublic(ctx context.Context, qe repository.Querier) (entity.CategoriesPublicPostsResp, error) {
 	query, args, err := squirrel.
 		Select(
-			"p.logo_id",
 			"c.title",
-			"c.public").
+			"p.id",
+			"p.logo_id",
+			"p.title",
+			"p.public").
 		From("categories AS c").
 		Join("posts AS p ON p.categories_id = c.id").
 		OrderBy("c.title").
@@ -78,17 +79,23 @@ func (r *CategoryRepo) GetPublic(ctx context.Context, qe repository.Querier) (en
 	}
 	defer rows.Close()
 
-	categories := entity.CategoryPublic{}
+	categories := entity.CategoriesPublicPostsResp{}
 	for rows.Next() {
-		category := &entity.CategoriesPostsRespItemItem{}
+		var (
+			category string
+			position entity.CategoryPosition
+		)
+
 		if err := rows.Scan(
-			&category.LogoID,
-			&category.Title,
-			&category.Public); err != nil {
+			&category,
+			&position.ID,
+			&position.LogoID,
+			&position.Title,
+			&position.Public); err != nil {
 			return nil, err
 		}
 
-		categories[strconv.Itoa(category.LogoID)] = *category
+		categories[category] = append(categories[category], position)
 	}
 
 	if len(categories) == 0 {

@@ -35,8 +35,8 @@ func (uc *CategoryUC) Get(ctx context.Context, params usecase.PageParams) (*enti
 	}, err
 }
 
-func (uc *CategoryUC) GetPublic(ctx context.Context) (entity.CategoryPublic, error) {
-	var categories entity.CategoryPublic
+func (uc *CategoryUC) GetPublic(ctx context.Context) (entity.CategoriesPublicPostsResp, error) {
+	var categories entity.CategoriesPublicPostsResp
 
 	bytes, err := uc.cache.Get(ctx, cache.CategoriesWithPostsKey)
 	if err != nil {

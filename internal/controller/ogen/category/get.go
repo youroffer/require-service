@@ -42,5 +42,5 @@ func (h *Handler) V1CategoriesGet(ctx context.Context) (api.V1CategoriesGetRes, 
 		return nil, fmt.Errorf("categories get: %w", err)
 	}
 
-	return entity.CategoryPublicToApi(categories), nil
+	return entity.ConvertCategoriesPublicPostsRespToApi(categories), nil
 }

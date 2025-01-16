@@ -703,11 +703,11 @@ func (s *CategoriesPostsResp) Decode(d *jx.Decoder) error {
 	}
 	m := s.init()
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		var elem []CategoriesPostsRespItemItem
+		var elem []CategoryPosition
 		if err := func() error {
-			elem = make([]CategoriesPostsRespItemItem, 0)
+			elem = make([]CategoryPosition, 0)
 			if err := d.Arr(func(d *jx.Decoder) error {
-				var elemElem CategoriesPostsRespItemItem
+				var elemElem CategoryPosition
 				if err := elemElem.Decode(d); err != nil {
 					return err
 				}
@@ -738,136 +738,6 @@ func (s CategoriesPostsResp) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CategoriesPostsResp) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *CategoriesPostsRespItemItem) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *CategoriesPostsRespItemItem) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("logo_id")
-		e.Int(s.LogoID)
-	}
-	{
-		e.FieldStart("title")
-		e.Str(s.Title)
-	}
-	{
-		e.FieldStart("public")
-		e.Bool(s.Public)
-	}
-}
-
-var jsonFieldsNameOfCategoriesPostsRespItemItem = [3]string{
-	0: "logo_id",
-	1: "title",
-	2: "public",
-}
-
-// Decode decodes CategoriesPostsRespItemItem from json.
-func (s *CategoriesPostsRespItemItem) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CategoriesPostsRespItemItem to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "logo_id":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Int()
-				s.LogoID = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"logo_id\"")
-			}
-		case "title":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Title = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"title\"")
-			}
-		case "public":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Bool()
-				s.Public = bool(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"public\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode CategoriesPostsRespItemItem")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCategoriesPostsRespItemItem) {
-					name = jsonFieldsNameOfCategoriesPostsRespItemItem[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *CategoriesPostsRespItemItem) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CategoriesPostsRespItemItem) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1155,6 +1025,153 @@ func (s *Category) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Category) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CategoryPosition) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CategoryPosition) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("id")
+		e.Int(s.ID)
+	}
+	{
+		e.FieldStart("logo_id")
+		e.Int(s.LogoID)
+	}
+	{
+		e.FieldStart("title")
+		e.Str(s.Title)
+	}
+	{
+		e.FieldStart("public")
+		e.Bool(s.Public)
+	}
+}
+
+var jsonFieldsNameOfCategoryPosition = [4]string{
+	0: "id",
+	1: "logo_id",
+	2: "title",
+	3: "public",
+}
+
+// Decode decodes CategoryPosition from json.
+func (s *CategoryPosition) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CategoryPosition to nil")
+	}
+	var requiredBitSet [1]uint8
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "id":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"id\"")
+			}
+		case "logo_id":
+			requiredBitSet[0] |= 1 << 1
+			if err := func() error {
+				v, err := d.Int()
+				s.LogoID = int(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"logo_id\"")
+			}
+		case "title":
+			requiredBitSet[0] |= 1 << 2
+			if err := func() error {
+				v, err := d.Str()
+				s.Title = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"title\"")
+			}
+		case "public":
+			requiredBitSet[0] |= 1 << 3
+			if err := func() error {
+				v, err := d.Bool()
+				s.Public = bool(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"public\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CategoryPosition")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00001111,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfCategoryPosition) {
+					name = jsonFieldsNameOfCategoryPosition[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CategoryPosition) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CategoryPosition) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1826,39 +1843,6 @@ func (s *OptBool) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
-// Encode encodes Category as json.
-func (o OptCategory) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes Category from json.
-func (o *OptCategory) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptCategory to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptCategory) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptCategory) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
 // Encode encodes time.Time as json.
 func (o OptDateTime) Encode(e *jx.Encoder, format func(*jx.Encoder, time.Time)) {
 	if !o.Set {
@@ -1974,16 +1958,12 @@ func (s *Position) Encode(e *jx.Encoder) {
 // encodeFields encodes fields.
 func (s *Position) encodeFields(e *jx.Encoder) {
 	{
-		if s.ID.Set {
-			e.FieldStart("id")
-			s.ID.Encode(e)
-		}
+		e.FieldStart("id")
+		e.Int(s.ID)
 	}
 	{
-		if s.Category.Set {
-			e.FieldStart("category")
-			s.Category.Encode(e)
-		}
+		e.FieldStart("category")
+		s.Category.Encode(e)
 	}
 	{
 		e.FieldStart("logo_id")
@@ -2017,9 +1997,11 @@ func (s *Position) Decode(d *jx.Decoder) error {
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "id":
+			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
-				s.ID.Reset()
-				if err := s.ID.Decode(d); err != nil {
+				v, err := d.Int()
+				s.ID = int(v)
+				if err != nil {
 					return err
 				}
 				return nil
@@ -2027,8 +2009,8 @@ func (s *Position) Decode(d *jx.Decoder) error {
 				return errors.Wrap(err, "decode field \"id\"")
 			}
 		case "category":
+			requiredBitSet[0] |= 1 << 1
 			if err := func() error {
-				s.Category.Reset()
 				if err := s.Category.Decode(d); err != nil {
 					return err
 				}
@@ -2082,7 +2064,7 @@ func (s *Position) Decode(d *jx.Decoder) error {
 	// Validate required fields.
 	var failures []validate.FieldError
 	for i, mask := range [1]uint8{
-		0b00011100,
+		0b00011111,
 	} {
 		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
 			// Mask only required fields and check equality to mask using XOR.

@@ -2,22 +2,5 @@ type: object
 additionalProperties:
   type: array
   items:
-    type: object
-    required:
-      - logo_id
-      - title
-      - public
-    properties:
-      logo_id:
-        type: integer
-        description: Идентификатор логотипа.
-        example: 1
-      title:
-        type: string
-        description: Заголовок должности.
-        maxLength: 100
-        example: "Заголовок поста"
-      public:
-        type: boolean
-        description: Является ли пост публичным.
-        example: true
+    $ref: "../category/CategoryPosition.yml"
+    

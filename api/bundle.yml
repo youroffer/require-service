@@ -896,30 +896,37 @@ components:
         details:
           type: object
           additionalProperties: true
+    CategoryPosition:
+      type: object
+      required:
+        - id
+        - logo_id
+        - title
+        - public
+      properties:
+        id:
+          type: integer
+          description: Уникальный идентификатор поста.
+          example: 1
+        logo_id:
+          type: integer
+          description: Идентификатор логотипа.
+          example: 1
+        title:
+          type: string
+          description: Заголовок поста.
+          maxLength: 100
+          example: Заголовок поста
+        public:
+          type: boolean
+          description: Является ли пост публичным.
+          example: true
     CategoriesPostsResp:
       type: object
       additionalProperties:
         type: array
         items:
-          type: object
-          required:
-            - logo_id
-            - title
-            - public
-          properties:
-            logo_id:
-              type: integer
-              description: Идентификатор логотипа.
-              example: 1
-            title:
-              type: string
-              description: Заголовок должности.
-              maxLength: 100
-              example: Заголовок поста
-            public:
-              type: boolean
-              description: Является ли пост публичным.
-              example: true
+          $ref: '#/components/schemas/CategoryPosition'
     Category:
       type: object
       properties:
@@ -1129,8 +1136,9 @@ components:
     Position:
       type: object
       required:
-        - categories_id
+        - id
         - logo_id
+        - category
         - title
         - public
       properties:

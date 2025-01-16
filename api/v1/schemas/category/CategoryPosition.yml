@@ -2,7 +2,6 @@ type: object
 required:
   - id
   - logo_id
-  - category
   - title
   - public
 properties:
@@ -10,8 +9,6 @@ properties:
     type: integer
     description: Уникальный идентификатор поста.
     example: 1
-  category:
-    $ref: '../category/Category.yml'
   logo_id:
     type: integer
     description: Идентификатор логотипа.

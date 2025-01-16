@@ -34,12 +34,12 @@ type PositionResp struct {
 
 func PositionRespToApi(p *PositionResp) *api.Position {
 	return &api.Position{
-		ID: api.NewOptInt(p.ID),
-		Category: api.NewOptCategory(api.Category{
+		ID: p.ID,
+		Category: api.Category{
 			ID:     p.Category.ID,
 			Title:  p.Category.Title,
 			Public: p.Category.Public,
-		}),
+		},
 		LogoID: p.LogoID,
 		Title:  p.Title,
 		Public: p.Public,
